@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Tracking · PEAK Store</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background: #0b0b0b;
+      color: #f0f0f0;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      padding: 20px 0 30px;
+      border-bottom: 1px solid #242424;
+    }
+
+    .header .brand {
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #b7ffd6, #6effb0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header .brand i {
+      -webkit-text-fill-color: initial;
+      color: #6effb0;
+      margin-right: 8px;
+    }
+
+    .header h1 {
+      font-size: 20px;
+      margin-top: 8px;
+      color: #f0f0f0;
+    }
+
+    .header p {
+      color: #8a8a8a;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .back-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      color: #b0b0b0;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    .back-top:hover {
+      background: #2a2a2a;
+      color: #f0f0f0;
+      transform: translateX(-4px);
+    }
+
+    .back-top i {
+      color: #6effb0;
+    }
+
+    .search-section {
+      background: #141414;
+      border-radius: 20px;
+      padding: 24px;
+      border: 1px solid #262626;
+      margin-bottom: 20px;
+    }
+
+    .search-section h2 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: #f0f0f0;
+    }
+
+    .search-section h2 i {
+      color: #6effb0;
+      margin-right: 8px;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid #2a2a2a;
+      background: #1a1a1a;
+      color: #f0f0f0;
+      font-size: 15px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .search-box input:focus {
+      border-color: #6effb0;
+      box-shadow: 0 0 0 3px rgba(110, 255, 176, 0.08);
+    }
+
+    .search-box input::placeholder {
+      color: #5a5a5a;
+    }
+
+    .search-box button {
+      padding: 14px 24px;
+      background: #6effb0;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      color: #0b0b0b;
+      cursor: pointer;
+      transition: 0.3s;
+      white-space: nowrap;
+    }
+
+    .search-box button:hover {
+      background: #8affc4;
+      transform: scale(1.02);
+    }
+
+    .search-error {
+      color: #fc8181;
+      font-size: 14px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .order-card {
+      background: #141414;
+      border-radius: 20px;
+      padding: 20px;
+      margin: 20px 0;
+      border: 1px solid #262626;
+    }
+
+    .order-card .order-id {
+      font-size: 14px;
+      color: #8a8a8a;
+    }
+
+    .order-card .order-id span {
+      color: #6effb0;
+      font-weight: 700;
+      font-family: monospace;
+      font-size: 16px;
+    }
+
+    .order-card .order-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 16px;
+      margin-top: 10px;
+    }
+
+    .order-card .order-meta .meta-item {
+      font-size: 13px;
+      color: #b0b0b0;
+      padding: 4px 0;
+    }
+
+    .order-card .order-meta .meta-item strong {
+      color: #f0f0f0;
+    }
+
+    .order-card .order-meta .meta-item i {
+      color: #6effb0;
+      margin-right: 4px;
+      width: 16px;
+    }
+
+    .order-card .status-row {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .status-badge.pending {
+      background: #2a2a1a;
+      color: #f6ad55;
+    }
+
+    .status-badge.payment_confirmed {
+      background: #1a2a1a;
+      color: #6effb0;
+    }
+
+    .status-badge.preparing {
+      background: #1a2a3a;
+      color: #63b3ed;
+    }
+
+    .status-badge.shipped {
+      background: #1a2a3a;
+      color: #63b3ed;
+    }
+
+    .status-badge.out_for_delivery {
+      background: #2a2a3a;
+      color: #9f7aea;
+    }
+
+    .status-badge.delivered {
+      background: #1a2a1a;
+      color: #6effb0;
+    }
+
+    .status-badge.cancelled {
+      background: #2a1a1a;
+      color: #fc8181;
+    }
+
+    .status-badge i {
+      margin-right: 6px;
+    }
+
+    .delivery-estimate {
+      background: #1a1a1a;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      border: 1px solid #262626;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .delivery-estimate i {
+      font-size: 24px;
+      color: #6effb0;
+    }
+
+    .delivery-estimate .info h4 {
+      font-size: 14px;
+      color: #b0b0b0;
+      font-weight: 400;
+    }
+
+    .delivery-estimate .info .date {
+      font-size: 16px;
+      font-weight: 700;
+      color: #f0f0f0;
+    }
+
+    .progress-container {
+      background: #1a1a1a;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      border: 1px solid #262626;
+    }
+
+    .progress-container .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #8a8a8a;
+      margin-bottom: 8px;
+    }
+
+    .progress-container .progress-label .percent {
+      color: #6effb0;
+      font-weight: 700;
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 8px;
+      background: #2a2a2a;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar-track .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #6effb0, #667eea);
+      border-radius: 4px;
+      transition: width 0.8s ease;
+      width: 0%;
+    }
+
+    .timeline {
+      position: relative;
+      padding: 10px 0 10px 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 18px;
+      top: 20px;
+      bottom: 20px;
+      width: 3px;
+      background: #2a2a2a;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 20px;
+      padding: 12px 0;
+      position: relative;
+      opacity: 0.4;
+      transition: all 0.5s ease;
+    }
+
+    .timeline-item.completed {
+      opacity: 1;
+    }
+
+    .timeline-item.completed .timeline-icon {
+      background: #6effb0;
+      border-color: #6effb0;
+      box-shadow: 0 0 10px rgba(110, 255, 176, 0.15);
+      color: #0b0b0b;
+    }
+
+    .timeline-item.completed .timeline-title {
+      color: #6effb0;
+    }
+
+    .timeline-item.completed .timeline-desc {
+      color: #8a8a8a;
+    }
+
+    .timeline-item.completed .timeline-time {
+      color: #6a6a6a;
+    }
+
+    .timeline-item.active {
+      opacity: 1;
+    }
+
+    .timeline-item.active .timeline-icon {
+      background: #6effb0;
+      border-color: #6effb0;
+      box-shadow: 0 0 20px rgba(110, 255, 176, 0.3);
+      color: #0b0b0b;
+      animation: glow 1.5s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(110, 255, 176, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(110, 255, 176, 0.6); }
+    }
+
+    .timeline-item.active .timeline-title {
+      color: #f0f0f0;
+      font-weight: 700;
+    }
+
+    .timeline-item.active .timeline-desc {
+      color: #b0b0b0;
+    }
+
+    .timeline-item.active .timeline-time {
+      color: #6effb0;
+      font-weight: 600;
+    }
+
+    .timeline-item .timeline-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #1a1a1a;
+      border: 2px solid #2a2a2a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      z-index: 2;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      color: #6a6a6a;
+    }
+
+    .timeline-item .timeline-content {
+      flex: 1;
+      padding-top: 4px;
+    }
+
+    .timeline-item .timeline-title {
+      font-size: 15px;
+      color: #6a6a6a;
+      transition: all 0.3s ease;
+    }
+
+    .timeline-item .timeline-desc {
+      font-size: 13px;
+      color: #4a4a4a;
+      margin-top: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .timeline-item .timeline-time {
+      font-size: 12px;
+      color: #3a3a3a;
+      margin-top: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #1a2a1a;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: #6effb0;
+      border: 1px solid #2a4a2a;
+      margin-bottom: 12px;
+    }
+
+    .live-indicator .dot {
+      width: 8px;
+      height: 8px;
+      background: #6effb0;
+      border-radius: 50%;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.8); }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(110, 255, 176, 0.2);
+      border-radius: 50%;
+      border-top-color: #6effb0;
+      animation: spin 0.8s ease infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 0 10px; }
+      .header h1 { font-size: 18px; }
+      .timeline-item { gap: 14px; }
+      .timeline-item .timeline-icon { width: 30px; height: 30px; font-size: 12px; }
+      .search-box { flex-direction: column; }
+      .search-box button { width: 100%; }
+      .order-card .order-meta { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <a href="index.html" class="back-top">
+    <i class="fas fa-arrow-left"></i> Back to Store
+  </a>
+
+  <div class="header">
+    <div class="brand"><i class="fas fa-store"></i>PEAK STORE</div>
+    <h1><i class="fas fa-truck"></i> Track Your Order</h1>
+    <p>Enter your Order ID to see real-time delivery status</p>
+  </div>
+
+  <div class="search-section" id="searchSection">
+    <h2><i class="fas fa-search"></i> Find Your Order</h2>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Enter Order ID (e.g., ORD-XXXXXX)" />
+      <button onclick="trackOrder()"><i class="fas fa-arrow-right"></i> Track</button>
+    </div>
+    <div class="search-error" id="searchError"></div>
+  </div>
+
+  <div id="orderDetails" class="hidden">
+
+    <div class="live-indicator">
+      <span class="dot"></span>
+      Live Tracking
+    </div>
+
+    <div class="order-card">
+      <div class="order-id">📦 Order ID: <span id="displayOrderId">ORD-XXXXXX</span></div>
+      <div class="order-meta">
+        <div class="meta-item"><i class="fas fa-user"></i> <strong id="displayName">-</strong></div>
+        <div class="meta-item"><i class="fas fa-map-pin"></i> <strong id="displayAddress">-</strong></div>
+        <div class="meta-item"><i class="fas fa-phone"></i> <strong id="displayPhone">-</strong></div>
+        <div class="meta-item"><i class="fas fa-tag"></i> <strong id="displayProduct">-</strong></div>
+        <div class="meta-item"><i class="fas fa-coins"></i> <strong id="displayPrice">-</strong></div>
+        <div class="meta-item"><i class="fas fa-calendar"></i> <strong id="displayDate">-</strong></div>
+      </div>
+      <div class="status-row">
+        <span class="status-badge pending" id="displayStatus"><i class="fas fa-clock"></i> Pending</span>
+        <span style="font-size:12px; color:#4a4a4a;" id="lastUpdated">Last updated: Just now</span>
+      </div>
+    </div>
+
+    <div class="delivery-estimate">
+      <i class="fas fa-calendar-check"></i>
+      <div class="info">
+        <h4>Estimated Delivery</h4>
+        <div class="date" id="estimatedDelivery">-</div>
+      </div>
+    </div>
+
+    <div class="progress-container">
+      <div class="progress-label">
+        <span>Delivery Progress</span>
+        <span class="percent" id="progressPercent">0%</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <div class="order-card" style="border-color: #1a2a1a;">
+      <h3 style="color:#6effb0; font-size:16px; margin-bottom:12px;">
+        <i class="fas fa-timeline"></i> Delivery Timeline
+      </h3>
+      <div class="timeline" id="timelineContainer"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ===== FIREBASE ===== -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCtkKzMB3ogRwwq4OIEaF9oICuV_n25xkY",
+    authDomain: "peakstore-895ff.firebaseapp.com",
+    projectId: "peakstore-895ff",
+    storageBucket: "peakstore-895ff.firebasestorage.app",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  window.trackOrderFromFirebase = async function(orderId) {
+    try {
+      const q = query(collection(db, "orders"), where("orderId", "==", orderId));
+      const querySnapshot = await getDocs(q);
+      
+      if (!querySnapshot.empty) {
+        const orderData = querySnapshot.docs[0].data();
+        return {
+          name: orderData.name,
+          address: orderData.address,
+          phone: orderData.phone,
+          product: orderData.product,
+          price: orderData.price,
+          status: orderData.status || 'pending',
+          date: orderData.date
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error('Firebase query error:', error);
+      return null;
+    }
+  }
+
+  console.log('🔥 Firebase initialized in tracking page');
+</script>
+
+<!-- ===== VANILLA JS ===== -->
+<script>
+  // ============================================
+  // TIMELINE CONFIGURATION
+  // ============================================
+  const TIMELINE_STEPS = [
+    { 
+      id: 'order_placed', 
+      icon: 'fa-clipboard-check', 
+      title: 'Order Placed', 
+      desc: 'Your order has been confirmed and is being processed' 
+    },
+    { 
+      id: 'payment_confirmed', 
+      icon: 'fa-credit-card', 
+      title: 'Payment Confirmed', 
+      desc: 'Payment has been verified successfully' 
+    },
+    { 
+      id: 'preparing', 
+      icon: 'fa-box-open', 
+      title: 'Preparing to Ship', 
+      desc: 'Your items are being carefully packed' 
+    },
+    { 
+      id: 'shipped', 
+      icon: 'fa-truck', 
+      title: 'Shipped', 
+      desc: 'Your order is on the way to you!' 
+    },
+    { 
+      id: 'out_for_delivery', 
+      icon: 'fa-truck-fast', 
+      title: 'Out for Delivery', 
+      desc: 'Your order is out for delivery' 
+    },
+    { 
+      id: 'delivered', 
+      icon: 'fa-check-circle', 
+      title: 'Delivered', 
+      desc: 'Your order has been delivered! 🎉' 
+    }
+  ];
+
+  // Map status to timeline step index (0-based)
+  // Each status now maps to its own unique step
+  const STATUS_STEP_MAP = {
+    'pending': 0,
+    'pend': 0,
+    'p': 0,
+    'payment_confirmed': 1,
+    'payment confirmed': 1,
+    'pay': 1,
+    'preparing': 2,
+    'prepare': 2,
+    'prep': 2,
+    'shipped': 3,
+    'ship': 3,
+    'sh': 3,
+    'out_for_delivery': 4,
+    'out for delivery': 4,
+    'out': 4,
+    'delivered': 5,
+    'deliver': 5,
+    'del': 5,
+    'd': 5,
+    'cancelled': -1,
+    'cancel': -1,
+    'c': -1
+  };
+
+  const STATUS_LABELS = {
+    'pending': 'Pending',
+    'payment_confirmed': 'Payment Confirmed',
+    'preparing': 'Preparing to Ship',
+    'shipped': 'Shipped',
+    'out_for_delivery': 'Out for Delivery',
+    'delivered': 'Delivered',
+    'cancelled': 'Cancelled'
+  };
+
+  const STATUS_BADGE_CLASS = {
+    'pending': 'pending',
+    'payment_confirmed': 'payment_confirmed',
+    'preparing': 'preparing',
+    'shipped': 'shipped',
+    'out_for_delivery': 'out_for_delivery',
+    'delivered': 'delivered',
+    'cancelled': 'cancelled'
+  };
+
+  const STATUS_ICON_MAP = {
+    'pending': 'fa-clock',
+    'payment_confirmed': 'fa-check',
+    'preparing': 'fa-box-open',
+    'shipped': 'fa-truck',
+    'out_for_delivery': 'fa-truck-fast',
+    'delivered': 'fa-check-circle',
+    'cancelled': 'fa-times-circle'
+  };
+
+  let currentOrder = null;
+
+  function getEstimatedDelivery(orderDate) {
+    const date = orderDate ? new Date(orderDate) : new Date();
+    date.setDate(date.getDate() + 4);
+    return date.toLocaleDateString('en-US', { 
+      weekday: 'long', 
+      month: 'long', 
+      day: 'numeric',
+      year: 'numeric'
+    });
+  }
+
+  function normalizeStatus(status) {
+    if (!status) return 'pending';
+    const s = String(status).toLowerCase().trim();
+    if (s === 'p' || s === 'pend' || s === 'pending') return 'pending';
+    if (s === 'payment_confirmed' || s === 'payment confirmed' || s === 'pay') return 'payment_confirmed';
+    if (s === 'preparing' || s === 'prepare' || s === 'prep') return 'preparing';
+    if (s === 'shipped' || s === 'ship' || s === 'sh') return 'shipped';
+    if (s === 'out_for_delivery' || s === 'out for delivery' || s === 'out') return 'out_for_delivery';
+    if (s === 'delivered' || s === 'deliver' || s === 'del' || s === 'd') return 'delivered';
+    if (s === 'cancelled' || s === 'cancel' || s === 'c') return 'cancelled';
+    return 'pending';
+  }
+
+  function getProgress(status) {
+    const normalized = normalizeStatus(status);
+    const step = STATUS_STEP_MAP[normalized];
+    if (step === undefined || step === -1) return 0;
+    const progress = Math.round(((step + 1) / TIMELINE_STEPS.length) * 100);
+    return Math.min(progress, 100);
+  }
+
+  function getCurrentStep(status) {
+    const normalized = normalizeStatus(status);
+    const step = STATUS_STEP_MAP[normalized];
+    return step !== undefined ? step : -1;
+  }
+
+  // ============================================
+  // RENDER FUNCTIONS
+  // ============================================
+
+  function renderTimeline(status) {
+    const container = document.getElementById('timelineContainer');
+    const normalized = normalizeStatus(status);
+    const currentStep = getCurrentStep(normalized);
+    
+    let html = '';
+    
+    TIMELINE_STEPS.forEach((step, index) => {
+      const isCompleted = index < currentStep;
+      const isActive = index === currentStep;
+      
+      let statusClass = '';
+      let timeHtml = '';
+      
+      if (isCompleted) {
+        statusClass = 'completed';
+        timeHtml = `<div class="timeline-time">✅ Completed</div>`;
+      } else if (isActive) {
+        statusClass = 'active';
+        const now = new Date();
+        const timeStr = now.toLocaleString('en-US', { 
+          month: 'short', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        timeHtml = `<div class="timeline-time">🔵 Now · ${timeStr}</div>`;
+      } else {
+        timeHtml = `<div class="timeline-time">⏳ Pending</div>`;
+      }
+      
+      html += `
+        <div class="timeline-item ${statusClass}">
+          <div class="timeline-icon">
+            <i class="fas ${step.icon}"></i>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-title">${step.title}</div>
+            <div class="timeline-desc">${step.desc}</div>
+            ${timeHtml}
+          </div>
+        </div>
+      `;
+    });
+    
+    container.innerHTML = html;
+  }
+
+  function updateOrderUI(order) {
+    if (!order) return;
+
+    const rawStatus = order.status || 'pending';
+    const normalized = normalizeStatus(rawStatus);
+    const statusDisplay = STATUS_LABELS[normalized] || rawStatus.charAt(0).toUpperCase() + rawStatus.slice(1);
+
+    document.getElementById('orderDetails').classList.remove('hidden');
+    document.getElementById('searchSection').style.display = 'none';
+
+    document.getElementById('displayOrderId').textContent = order.orderId || 'ORD-XXXXXX';
+    document.getElementById('displayName').textContent = order.name || 'Unknown';
+    document.getElementById('displayAddress').textContent = order.address || 'Unknown';
+    document.getElementById('displayPhone').textContent = order.phone || 'N/A';
+    document.getElementById('displayProduct').textContent = order.product || 'N/A';
+    document.getElementById('displayPrice').textContent = order.price ? `₱${order.price}` : 'N/A';
+    document.getElementById('displayDate').textContent = order.date ? new Date(order.date).toLocaleString() : 'N/A';
+
+    const badge = document.getElementById('displayStatus');
+    const badgeClass = STATUS_BADGE_CLASS[normalized] || 'pending';
+    badge.className = `status-badge ${badgeClass}`;
+    const icon = STATUS_ICON_MAP[normalized] || 'fa-clock';
+    badge.innerHTML = `<i class="fas ${icon}"></i> ${statusDisplay}`;
+
+    const now = new Date();
+    document.getElementById('lastUpdated').textContent = `Last updated: ${now.toLocaleTimeString()}`;
+
+    document.getElementById('estimatedDelivery').textContent = getEstimatedDelivery(order.date);
+
+    const progress = getProgress(normalized);
+    document.getElementById('progressPercent').textContent = `${progress}%`;
+    document.getElementById('progressFill').style.width = `${progress}%`;
+
+    renderTimeline(normalized);
+  }
+
+  // ============================================
+  // FIREBASE INTEGRATION
+  // ============================================
+
+  async function fetchOrderFromFirebase(orderId) {
+    try {
+      if (window.trackOrderFromFirebase) {
+        const order = await window.trackOrderFromFirebase(orderId);
+        if (order) {
+          order.orderId = orderId;
+          return order;
+        }
+      }
+      
+      let localOrders = JSON.parse(localStorage.getItem('orders')) || {};
+      if (localOrders[orderId]) {
+        const order = localOrders[orderId];
+        order.orderId = orderId;
+        return order;
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('Error fetching order:', error);
+      return null;
+    }
+  }
+
+  // ============================================
+  // MAIN FUNCTIONS
+  // ============================================
+
+  window.trackOrder = async function() {
+    const input = document.getElementById('searchInput');
+    const orderId = input.value.trim();
+    const errorEl = document.getElementById('searchError');
+
+    if (!orderId) {
+      errorEl.textContent = '⚠️ Please enter an Order ID';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    errorEl.style.display = 'none';
+
+    const btn = document.querySelector('.search-box button');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<span class="loading-spinner"></span> Searching...';
+    btn.disabled = true;
+
+    try {
+      const order = await fetchOrderFromFirebase(orderId);
+      
+      if (order) {
+        currentOrder = order;
+        updateOrderUI(order);
+      } else {
+        errorEl.textContent = '❌ Order not found. Please check your Order ID.';
+        errorEl.style.display = 'block';
+      }
+    } catch (error) {
+      errorEl.textContent = '❌ Error searching for order. Please try again.';
+      errorEl.style.display = 'block';
+      console.error('Track error:', error);
+    }
+
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  };
+
+  // ============================================
+  // URL HANDLING
+  // ============================================
+
+  function checkUrlForOrder() {
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get('id');
+    if (orderId) {
+      document.getElementById('searchInput').value = orderId;
+      setTimeout(window.trackOrder, 500);
+    }
+  }
+
+  // ============================================
+  // EVENT LISTENERS
+  // ============================================
+
+  document.getElementById('searchInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') window.trackOrder();
+  });
+
+  // ============================================
+  // INIT
+  // ============================================
+
+  checkUrlForOrder();
+
+  console.log('📦 PEAK Store Tracking Timeline loaded');
+  console.log('ℹ️ Supported statuses: pending, payment_confirmed, preparing, shipped, out_for_delivery, delivered, cancelled');
+</script>
+
+</body>
+</html>

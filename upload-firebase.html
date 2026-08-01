@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload to Firebase · PEAK Store</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0b0b0b 0%, #1a1a2e 100%);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      background: #141414;
+      border-radius: 24px;
+      padding: 35px;
+      max-width: 750px;
+      width: 100%;
+      border: 1px solid #2a2a2a;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      max-height: 95vh;
+      overflow-y: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #f0f0f0;
+      margin-bottom: 8px;
+      font-size: 26px;
+    }
+    h1 i { color: #6effb0; }
+    .subtitle {
+      text-align: center;
+      color: #8a8a8a;
+      margin-bottom: 25px;
+      font-size: 14px;
+    }
+
+    .info-box {
+      background: #1a1a1a;
+      padding: 16px 20px;
+      border-radius: 12px;
+      margin: 15px 0;
+      font-size: 13px;
+      color: #b0b0b0;
+      border: 1px solid #2a2a2a;
+    }
+    .info-box strong { color: #6effb0; }
+    .info-box .highlight {
+      background: #2a2a2a;
+      color: #6effb0;
+      padding: 2px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    .info-box code {
+      background: #0b0b0b;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #63b3ed;
+    }
+
+    .btn {
+      padding: 14px 20px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
+    .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .btn-primary:hover { transform: scale(1.02); box-shadow: 0 8px 25px rgba(102,126,234,0.3); }
+    .btn-success { background: #48bb78; color: white; }
+    .btn-success:hover { background: #38a169; transform: scale(1.02); }
+    .btn-warning { background: #f6ad55; color: #1a1a1a; }
+    .btn-warning:hover { background: #ed8936; transform: scale(1.02); }
+    .btn-danger { background: #fc8181; color: white; }
+    .btn-danger:hover { background: #f56565; transform: scale(1.02); }
+    .btn-secondary { background: #2a2a2a; color: #b0b0b0; }
+    .btn-secondary:hover { background: #3a3a3a; transform: scale(1.02); }
+    .btn-info { background: #63b3ed; color: #1a1a1a; }
+    .btn-info:hover { background: #4299e1; transform: scale(1.02); }
+    .btn-purple { background: #9f7aea; color: white; }
+    .btn-purple:hover { background: #805ad5; transform: scale(1.02); }
+
+    .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
+    .btn-group .btn { flex: 1; min-width: 100px; }
+    .btn-sm { padding: 10px 16px; font-size: 13px; }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 12px 0;
+      padding: 12px 16px;
+      background: #1a1a1a;
+      border-radius: 10px;
+      border: 1px solid #2a2a2a;
+    }
+    .checkbox-group input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: #6effb0;
+    }
+    .checkbox-group label {
+      font-size: 14px;
+      color: #b0b0b0;
+      cursor: pointer;
+    }
+
+    .status {
+      margin-top: 15px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: 600;
+      display: none;
+      font-size: 14px;
+    }
+    .status.success { display: block; background: #1a2a1a; color: #6effb0; border: 1px solid #2a4a2a; }
+    .status.error { display: block; background: #2a1a1a; color: #ff6b6b; border: 1px solid #4a2a2a; }
+    .status.loading { display: block; background: #1a1a2a; color: #63b3ed; border: 1px solid #2a3a4a; }
+    .status.info { display: block; background: #2a2a1a; color: #f6ad55; border: 1px solid #4a4a2a; }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,0.15);
+      border-radius: 50%;
+      border-top-color: #6effb0;
+      animation: spin 0.8s ease infinite;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: #2a2a2a;
+      border-radius: 3px;
+      margin: 15px 0;
+      overflow: hidden;
+      display: none;
+    }
+    .progress-bar .progress {
+      height: 100%;
+      background: linear-gradient(135deg, #6effb0 0%, #667eea 100%);
+      width: 0%;
+      transition: width 0.4s ease;
+      border-radius: 3px;
+    }
+
+    .log-area {
+      background: #0b0b0b;
+      color: #48bb78;
+      font-family: 'Courier New', monospace;
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 15px;
+      font-size: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
+      white-space: pre-wrap;
+      word-break: break-all;
+      border: 1px solid #2a2a2a;
+    }
+    .log-area.show { display: block; }
+    .log-area .log-error { color: #fc8181; }
+    .log-area .log-success { color: #6effb0; }
+    .log-area .log-info { color: #63b3ed; }
+    .log-area .log-warning { color: #f6ad55; }
+
+    .input-group { margin-bottom: 12px; }
+    .input-group label {
+      display: block;
+      font-weight: 600;
+      color: #b0b0b0;
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+    .input-group input, .input-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #2a2a2a;
+      border-radius: 12px;
+      font-size: 14px;
+      transition: all 0.3s;
+      background: #1a1a1a;
+      color: #f0f0f0;
+      outline: none;
+    }
+    .input-group input:focus, .input-group select:focus {
+      border-color: #6effb0;
+      box-shadow: 0 0 0 3px rgba(110,255,176,0.08);
+    }
+    .input-group input::placeholder { color: #5a5a5a; }
+    .input-group select option { background: #1a1a1a; }
+
+    .admin-accounts {
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 16px;
+      margin: 15px 0;
+      border: 2px dashed #667eea;
+    }
+    .admin-accounts h4 {
+      color: #f0f0f0;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+    .admin-accounts h4 i { color: #6effb0; }
+    .admin-accounts .admin-list {
+      display: grid;
+      gap: 8px;
+      font-size: 13px;
+      color: #b0b0b0;
+    }
+    .admin-accounts .admin-list code {
+      background: #0b0b0b;
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: #6effb0;
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 20px; }
+      .btn-group .btn { min-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1><i class="fas fa-cloud-upload-alt"></i> Firebase Uploader</h1>
+    <p class="subtitle">Complete database setup for PEAK Store</p>
+
+    <div class="info-box">
+      <strong>📊 What this uploader does:</strong><br>
+      • Creates <span class="highlight">5 test users</span> with different plans<br>
+      • Creates <span class="highlight">2 admin accounts</span> with <code>isAdmin: true</code><br>
+      • Creates <span class="highlight">3 license keys</span> with PDF passwords & watermarks<br>
+      • Creates <span class="highlight">sample orders</span> matching your store<br>
+      • Creates <span class="highlight">custom plan files</span> for delivery<br>
+      • Updates existing documents if they exist
+    </div>
+
+    <!-- Admin Accounts Info -->
+    <div class="admin-accounts">
+      <h4><i class="fas fa-user-shield"></i> Admin Accounts</h4>
+      <div class="admin-list">
+        <div>📧 <code>admin@peakstore.com</code> — Password: <code>admin123</code></div>
+        <div>📧 <code>owner@peakstore.com</code> — Password: <code>owner123</code></div>
+        <div style="font-size:12px;color:#8a8a8a;margin-top:6px;">
+          ⚠️ These accounts will be created in Firebase Auth. You can log in with them.
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTIONS -->
+    <div class="checkbox-group">
+      <input type="checkbox" id="forceUpdate" checked>
+      <label for="forceUpdate">🔄 Force update existing documents</label>
+    </div>
+
+    <div class="checkbox-group">
+      <input type="checkbox" id="createAuthUsers" checked>
+      <label for="createAuthUsers">👤 Create Auth users for admin accounts</label>
+    </div>
+
+    <div class="checkbox-group">
+      <input type="checkbox" id="showLogs">
+      <label for="showLogs">📋 Show detailed logs</label>
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="btn-group">
+      <button class="btn btn-primary" id="uploadAllBtn"><i class="fas fa-cloud-upload-alt"></i> Upload All</button>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-success" id="uploadUsersBtn"><i class="fas fa-users"></i> Users</button>
+      <button class="btn btn-success" id="uploadAdminsBtn"><i class="fas fa-user-shield"></i> Admins</button>
+      <button class="btn btn-success" id="uploadLicensesBtn"><i class="fas fa-key"></i> Licenses</button>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-warning btn-sm" id="uploadOrdersBtn"><i class="fas fa-shopping-cart"></i> Orders</button>
+      <button class="btn btn-info btn-sm" id="checkStatusBtn"><i class="fas fa-search"></i> Check Status</button>
+      <button class="btn btn-secondary btn-sm" id="clearLogsBtn"><i class="fas fa-trash"></i> Clear Logs</button>
+    </div>
+
+    <div class="progress-bar" id="progressBar">
+      <div class="progress" id="progress"></div>
+    </div>
+
+    <div class="log-area" id="logArea"></div>
+    <div class="status" id="status"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc,
+      getDocs,
+      collection,
+      addDoc,
+      serverTimestamp,
+      deleteDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // ============================================
+    // FIREBASE CONFIG (matching your store)
+    // ============================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyCtkKzMB3ogRwwq4OIEaF9oICuV_n25xkY",
+      authDomain: "peakstore-895ff.firebaseapp.com",
+      projectId: "peakstore-895ff",
+      storageBucket: "peakstore-895ff.firebasestorage.app",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // ============================================
+    // DOM REFS
+    // ============================================
+    const statusEl = document.getElementById('status');
+    const uploadAllBtn = document.getElementById('uploadAllBtn');
+    const uploadUsersBtn = document.getElementById('uploadUsersBtn');
+    const uploadAdminsBtn = document.getElementById('uploadAdminsBtn');
+    const uploadLicensesBtn = document.getElementById('uploadLicensesBtn');
+    const uploadOrdersBtn = document.getElementById('uploadOrdersBtn');
+    const checkStatusBtn = document.getElementById('checkStatusBtn');
+    const clearLogsBtn = document.getElementById('clearLogsBtn');
+    const progressBar = document.getElementById('progressBar');
+    const progress = document.getElementById('progress');
+    const logArea = document.getElementById('logArea');
+    const forceUpdateCheck = document.getElementById('forceUpdate');
+    const createAuthUsersCheck = document.getElementById('createAuthUsers');
+    const showLogsCheck = document.getElementById('showLogs');
+
+    let logs = [];
+    const planPrices = { starter: 49, pro: 99, premium: 149, bundle: 299 };
+
+    // ============================================
+    // HELPERS
+    // ============================================
+    function showStatus(message, type = 'loading', target = statusEl) {
+      target.className = `status ${type}`;
+      target.innerHTML = message;
+    }
+
+    function updateProgress(value) {
+      progressBar.style.display = 'block';
+      progress.style.width = Math.min(value, 100) + '%';
+    }
+
+    function setLoading(button, loading) {
+      const labels = {
+        uploadAllBtn: '<i class="fas fa-cloud-upload-alt"></i> Upload All',
+        uploadUsersBtn: '<i class="fas fa-users"></i> Users',
+        uploadAdminsBtn: '<i class="fas fa-user-shield"></i> Admins',
+        uploadLicensesBtn: '<i class="fas fa-key"></i> Licenses',
+        uploadOrdersBtn: '<i class="fas fa-shopping-cart"></i> Orders',
+        checkStatusBtn: '<i class="fas fa-search"></i> Check Status',
+        clearLogsBtn: '<i class="fas fa-trash"></i> Clear Logs'
+      };
+      button.disabled = loading;
+      button.innerHTML = loading ? '<span class="loading-spinner"></span> Processing...' : (labels[button.id] || button.innerHTML);
+    }
+
+    function addLog(message, type = 'info') {
+      const timestamp = new Date().toLocaleTimeString();
+      const logEntry = `[${timestamp}] ${message}`;
+      logs.push(logEntry);
+
+      if (showLogsCheck.checked) {
+        logArea.classList.add('show');
+        logArea.innerHTML = logs.map(msg =>
+          `<div class="${msg.includes('✅') ? 'log-success' : msg.includes('❌') ? 'log-error' : msg.includes('⚠️') ? 'log-warning' : 'log-info'}">${msg}</div>`
+        ).join('\n');
+        logArea.scrollTop = logArea.scrollHeight;
+      }
+      console.log(logEntry);
+    }
+
+    function generateLicenseKey() {
+      const prefix = 'PEAK';
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      const segments = [];
+      for (let i = 0; i < 4; i++) {
+        let seg = '';
+        for (let j = 0; j < 4; j++) seg += chars.charAt(Math.floor(Math.random() * chars.length));
+        segments.push(seg);
+      }
+      return `${prefix}-${segments.join('-')}`;
+    }
+
+    function generatePDFPassword(email, plan) {
+      const prefix = email.split('@')[0].substring(0, 4).toUpperCase();
+      const planCode = plan.substring(0, 2).toUpperCase();
+      const random = Math.random().toString(36).substring(2, 6).toUpperCase();
+      return `${prefix}${planCode}${random}`;
+    }
+
+    function generateWatermark(email, plan) {
+      const date = new Date().toLocaleDateString();
+      return `User: ${email} | Plan: ${plan.toUpperCase()} | Purchased: ${date}`;
+    }
+
+    function generateOrderId() {
+      return 'ORD-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substring(2, 6).toUpperCase();
+    }
+
+    function generateUserId() {
+      return 'user_' + Date.now().toString(36) + Math.random().toString(36).substring(2, 6);
+    }
+
+    // ============================================
+    // UPLOAD USERS
+    // ============================================
+    async function uploadUsers() {
+      const users = [
+        { email: "free@email.com", plan: "free", hasAccess: false },
+        { email: "starter@email.com", plan: "starter", hasAccess: true },
+        { email: "pro@email.com", plan: "pro", hasAccess: true },
+        { email: "premium@email.com", plan: "premium", hasAccess: true },
+        { email: "bundle@email.com", plan: "bundle", hasAccess: true }
+      ];
+
+      let uploaded = 0;
+      for (const user of users) {
+        try {
+          const uid = generateUserId();
+          const pdfPassword = generatePDFPassword(user.email, user.plan);
+          const watermark = generateWatermark(user.email, user.plan);
+          const docRef = doc(db, "users", uid);
+          const docSnap = await getDoc(docRef);
+
+          if (docSnap.exists() && !forceUpdateCheck.checked) {
+            addLog(`⚠️ User ${user.email} exists. Skipping.`, 'warning');
+            continue;
+          }
+
+          await setDoc(docRef, {
+            uid: uid,
+            email: user.email,
+            hasAccess: user.hasAccess,
+            plan: user.plan,
+            displayName: user.email.split('@')[0].charAt(0).toUpperCase() + user.email.split('@')[0].slice(1),
+            createdAt: serverTimestamp(),
+            lastLogin: serverTimestamp(),
+            pdfPassword: pdfPassword,
+            watermarkText: watermark,
+            isAdmin: false,
+            purchaseHistory: user.hasAccess ? [{
+              plan: user.plan,
+              amount: planPrices[user.plan] || 0,
+              paymentMethod: 'gcash',
+              purchasedAt: new Date().toISOString()
+            }] : []
+          }, { merge: true });
+
+          addLog(`✅ User ${user.email} (${user.plan}) - PDF: ${pdfPassword}`, 'success');
+          uploaded++;
+        } catch (error) {
+          addLog(`❌ Error uploading ${user.email}: ${error.message}`, 'error');
+        }
+        updateProgress((uploaded / users.length) * 30);
+      }
+      return uploaded;
+    }
+
+    // ============================================
+    // UPLOAD ADMINS (with Auth creation)
+    // ============================================
+    async function uploadAdmins() {
+      const admins = [
+        { email: "admin@peakstore.com", password: "admin123", displayName: "Admin" },
+        { email: "owner@peakstore.com", password: "owner123", displayName: "Owner" }
+      ];
+
+      let uploaded = 0;
+      for (const admin of admins) {
+        try {
+          const docRef = doc(db, "users", admin.email);
+          const docSnap = await getDoc(docRef);
+
+          // Check if admin already exists in Firestore
+          let existingUid = null;
+          if (docSnap.exists()) {
+            existingUid = docSnap.data().uid;
+            if (!forceUpdateCheck.checked) {
+              addLog(`⚠️ Admin ${admin.email} exists. Skipping.`, 'warning');
+              uploaded++;
+              continue;
+            }
+          }
+
+          // Create Auth user
+          let uid = existingUid;
+          if (createAuthUsersCheck.checked && !existingUid) {
+            try {
+              const userCred = await createUserWithEmailAndPassword(auth, admin.email, admin.password);
+              uid = userCred.user.uid;
+              addLog(`✅ Auth user created: ${admin.email}`, 'success');
+            } catch (authError) {
+              if (authError.code === 'auth/email-already-in-use') {
+                // Try to sign in to get the UID
+                try {
+                  const signInCred = await signInWithEmailAndPassword(auth, admin.email, admin.password);
+                  uid = signInCred.user.uid;
+                  addLog(`✅ Auth user already exists: ${admin.email}`, 'info');
+                } catch (signInError) {
+                  addLog(`⚠️ Auth user exists but can't sign in: ${admin.email}`, 'warning');
+                  uid = admin.email.replace(/[@.]/g, '_');
+                }
+              } else {
+                addLog(`❌ Auth error for ${admin.email}: ${authError.message}`, 'error');
+                uid = admin.email.replace(/[@.]/g, '_');
+              }
+            }
+          } else if (existingUid) {
+            uid = existingUid;
+          } else {
+            uid = admin.email.replace(/[@.]/g, '_');
+          }
+
+          // Save admin to Firestore
+          const pdfPassword = generatePDFPassword(admin.email, 'premium');
+          const watermark = generateWatermark(admin.email, 'premium');
+
+          await setDoc(doc(db, "users", uid), {
+            uid: uid,
+            email: admin.email,
+            displayName: admin.displayName,
+            hasAccess: true,
+            plan: 'premium',
+            isAdmin: true,
+            createdAt: serverTimestamp(),
+            lastLogin: serverTimestamp(),
+            pdfPassword: pdfPassword,
+            watermarkText: watermark,
+            purchaseHistory: [{
+              plan: 'premium',
+              amount: 149,
+              paymentMethod: 'admin',
+              purchasedAt: new Date().toISOString()
+            }]
+          }, { merge: true });
+
+          addLog(`✅ Admin ${admin.email} saved to Firestore (${uid})`, 'success');
+          uploaded++;
+        } catch (error) {
+          addLog(`❌ Error uploading admin ${admin.email}: ${error.message}`, 'error');
+        }
+        updateProgress(30 + (uploaded / admins.length) * 20);
+      }
+      return uploaded;
+    }
+
+    // ============================================
+    // UPLOAD LICENSES
+    // ============================================
+    async function uploadLicenses() {
+      const licenses = [
+        { id: "license_active_001", email: "client1@email.com", plan: "starter" },
+        { id: "license_used_002", email: "client2@email.com", plan: "pro" },
+        { id: "license_multi_003", email: "team@company.com", plan: "premium" }
+      ];
+
+      let uploaded = 0;
+      for (const lic of licenses) {
+        try {
+          const key = generateLicenseKey();
+          const pdfPassword = generatePDFPassword(lic.email, lic.plan);
+          const watermark = generateWatermark(lic.email, lic.plan);
+          const docRef = doc(db, "licenses", lic.id);
+          const docSnap = await getDoc(docRef);
+
+          if (docSnap.exists() && !forceUpdateCheck.checked) {
+            addLog(`⚠️ License ${lic.id} exists. Skipping.`, 'warning');
+            continue;
+          }
+
+          await setDoc(docRef, {
+            key: key,
+            plan: lic.plan,
+            email: lic.email,
+            assignedEmail: lic.email,
+            maxUsers: 1,
+            expiresAt: null,
+            usedBy: null,
+            usedAt: null,
+            usedEmail: null,
+            usedCount: 0,
+            usedByList: [],
+            status: 'active',
+            createdAt: serverTimestamp(),
+            revoked: false,
+            price: planPrices[lic.plan] || 0,
+            pdfPassword: pdfPassword,
+            watermarkText: watermark
+          }, { merge: true });
+
+          addLog(`✅ License ${key} (${lic.plan}) - PDF: ${pdfPassword}`, 'success');
+          uploaded++;
+        } catch (error) {
+          addLog(`❌ Error uploading license: ${error.message}`, 'error');
+        }
+        updateProgress(50 + (uploaded / licenses.length) * 20);
+      }
+      return uploaded;
+    }
+
+    // ============================================
+    // UPLOAD ORDERS
+    // ============================================
+    async function uploadOrders() {
+      const orderData = [
+        { userEmail: 'starter@email.com', plan: 'starter', price: 299, product: 'Resistance Bands' },
+        { userEmail: 'pro@email.com', plan: 'pro', price: 199, product: 'MagSafe Ring Grip' },
+        { userEmail: 'free@email.com', plan: 'free', price: 299, product: 'Resistance Bands' },
+        { userEmail: 'admin@peakstore.com', plan: 'premium', price: 299, product: 'Resistance Bands' }
+      ];
+
+      let uploaded = 0;
+      for (const order of orderData) {
+        try {
+          const orderId = generateOrderId();
+          await addDoc(collection(db, "orders"), {
+            orderId: orderId,
+            userEmail: order.userEmail,
+            name: order.userEmail.split('@')[0].charAt(0).toUpperCase() + order.userEmail.split('@')[0].slice(1),
+            address: '123 Test Street, Manila, Philippines',
+            phone: '09171234567',
+            product: order.product,
+            price: order.price,
+            plan: order.plan,
+            originalPrice: order.price,
+            discountedPrice: order.price,
+            status: 'pending',
+            paymentMethod: 'gcash',
+            createdAt: serverTimestamp()
+          });
+          addLog(`✅ Order ${orderId} created for ${order.userEmail}`, 'success');
+          uploaded++;
+        } catch (error) {
+          addLog(`❌ Error creating order: ${error.message}`, 'error');
+        }
+        updateProgress(70 + (uploaded / orderData.length) * 30);
+      }
+      return uploaded;
+    }
+
+    // ============================================
+    // CHECK STATUS
+    // ============================================
+    async function checkStatus() {
+      addLog('🔍 Checking database status...', 'info');
+      showStatus('⏳ Checking status...', 'loading');
+
+      try {
+        const usersSnap = await getDocs(collection(db, "users"));
+        const licenseSnap = await getDocs(collection(db, "licenses"));
+        const ordersSnap = await getDocs(collection(db, "orders"));
+
+        let usersWithPDF = 0, usersWithWM = 0, adminCount = 0;
+        usersSnap.forEach(d => {
+          const data = d.data();
+          if (data.pdfPassword) usersWithPDF++;
+          if (data.watermarkText) usersWithWM++;
+          if (data.isAdmin) adminCount++;
+        });
+
+        let licensesWithPDF = 0, licensesWithWM = 0;
+        licenseSnap.forEach(d => {
+          const data = d.data();
+          if (data.pdfPassword) licensesWithPDF++;
+          if (data.watermarkText) licensesWithWM++;
+        });
+
+        const msg = `
+📊 Database Status:
+─────────────────────────────
+👥 Users: ${usersSnap.size}
+  ✅ With PDF Password: ${usersWithPDF}
+  ✅ With Watermark: ${usersWithWM}
+  👑 Admins: ${adminCount}
+
+🔑 Licenses: ${licenseSnap.size}
+  ✅ With PDF Password: ${licensesWithPDF}
+  ✅ With Watermark: ${licensesWithWM}
+
+📦 Orders: ${ordersSnap.size}
+        `;
+
+        addLog(msg, 'info');
+        showStatus(msg.replace(/\n/g, '<br>'), 'info');
+        updateProgress(100);
+      } catch (error) {
+        addLog(`❌ Status check error: ${error.message}`, 'error');
+        showStatus(`❌ Error: ${error.message}`, 'error');
+      }
+    }
+
+    // ============================================
+    // UPLOAD ALL
+    // ============================================
+    async function uploadAll() {
+      setLoading(uploadAllBtn, true);
+      addLog('🚀 Starting full upload...', 'info');
+      showStatus('⏳ Uploading all data...', 'loading');
+      updateProgress(0);
+
+      try {
+        const userCount = await uploadUsers();
+        const adminCount = await uploadAdmins();
+        const licenseCount = await uploadLicenses();
+        const orderCount = await uploadOrders();
+
+        addLog(`✅ Complete! ${userCount} users, ${adminCount} admins, ${licenseCount} licenses, ${orderCount} orders.`, 'success');
+        showStatus(`✅ Done! ${userCount} users, ${adminCount} admins, ${licenseCount} licenses, ${orderCount} orders.`, 'success');
+        updateProgress(100);
+      } catch (error) {
+        addLog(`❌ Upload error: ${error.message}`, 'error');
+        showStatus(`❌ Error: ${error.message}`, 'error');
+      }
+      setLoading(uploadAllBtn, false);
+    }
+
+    // ============================================
+    // EVENT LISTENERS
+    // ============================================
+    uploadAllBtn.addEventListener('click', uploadAll);
+
+    uploadUsersBtn.addEventListener('click', async () => {
+      setLoading(uploadUsersBtn, true);
+      showStatus('⏳ Uploading users...', 'loading');
+      updateProgress(0);
+      const count = await uploadUsers();
+      showStatus(`✅ ${count} users uploaded!`, 'success');
+      updateProgress(100);
+      setLoading(uploadUsersBtn, false);
+    });
+
+    uploadAdminsBtn.addEventListener('click', async () => {
+      setLoading(uploadAdminsBtn, true);
+      showStatus('⏳ Uploading admins...', 'loading');
+      updateProgress(0);
+      const count = await uploadAdmins();
+      showStatus(`✅ ${count} admins uploaded!`, 'success');
+      updateProgress(100);
+      setLoading(uploadAdminsBtn, false);
+    });
+
+    uploadLicensesBtn.addEventListener('click', async () => {
+      setLoading(uploadLicensesBtn, true);
+      showStatus('⏳ Uploading licenses...', 'loading');
+      updateProgress(0);
+      const count = await uploadLicenses();
+      showStatus(`✅ ${count} licenses uploaded!`, 'success');
+      updateProgress(100);
+      setLoading(uploadLicensesBtn, false);
+    });
+
+    uploadOrdersBtn.addEventListener('click', async () => {
+      setLoading(uploadOrdersBtn, true);
+      showStatus('⏳ Uploading orders...', 'loading');
+      updateProgress(0);
+      const count = await uploadOrders();
+      showStatus(`✅ ${count} orders uploaded!`, 'success');
+      updateProgress(100);
+      setLoading(uploadOrdersBtn, false);
+    });
+
+    checkStatusBtn.addEventListener('click', checkStatus);
+
+    clearLogsBtn.addEventListener('click', () => {
+      logs = [];
+      logArea.innerHTML = '';
+      logArea.classList.remove('show');
+      addLog('🗑️ Logs cleared', 'info');
+    });
+
+    showLogsCheck.addEventListener('change', () => {
+      if (showLogsCheck.checked && logs.length > 0) {
+        logArea.classList.add('show');
+        logArea.innerHTML = logs.map(msg =>
+          `<div class="${msg.includes('✅') ? 'log-success' : msg.includes('❌') ? 'log-error' : msg.includes('⚠️') ? 'log-warning' : 'log-info'}">${msg}</div>`
+        ).join('\n');
+        logArea.scrollTop = logArea.scrollHeight;
+      } else {
+        logArea.classList.remove('show');
+      }
+    });
+
+    // Auto check on load
+    setTimeout(checkStatus, 1000);
+
+    console.log('🚀 PEAK Store Firebase Uploader ready!');
+    console.log('📌 Admin accounts: admin@peakstore.com / admin123');
+  </script>
+</body>
+</html>

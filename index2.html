@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PEAK · Dropship</title>
+  <!-- Font Awesome 6 (free) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ----- reset & base ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background: #0b0b0b;
+      color: #f0f0f0;
+      padding: 20px 0 40px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* ----- brand header (mini) ----- */
+    .brand-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #242424;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      background: #1e1e1e;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+      color: #b7ffd6;
+      border: 1px solid #2e2e2e;
+    }
+
+    .brand-name {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      background: linear-gradient(135deg, #b7ffd6, #6effb0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .brand-tag {
+      background: #1a1a1a;
+      padding: 4px 14px;
+      border-radius: 40px;
+      font-size: 12px;
+      color: #8a8a8a;
+      border: 1px solid #2a2a2a;
+    }
+
+    .brand-tag i {
+      color: #6effb0;
+      margin-right: 4px;
+    }
+
+    /* ----- Track Button (top) ----- */
+    .track-top {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 8px;
+    }
+
+    .track-top-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 30px;
+      color: #b0b0b0;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .track-top-btn:hover {
+      background: #2a2a2a;
+      color: #6effb0;
+      border-color: #6effb0;
+      transform: translateX(2px);
+    }
+
+    .track-top-btn i {
+      color: #6effb0;
+      font-size: 16px;
+    }
+
+    /* ----- section title ----- */
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0 0 18px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title i {
+      color: #6effb0;
+      font-size: 18px;
+    }
+
+    /* ----- Category Header ----- */
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 32px 0 16px 0;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #2a2a2a;
+    }
+
+    .category-header .cat-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      background: #1a2a1a;
+      color: #6effb0;
+      border: 1px solid #2a4a2a;
+    }
+
+    .category-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #f0f0f0;
+    }
+
+    .category-header .cat-badge {
+      margin-left: auto;
+      background: #1a1a1a;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      color: #8a8a8a;
+      border: 1px solid #2a2a2a;
+    }
+
+    /* ----- product card ----- */
+    .product {
+      background: #141414;
+      padding: 20px 20px 22px;
+      border-radius: 24px;
+      border: 1px solid #262626;
+      margin-bottom: 28px;
+      transition: 0.2s;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.6);
+    }
+
+    .product:hover {
+      border-color: #3a3a3a;
+    }
+
+    .product-img {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #1a1a1a;
+      margin-bottom: 16px;
+    }
+
+    .product-img img {
+      width: 100%;
+      display: block;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      transition: 0.3s;
+    }
+
+    .badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(4px);
+      padding: 4px 14px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #b7ffd6;
+      border: 1px solid #3a3a3a;
+      letter-spacing: 0.3px;
+      z-index: 2;
+    }
+
+    .badge.out-of-stock {
+      background: rgba(200, 50, 50, 0.9);
+      color: white;
+      border-color: #ff4444;
+    }
+
+    .product h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .product h3 span {
+      font-size: 13px;
+      font-weight: 400;
+      color: #888;
+      background: #1f1f1f;
+      padding: 2px 12px;
+      border-radius: 40px;
+    }
+
+    .desc {
+      color: #a8a8a8;
+      font-size: 14px;
+      margin: 4px 0 10px;
+    }
+
+    .desc i {
+      color: #6effb0;
+      margin-right: 6px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 8px 0 12px;
+    }
+
+    .price {
+      color: #6effb0;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .price-old {
+      color: #6a6a6a;
+      font-size: 17px;
+      text-decoration: line-through;
+    }
+
+    .rating-block {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1a1a1a;
+      padding: 8px 14px;
+      border-radius: 60px;
+      margin: 8px 0 14px;
+      border: 1px solid #282828;
+      flex-wrap: wrap;
+    }
+
+    .stars {
+      color: #f5b342;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
+    .stars span {
+      color: #b0b0b0;
+      font-weight: 400;
+      margin-left: 6px;
+      font-size: 13px;
+    }
+
+    .stock {
+      color: #ff7676;
+      font-weight: 600;
+      font-size: 14px;
+      background: #1f1a1a;
+      padding: 4px 14px;
+      border-radius: 40px;
+      border: 1px solid #3a2a2a;
+      transition: all 0.3s ease;
+    }
+
+    .stock.in-stock {
+      color: #6effb0;
+      border-color: #2a4a2a;
+      background: #1a2a1a;
+    }
+
+    .stock.low-stock {
+      color: #f6ad55;
+      border-color: #4a3a2a;
+      background: #2a2a1a;
+    }
+
+    .stock.out-of-stock {
+      color: #fc8181;
+      border-color: #4a2a2a;
+      background: #2a1a1a;
+    }
+
+    .stock i {
+      margin-right: 5px;
+      font-size: 11px;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 60px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-buy {
+      background: #6effb0;
+      color: #0b0b0b;
+      box-shadow: 0 6px 14px rgba(110, 255, 176, 0.12);
+    }
+
+    .btn-buy:hover {
+      background: #8affc4;
+      transform: scale(1.01);
+      box-shadow: 0 8px 20px rgba(110, 255, 176, 0.2);
+    }
+
+    .btn-buy:disabled {
+      background: #2a2a2a;
+      color: #6a6a6a;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none !important;
+    }
+
+    .btn-buy:disabled:hover {
+      background: #2a2a2a;
+      transform: none !important;
+    }
+
+    .btn-instagram {
+      background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af);
+      color: white;
+    }
+
+    .btn-instagram:hover {
+      transform: scale(1.01);
+      box-shadow: 0 8px 20px rgba(221, 42, 123, 0.3);
+    }
+
+    .btn-instagram i {
+      font-size: 18px;
+    }
+
+    .btn-order {
+      background: white;
+      color: #0b0b0b;
+      margin-top: 6px;
+    }
+
+    .btn-order:hover {
+      background: #e8e8e8;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* ----- reviews ----- */
+    .reviews {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid #242424;
+      color: #b0b0b0;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .reviews i {
+      color: #f5b342;
+      margin-right: 2px;
+    }
+
+    .reviews .highlight {
+      color: #d0d0d0;
+      font-weight: 500;
+    }
+
+    /* ----- trust badges ----- */
+    .trust-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 18px 0 0;
+      justify-content: center;
+      font-size: 13px;
+      color: #8a8a8a;
+    }
+
+    .trust-badges span {
+      background: #1a1a1a;
+      padding: 4px 16px;
+      border-radius: 40px;
+      border: 1px solid #2a2a2a;
+    }
+
+    .trust-badges i {
+      color: #6effb0;
+      margin-right: 5px;
+    }
+
+    /* ----- success message after order ----- */
+    .order-success {
+      display: none;
+      background: #1a2a1a;
+      border: 2px solid #2a4a2a;
+      border-radius: 20px;
+      padding: 24px 20px;
+      margin: 20px 0;
+      text-align: center;
+      animation: fadeUp 0.4s ease;
+    }
+    .order-success.show { display: block; }
+    .order-success .order-id {
+      background: #0b0b0b;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-family: monospace;
+      font-size: 24px;
+      font-weight: 700;
+      color: #6effb0;
+      letter-spacing: 2px;
+      margin: 12px 0;
+      border: 1px solid #2a4a2a;
+      word-break: break-all;
+      user-select: all;
+      cursor: pointer;
+    }
+    .order-success .order-id:hover {
+      background: #1a1a1a;
+    }
+    .order-success .copy-btn {
+      background: #2a2a2a;
+      border: none;
+      color: #b0b0b0;
+      padding: 6px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: 0.2s;
+    }
+    .order-success .copy-btn:hover {
+      background: #3a3a3a;
+      color: white;
+    }
+    .order-success .status-badge {
+      display: inline-block;
+      padding: 4px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      background: #2a2a1a;
+      color: #f6ad55;
+      margin-top: 8px;
+    }
+
+    /* ============================================
+       CHECKOUT MODAL
+       ============================================ */
+    .checkout-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+    .checkout-overlay.show {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .checkout-modal {
+      background: #141414;
+      border-radius: 24px;
+      max-width: 500px;
+      width: 92%;
+      max-height: 90vh;
+      overflow-y: auto;
+      border: 1px solid #2a2a2a;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .checkout-modal .modal-header {
+      padding: 18px 20px 14px;
+      border-bottom: 1px solid #2a2a2a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      background: #141414;
+      z-index: 10;
+      border-radius: 24px 24px 0 0;
+    }
+
+    .checkout-modal .modal-header h3 {
+      font-size: 18px;
+      color: #f0f0f0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .checkout-modal .modal-header h3 i {
+      color: #6effb0;
+    }
+
+    .checkout-modal .modal-close {
+      background: #2a2a2a;
+      border: none;
+      color: #b0b0b0;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .checkout-modal .modal-close:hover {
+      background: #3a3a3a;
+      color: white;
+    }
+
+    .checkout-modal .modal-body {
+      padding: 20px;
+    }
+
+    .checkout-modal .product-summary {
+      display: flex;
+      gap: 14px;
+      padding: 14px;
+      background: #1a1a1a;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #2a2a2a;
+    }
+
+    .checkout-modal .product-summary img {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #222;
+    }
+
+    .checkout-modal .product-summary .info {
+      flex: 1;
+    }
+
+    .checkout-modal .product-summary .info .name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f0f0f0;
+    }
+
+    .checkout-modal .product-summary .info .qty-price {
+      font-size: 13px;
+      color: #b0b0b0;
+      margin-top: 4px;
+    }
+
+    .checkout-modal .product-summary .info .qty-price .price-tag {
+      color: #6effb0;
+      font-weight: 700;
+    }
+
+    .checkout-modal .input-group {
+      margin-bottom: 14px;
+    }
+
+    .checkout-modal .input-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #b0b0b0;
+      margin-bottom: 4px;
+    }
+
+    .checkout-modal .input-group input,
+    .checkout-modal .input-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid #2a2a2a;
+      background: #1a1a1a;
+      color: #f0f0f0;
+      font-size: 15px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .checkout-modal .input-group input:focus,
+    .checkout-modal .input-group textarea:focus {
+      border-color: #6effb0;
+      box-shadow: 0 0 0 3px rgba(110,255,176,0.08);
+    }
+
+    .checkout-modal .input-group textarea {
+      resize: vertical;
+      min-height: 60px;
+      font-family: inherit;
+    }
+
+    .checkout-modal .payment-info {
+      background: #1a2a1a;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin: 16px 0;
+      border: 1px solid #2a4a2a;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .checkout-modal .payment-info i {
+      font-size: 24px;
+      color: #6effb0;
+    }
+
+    .checkout-modal .payment-info .details {
+      flex: 1;
+    }
+
+    .checkout-modal .payment-info .details .label {
+      font-size: 12px;
+      color: #8a8a8a;
+    }
+
+    .checkout-modal .payment-info .details .number {
+      font-size: 18px;
+      font-weight: 700;
+      color: #6effb0;
+      letter-spacing: 1px;
+      font-family: monospace;
+    }
+
+    .checkout-modal .payment-info .details .note {
+      font-size: 12px;
+      color: #6a6a6a;
+      margin-top: 2px;
+    }
+
+    .checkout-modal .btn-place-order {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+      background: #6effb0;
+      color: #0b0b0b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .checkout-modal .btn-place-order:hover {
+      background: #8affc4;
+      transform: scale(1.01);
+      box-shadow: 0 8px 20px rgba(110, 255, 176, 0.2);
+    }
+
+    .checkout-modal .btn-place-order:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .checkout-modal .btn-place-order i {
+      font-size: 18px;
+    }
+
+    .checkout-modal .instagram-note {
+      text-align: center;
+      font-size: 12px;
+      color: #6a6a6a;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #2a2a2a;
+    }
+
+    .checkout-modal .instagram-note i {
+      color: #6effb0;
+      margin-right: 4px;
+    }
+
+    /* ----- responsive ----- */
+    @media (max-width: 480px) {
+      .brand-name { font-size: 18px; }
+      .brand-tag { font-size: 10px; padding: 2px 12px; }
+      .price { font-size: 22px; }
+      .product h3 { font-size: 19px; }
+      .order-success .order-id { font-size: 18px; }
+      .track-top { justify-content: center; }
+      .track-top-btn { font-size: 13px; padding: 8px 16px; }
+      .category-header .cat-badge { font-size: 9px; padding: 2px 10px; }
+      .checkout-modal .product-summary { flex-direction: column; align-items: center; text-align: center; }
+      .checkout-modal .product-summary img { width: 80px; height: 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- brand bar -->
+  <div class="brand-bar">
+    <div class="brand-left">
+      <div class="brand-icon">✦</div>
+      <span class="brand-name">PEAK STORE</span>
+    </div>
+    <div class="brand-tag"><i class="fas fa-bolt"></i> dropship</div>
+  </div>
+
+  <!-- Track Order Button (Top) -->
+  <div class="track-top">
+    <a href="tracking.html" class="track-top-btn">
+      <i class="fas fa-truck"></i> Track Order
+    </a>
+  </div>
+
+  <!-- section title -->
+  <div class="section-title">
+    <i class="fas fa-fire"></i> Shop Categories
+  </div>
+
+  <!-- ===== SUCCESS MESSAGE (hidden by default) ===== -->
+  <div class="order-success" id="orderSuccess">
+    <i class="fas fa-check-circle" style="color:#6effb0; font-size:40px;"></i>
+    <h3 style="color:#6effb0; margin-top:8px;">Order Placed! 🎉</h3>
+    <p style="color:#b0b0b0; font-size:14px;">Your order has been received. Here's your Order ID:</p>
+    <div class="order-id" id="successOrderId">ORD-XXXXXX</div>
+    <button class="copy-btn" onclick="copyOrderId()"><i class="fas fa-copy"></i> Copy Order ID</button>
+    <p style="color:#8a8a8a; font-size:13px; margin-top:12px;">
+      <i class="fas fa-info-circle"></i> Use this ID to <strong style="color:#b0b0b0;">track your order</strong>.
+    </p>
+    <div class="status-badge" id="successStatus">⏳ Pending</div>
+  </div>
+
+  <!-- ================================================================ -->
+  <!-- ===================== SUPPLEMENTS SECTION ===================== -->
+  <!-- ================================================================ -->
+  <div class="category-header">
+    <div class="cat-icon"><i class="fas fa-pills"></i></div>
+    <h2>Supplements</h2>
+    <span class="cat-badge">Whey · Creatine · More</span>
+  </div>
+
+  <!-- ===== PRODUCT: Whey Protein ===== -->
+  <div class="product" data-stock-id="stockWhey">
+    <div class="product-img">
+      <img src="images/whey-protein.jpg" alt="Promatrix7 Whey Protein" onerror="this.src='https://images.unsplash.com/photo-1579722821273-49bc6b7dd02a?w=600&h=600&fit=crop&crop=center'">
+      <span class="badge"><i class="fas fa-fire" style="margin-right:4px;"></i>BEST SELLER</span>
+    </div>
+    <h3>Promatrix7 Whey Protein <span>1lb w/ gray sando</span></h3>
+    <div class="desc"><i class="fas fa-dumbbell"></i> 23g protein · zero sugar · fast absorption</div>
+    <div class="price-row">
+      <span class="price">₱1,000</span>
+      <span class="price-old">₱1,500</span>
+    </div>
+    <div class="rating-block">
+      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>256 sold</span></div>
+      <div class="stock" id="stockWhey"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-buy" id="buyBtnWhey" onclick="openCheckoutModal('whey', 'Promatrix7 Whey Protein', 1000, 'images/whey-protein.jpg', 'stockWhey')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
+      <button class="btn btn-instagram" onclick="orderInstagram()"><i class="fab fa-instagram"></i> Order via Instagram</button>
+    </div>
+    <div class="reviews">
+      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+      <span class="highlight"> "Best protein I've tried!"</span> — Carlo
+    </div>
+  </div>
+
+  <!-- ===== PRODUCT: Creatine Monohydrate ===== -->
+  <div class="product" data-stock-id="stockCreatine">
+    <div class="product-img">
+      <img src="images/creatine.jpg" alt="Creatine Monohydrate" onerror="this.src='https://images.unsplash.com/photo-1584735935682-2f2b69d1b4b0?w=600&h=600&fit=crop&crop=center'">
+      <span class="badge"><i class="fas fa-bolt" style="margin-right:4px;"></i>TOP RATED</span>
+    </div>
+    <h3>Creatine Monohydrate <span>300g</span></h3>
+    <div class="desc"><i class="fas fa-bolt"></i> Pure micronized · strength · muscle endurance</div>
+    <div class="price-row">
+      <span class="price">₱950</span>
+      <span class="price-old">₱1,200</span>
+    </div>
+    <div class="rating-block">
+      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>189 sold</span></div>
+      <div class="stock" id="stockCreatine"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-buy" id="buyBtnCreatine" onclick="openCheckoutModal('creatine', 'Creatine Monohydrate', 950, 'images/creatine.jpg', 'stockCreatine')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
+      <button class="btn btn-instagram" onclick="orderInstagram()"><i class="fab fa-instagram"></i> Order via Instagram</button>
+    </div>
+    <div class="reviews">
+      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+      <span class="highlight"> "Huge strength gains!"</span> — Jay
+    </div>
+  </div>
+
+  <!-- ===== PRODUCT: Pre-Workout ===== -->
+  <div class="product" data-stock-id="stockPre">
+    <div class="product-img">
+      <img src="images/pre-workout.jpg" alt="Pre-Workout" onerror="this.src='https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&h=600&fit=crop&crop=center'">
+      <span class="badge"><i class="fas fa-fire" style="margin-right:4px;"></i>POWER</span>
+    </div>
+    <h3>C4 Pre-Workout <span>30 servings</span></h3>
+    <div class="desc"><i class="fas fa-bolt"></i> 150mg caffeine · beta-alanine · focus</div>
+    <div class="price-row">
+      <span class="price">₱2,200</span>
+      <span class="price-old">₱2,800</span>
+    </div>
+    <div class="rating-block">
+      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>142 sold</span></div>
+      <div class="stock" id="stockPre"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-buy" id="buyBtnPre" onclick="openCheckoutModal('pre', 'C4 Pre-Workout', 2200, 'images/pre-workout.jpg', 'stockPre')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
+      <button class="btn btn-instagram" onclick="orderInstagram()"><i class="fab fa-instagram"></i> Order via Instagram</button>
+    </div>
+    <div class="reviews">
+      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+      <span class="highlight"> "Insane energy!"</span> — Chris
+    </div>
+  </div>
+
+  <!-- ================================================================ -->
+  <!-- ======================= PED's SECTION ======================== -->
+  <!-- ================================================================ -->
+  <div class="category-header">
+    <div class="cat-icon"><i class="fas fa-syringe"></i></div>
+    <h2>PED's</h2>
+    <span class="cat-badge">Peptides · Gears</span>
+  </div>
+
+  <!-- ===== PRODUCT: CJC-1295 + Ipamorelin ===== -->
+  <div class="product" data-stock-id="stock1">
+    <div class="product-img">
+      <img src="images/cjc-1295.jpg" alt="CJC-1295 no DAC + Ipamorelin" onerror="this.src='https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=600&h=600&fit=crop&crop=center'">
+      <span class="badge"><i class="fas fa-fire" style="margin-right:4px;"></i>BEST SELLER</span>
+    </div>
+    <h3>CJC-1295 no DAC + Ipamorelin <span>10mg</span></h3>
+    <div class="desc"><i class="fas fa-syringe"></i> Peptide blend · GH release · anti-aging</div>
+    <div class="price-row">
+      <span class="price">₱2,499</span>
+      <span class="price-old">₱3,200</span>
+    </div>
+    <div class="rating-block">
+      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> <span>128 sold</span></div>
+      <div class="stock" id="stock1"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-buy" id="buyBtn1" onclick="openCheckoutModal('1', 'CJC-1295 no DAC + Ipamorelin', 2499, 'images/cjc-1295.jpg', 'stock1')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
+      <button class="btn btn-instagram" onclick="orderInstagram()"><i class="fab fa-instagram"></i> Order via Instagram</button>
+    </div>
+    <div class="reviews">
+      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+      <span class="highlight"> "Great results!"</span> — Mark
+    </div>
+  </div>
+
+  <!-- ===== PRODUCT: BPC-157 ===== -->
+  <div class="product" data-stock-id="stockBPC">
+    <div class="product-img">
+      <img src="images/bpc157.jpg" alt="BPC-157" onerror="this.src='https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=600&h=600&fit=crop&crop=center'">
+      <span class="badge"><i class="fas fa-flask" style="margin-right:4px;"></i> HEALING</span>
+    </div>
+    <h3>BPC-157 <span>10mg</span></h3>
+    <div class="desc"><i class="fas fa-flask"></i> Healing peptide · gut health · recovery</div>
+    <div class="price-row">
+      <span class="price">₱1,200</span>
+      <span class="price-old">₱1,850</span>
+    </div>
+    <div class="rating-block">
+      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>96 sold</span></div>
+      <div class="stock" id="stockBPC"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-buy" id="buyBtnBPC" onclick="openCheckoutModal('bpc', 'BPC-157 Peptide', 1200, 'images/bpc157.jpg', 'stockBPC')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
+      <button class="btn btn-instagram" onclick="orderInstagram()"><i class="fab fa-instagram"></i> Order via Instagram</button>
+    </div>
+    <div class="reviews">
+      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+      <span class="highlight"> "Healed my injury!"</span> — Paul
+    </div>
+  </div>
+
+  <!-- ===== PRODUCT: TB-500 ===== -->
+  <div class="product" data-stock-id="stockTB">
+    <div class="product-img">
+      <img src="images/tb500.jpg" alt="TB-500" onerror="this.src='https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=600&h=600&fit=crop&crop=center'">
+      <span class="badge"><i class="fas fa-heartbeat" style="margin-right:4px;"></i> REPAIR</span>
+    </div>
+    <h3>TB-500 <span>10mg</span></h3>
+    <div class="desc"><i class="fas fa-heartbeat"></i> Tissue repair · inflammation · recovery</div>
+    <div class="price-row">
+      <span class="price">₱2,199</span>
+      <span class="price-old">₱2,900</span>
+    </div>
+    <div class="rating-block">
+      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>73 sold</span></div>
+      <div class="stock" id="stockTB"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-buy" id="buyBtnTB" onclick="openCheckoutModal('tb', 'TB-500 Peptide', 2199, 'images/tb500.jpg', 'stockTB')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
+      <button class="btn btn-instagram" onclick="orderInstagram()"><i class="fab fa-instagram"></i> Order via Instagram</button>
+    </div>
+    <div class="reviews">
+      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+      <span class="highlight"> "Fast recovery!"</span> — Alex
+    </div>
+  </div>
+
+  <!-- trust badges -->
+  <div class="trust-badges">
+    <span><i class="fas fa-truck"></i> 3-5 days delivery</span>
+    <span><i class="fas fa-shield-alt"></i> 100+ customers</span>
+    <span><i class="fas fa-credit-card"></i> COD available</span>
+  </div>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- CHECKOUT MODAL -->
+<!-- ================================================================ -->
+<div class="checkout-overlay" id="checkoutModal">
+  <div class="checkout-modal">
+    <div class="modal-header">
+      <h3><i class="fas fa-edit"></i> Checkout</h3>
+      <button class="modal-close" onclick="closeCheckoutModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <!-- Product Summary -->
+      <div class="product-summary">
+        <img id="checkoutProductImage" src="" alt="Product">
+        <div class="info">
+          <div class="name" id="checkoutProductName">Product Name</div>
+          <div class="qty-price">
+            <span>Qty: 1</span> · <span class="price-tag" id="checkoutProductPrice">₱0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shipping Info -->
+      <div class="input-group">
+        <label><i class="fas fa-user"></i> Full Name</label>
+        <input type="text" id="checkoutName" placeholder="Enter your full name">
+      </div>
+
+      <div class="input-group">
+        <label><i class="fas fa-map-pin"></i> Address</label>
+        <textarea id="checkoutAddress" placeholder="House #, Street, Barangay, City, Province" rows="2"></textarea>
+      </div>
+
+      <div class="input-group">
+        <label><i class="fas fa-phone"></i> Phone Number</label>
+        <input type="text" id="checkoutPhone" placeholder="09XX XXX XXXX">
+      </div>
+
+      <!-- Payment Info -->
+      <div class="payment-info">
+        <i class="fas fa-coins"></i>
+        <div class="details">
+          <div class="label">💳 Send payment to:</div>
+          <div class="number">09691348416</div>
+          <div class="note">PayMaya / GCash · Include your Order ID</div>
+        </div>
+      </div>
+
+      <!-- Place Order Button -->
+      <button class="btn-place-order" id="checkoutPlaceOrderBtn" onclick="placeOrderFromCheckout()">
+        <i class="fas fa-check-circle"></i> Place Order
+      </button>
+
+      <div class="instagram-note">
+        <i class="fab fa-instagram"></i> After placing order, DM us your payment proof
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FIREBASE ===== -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCtkKzMB3ogRwwq4OIEaF9oICuV_n25xkY",
+    authDomain: "peakstore-895ff.firebaseapp.com",
+    projectId: "peakstore-895ff",
+    storageBucket: "peakstore-895ff.firebasestorage.app",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Instagram URL - Update this to your actual Instagram profile
+  const INSTAGRAM_URL = 'https://www.instagram.com/peakworkout2026/';
+
+  // Generate unique order ID
+  function generateOrderId() {
+    return 'ORD-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substring(2, 6).toUpperCase();
+  }
+
+  // Show success message with Order ID
+  function showOrderSuccess(orderId) {
+    const successEl = document.getElementById('orderSuccess');
+    const idEl = document.getElementById('successOrderId');
+    idEl.textContent = orderId;
+    successEl.classList.add('show');
+    successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    
+    localStorage.setItem('lastOrderId', orderId);
+  }
+
+  // Check for last order on page load
+  function checkLastOrder() {
+    const lastId = localStorage.getItem('lastOrderId');
+    if (lastId) {
+      const successEl = document.getElementById('orderSuccess');
+      const idEl = document.getElementById('successOrderId');
+      idEl.textContent = lastId;
+      successEl.classList.add('show');
+      fetchOrderStatus(lastId);
+    }
+  }
+
+  // Fetch order status from Firebase
+  async function fetchOrderStatus(orderId) {
+    try {
+      const q = query(collection(db, "orders"), where("orderId", "==", orderId));
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        const orderData = querySnapshot.docs[0].data();
+        const status = orderData.status || 'pending';
+        updateStatusBadge(status);
+      }
+    } catch (error) {
+      console.error('Error fetching order status:', error);
+    }
+  }
+
+  // Update the status badge in the success message
+  function updateStatusBadge(status) {
+    const badge = document.getElementById('successStatus');
+    const statusColors = {
+      'pending': '#f6ad55',
+      'payment_confirmed': '#6effb0',
+      'preparing': '#63b3ed',
+      'shipped': '#63b3ed',
+      'out_for_delivery': '#9f7aea',
+      'delivered': '#6effb0',
+      'cancelled': '#fc8181'
+    };
+    const statusIcons = {
+      'pending': '⏳',
+      'payment_confirmed': '✅',
+      'preparing': '📦',
+      'shipped': '🚚',
+      'out_for_delivery': '🚚',
+      'delivered': '🏠',
+      'cancelled': '❌'
+    };
+    const statusDisplay = status.charAt(0).toUpperCase() + status.slice(1).replace(/_/g, ' ');
+    badge.textContent = `${statusIcons[status] || '⏳'} ${statusDisplay}`;
+    badge.style.color = statusColors[status] || '#f6ad55';
+  }
+
+  // Listen for real-time status updates from Firebase
+  function listenForOrderUpdates(orderId) {
+    const q = query(collection(db, "orders"), where("orderId", "==", orderId));
+    onSnapshot(q, (snapshot) => {
+      if (!snapshot.empty) {
+        const orderData = snapshot.docs[0].data();
+        const status = orderData.status || 'pending';
+        updateStatusBadge(status);
+      }
+    });
+  }
+
+  // Copy Order ID to clipboard
+  window.copyOrderId = function() {
+    const id = document.getElementById('successOrderId').textContent;
+    navigator.clipboard.writeText(id).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+      }, 2000);
+    }).catch(() => {
+      const idEl = document.getElementById('successOrderId');
+      const range = document.createRange();
+      range.selectNode(idEl);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+      document.execCommand('copy');
+      const btn = document.querySelector('.copy-btn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+      }, 2000);
+    });
+  };
+
+  // Place order from checkout modal
+  window.placeOrderFromCheckout = async function() {
+    const name = document.getElementById('checkoutName').value.trim();
+    const address = document.getElementById('checkoutAddress').value.trim();
+    const phone = document.getElementById('checkoutPhone').value.trim();
+    const btn = document.getElementById('checkoutPlaceOrderBtn');
+
+    // Get product info
+    const productName = document.getElementById('checkoutProductName').textContent;
+    const priceText = document.getElementById('checkoutProductPrice').textContent;
+    const price = parseFloat(priceText.replace('₱', '').trim()) || 0;
+
+    if (!name || !address || !phone) {
+      alert("⚠️ Please fill in all fields.");
+      return;
+    }
+
+    // Get the stock ID from the global variable set when modal opened
+    const stockId = window._currentStockId;
+    if (!stockId) {
+      alert("❌ Error: Product stock ID not found. Please try again.");
+      return;
+    }
+    
+    const currentStock = window.getStockLevel ? window.getStockLevel(stockId) : 0;
+    if (currentStock <= 0) {
+      alert("❌ Sorry, this product is out of stock!");
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading-spinner" style="display:inline-block;width:20px;height:20px;border:3px solid rgba(0,0,0,0.2);border-radius:50%;border-top-color:#0b0b0b;animation:spin 0.8s ease infinite;margin-right:10px;"></span> Placing Order...';
+
+    try {
+      const orderId = generateOrderId();
+
+      // Save to Firebase
+      await addDoc(collection(db, "orders"), {
+        orderId: orderId,
+        name: name,
+        address: address,
+        phone: phone,
+        product: productName,
+        price: price,
+        status: "pending",
+        date: new Date().toISOString()
+      });
+
+      // Decrease stock
+      if (window.decreaseStock) {
+        window.decreaseStock(stockId);
+      }
+
+      // Save to localStorage
+      let localOrders = JSON.parse(localStorage.getItem("orders")) || {};
+      localOrders[orderId] = {
+        name: name,
+        address: address,
+        phone: phone,
+        product: productName,
+        price: price,
+        status: "Pending",
+        date: new Date().toISOString()
+      };
+      localStorage.setItem("orders", JSON.stringify(localOrders));
+
+      // Close modal
+      closeCheckoutModal();
+
+      // Show success message
+      showOrderSuccess(orderId);
+      listenForOrderUpdates(orderId);
+
+      // Update stock display
+      if (window.updateAllStockDisplay) {
+        window.updateAllStockDisplay();
+      }
+
+      // Open Instagram profile so customer can DM payment proof
+      setTimeout(() => {
+        window.open(INSTAGRAM_URL, '_blank');
+      }, 1000);
+
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-check-circle"></i> Place Order';
+
+    } catch (error) {
+      alert("❌ Error placing order. Please try again.");
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-check-circle"></i> Place Order';
+      console.error(error);
+    }
+  };
+
+  // Expose trackOrderFromFirebase to global scope
+  window.trackOrderFromFirebase = async function(orderId) {
+    try {
+      const q = query(collection(db, "orders"), where("orderId", "==", orderId));
+      const querySnapshot = await getDocs(q);
+      
+      if (!querySnapshot.empty) {
+        const orderData = querySnapshot.docs[0].data();
+        return {
+          name: orderData.name,
+          address: orderData.address,
+          phone: orderData.phone,
+          product: orderData.product,
+          price: orderData.price,
+          status: orderData.status || 'pending',
+          date: orderData.date
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error('Firebase query error:', error);
+      return null;
+    }
+  };
+
+  // Check for last order on page load
+  checkLastOrder();
+
+</script>
+
+<!-- ===== VANILLA JS ===== -->
+<script>
+  // ============================================
+  // CHECKOUT MODAL
+  // ============================================
+  let _currentProductId = null;
+  let _currentStockId = null;
+
+  window.openCheckoutModal = function(productId, productName, price, imageSrc, stockId) {
+    // Check stock
+    const qty = stockId ? window.getStockLevel(stockId) : 0;
+    if (qty <= 0) {
+      alert('❌ Sorry, this product is out of stock!');
+      return;
+    }
+
+    _currentProductId = productId;
+    _currentStockId = stockId;
+    window._currentStockId = stockId;
+
+    document.getElementById('checkoutProductName').textContent = productName;
+    document.getElementById('checkoutProductPrice').textContent = `₱${price}`;
+    document.getElementById('checkoutProductImage').src = imageSrc || 'images/placeholder.jpg';
+    document.getElementById('checkoutName').value = '';
+    document.getElementById('checkoutAddress').value = '';
+    document.getElementById('checkoutPhone').value = '';
+
+    document.getElementById('checkoutModal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.closeCheckoutModal = function() {
+    document.getElementById('checkoutModal').classList.remove('show');
+    document.body.style.overflow = '';
+  };
+
+  // Close modal on outside click
+  document.getElementById('checkoutModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeCheckoutModal();
+    }
+  });
+
+  // ============================================
+  // STOCK MANAGEMENT
+  // ============================================
+  
+  const DEFAULT_STOCK = {
+    stockWhey: 12,
+    stockCreatine: 15,
+    stockPre: 9,
+    stock1: 7,
+    stockBPC: 6,
+    stockTB: 5
+  };
+
+  window.getStockData = function() {
+    const saved = localStorage.getItem('peakStock');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {}
+    }
+    const defaults = Object.keys(DEFAULT_STOCK).map(id => ({
+      id: id,
+      qty: DEFAULT_STOCK[id]
+    }));
+    localStorage.setItem('peakStock', JSON.stringify(defaults));
+    return defaults;
+  };
+
+  window.getStockLevel = function(stockId) {
+    if (!stockId) return 0;
+    const stock = window.getStockData();
+    const item = stock.find(s => s.id === stockId);
+    return item ? item.qty : 0;
+  };
+
+  window.decreaseStock = function(stockId) {
+    if (!stockId) return;
+    const stock = window.getStockData();
+    const item = stock.find(s => s.id === stockId);
+    if (item && item.qty > 0) {
+      item.qty--;
+      localStorage.setItem('peakStock', JSON.stringify(stock));
+    }
+  };
+
+  window.updateAllStockDisplay = function() {
+    const stockElements = document.querySelectorAll('[id^="stock"]');
+    stockElements.forEach(el => {
+      const stockId = el.id;
+      const qty = window.getStockLevel(stockId);
+      window.updateStockDisplay(el, qty);
+      
+      const productCard = el.closest('.product');
+      if (productCard) {
+        const buyBtn = productCard.querySelector('.btn-buy');
+        if (buyBtn) {
+          buyBtn.disabled = qty <= 0;
+          if (qty <= 0) {
+            buyBtn.innerHTML = '<i class="fas fa-times-circle"></i> Out of Stock';
+          } else {
+            buyBtn.innerHTML = '<i class="fas fa-bag-shopping"></i> Buy Now';
+          }
+        }
+      }
+    });
+  };
+
+  window.updateStockDisplay = function(element, qty) {
+    const icon = qty > 0 ? 'fa-circle' : 'fa-times-circle';
+    let statusClass = 'in-stock';
+    let label = `${qty} left`;
+    
+    if (qty <= 0) {
+      statusClass = 'out-of-stock';
+      label = 'Out of Stock';
+    } else if (qty <= 3) {
+      statusClass = 'low-stock';
+      label = `Only ${qty} left!`;
+    }
+    
+    element.className = `stock ${statusClass}`;
+    element.innerHTML = `<i class="fas ${icon}" style="color:${qty > 0 ? '#6effb0' : '#fc8181'}; font-size:10px;"></i> ${label}`;
+    
+    const productCard = element.closest('.product');
+    if (productCard) {
+      const badge = productCard.querySelector('.badge');
+      if (badge) {
+        if (qty <= 0) {
+          badge.classList.add('out-of-stock');
+          badge.innerHTML = '<i class="fas fa-times-circle" style="margin-right:4px;"></i> OUT OF STOCK';
+        } else {
+          badge.classList.remove('out-of-stock');
+          const originalBadge = productCard.dataset.originalBadge;
+          if (originalBadge) {
+            badge.innerHTML = originalBadge;
+          }
+        }
+      }
+    }
+  };
+
+  function initStock() {
+    document.querySelectorAll('.product').forEach(card => {
+      const badge = card.querySelector('.badge');
+      if (badge && !badge.classList.contains('out-of-stock')) {
+        card.dataset.originalBadge = badge.innerHTML;
+      }
+    });
+    window.updateAllStockDisplay();
+    
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'peakStock') {
+        window.updateAllStockDisplay();
+      }
+    });
+  }
+
+  // ============================================
+  // ORDER VIA INSTAGRAM (button on product)
+  // ============================================
+  function orderInstagram() {
+    window.open('https://www.instagram.com/peakworkout2026/', '_blank');
+  }
+
+  // ============================================
+  // INIT
+  // ============================================
+  initStock();
+  console.log('📦 Real stock management initialized');
+  console.log('📊 Stock data:', window.getStockData());
+</script>
+
+<!-- Add spin animation for loading -->
+<style>
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>
+
+</body>
+</html>

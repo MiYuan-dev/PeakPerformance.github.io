@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel · PEAK Store</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0b0b0b;
+      min-height: 100vh;
+      padding: 20px;
+      color: #f0f0f0;
+    }
+    .admin-wrapper { max-width: 1400px; margin: 0 auto; }
+
+    .admin-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px 30px;
+      border-radius: 16px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    .admin-header h1 { font-size: 24px; }
+    .admin-header .admin-info { display: flex; align-items: center; gap: 15px; }
+    .admin-header .admin-info span { background: rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 20px; font-size: 14px; }
+    .btn-logout {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      padding: 8px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,0.3); transform: scale(1.05); }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    .stat-card {
+      background: #1a1a1a;
+      padding: 18px;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid #2a2a2a;
+    }
+    .stat-card .number { font-size: 26px; font-weight: 800; color: #6effb0; }
+    .stat-card .label { color: #8a8a8a; font-size: 13px; margin-top: 4px; }
+
+    .admin-section {
+      background: #141414;
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 25px;
+      border: 1px solid #262626;
+    }
+    .admin-section .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .admin-section .section-header h2 {
+      color: #f0f0f0;
+      font-size: 20px;
+    }
+    .admin-section .section-header h2 i { color: #6effb0; margin-right: 10px; }
+    .admin-section .section-header .badge-count {
+      background: #667eea;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* ----- Discount Section ----- */
+    .discount-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    .discount-grid .input-group { margin-bottom: 0; }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
+    .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .btn-success { background: #48bb78; color: white; }
+    .btn-danger { background: #fc8181; color: white; }
+    .btn-warning { background: #f6ad55; color: #1a1a1a; }
+    .btn-secondary { background: #2a2a2a; color: #b0b0b0; }
+    .btn-info { background: #63b3ed; color: #1a1a1a; }
+    .btn-sm { padding: 6px 14px; font-size: 13px; }
+
+    .input-group { margin-bottom: 15px; }
+    .input-group label {
+      display: block;
+      font-weight: 600;
+      color: #b0b0b0;
+      margin-bottom: 5px;
+      font-size: 13px;
+    }
+    .input-group input, .input-group select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid #2a2a2a;
+      border-radius: 10px;
+      font-size: 14px;
+      transition: all 0.3s;
+      background: #1a1a1a;
+      color: #f0f0f0;
+      outline: none;
+    }
+    .input-group input:focus, .input-group select:focus {
+      border-color: #6effb0;
+      box-shadow: 0 0 0 3px rgba(110,255,176,0.08);
+    }
+    .input-group input::placeholder { color: #5a5a5a; }
+
+    .table-wrapper { overflow-x: auto; margin-top: 15px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    table th { 
+      background: #1a1a1a; 
+      padding: 10px 12px; 
+      text-align: left; 
+      font-weight: 700; 
+      color: #b0b0b0;
+      border-bottom: 2px solid #2a2a2a;
+    }
+    table td { padding: 10px 12px; border-bottom: 1px solid #2a2a2a; color: #d0d0d0; }
+    table tr:hover { background: #1a1a1a; }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .badge-active { background: #1a2a1a; color: #6effb0; }
+    .badge-expired { background: #2a2a1a; color: #f6ad55; }
+    .badge-inactive { background: #2a2a2a; color: #6a6a6a; }
+
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+    .filter-bar input, .filter-bar select {
+      padding: 10px 14px;
+      border: 2px solid #2a2a2a;
+      border-radius: 10px;
+      font-size: 14px;
+      background: #1a1a1a;
+      color: #f0f0f0;
+      outline: none;
+    }
+    .filter-bar input:focus, .filter-bar select:focus {
+      border-color: #6effb0;
+    }
+    .filter-bar input { flex: 1; min-width: 150px; }
+    .filter-bar input::placeholder { color: #5a5a5a; }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal.show { display: flex; }
+    .modal-content {
+      background: #141414;
+      padding: 30px;
+      border-radius: 16px;
+      max-width: 580px;
+      width: 92%;
+      border: 1px solid #2a2a2a;
+      max-height: 95vh;
+      overflow-y: auto;
+    }
+    .modal-content h3 { color: #f0f0f0; margin-bottom: 20px; }
+    .modal-content .btn-row { display: flex; gap: 10px; margin-top: 15px; }
+    .modal-content .btn-row .btn { flex: 1; }
+
+    .message {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 10px;
+      display: none;
+      font-weight: 500;
+    }
+    .message.success { display: block; background: #1a2a1a; color: #6effb0; border: 1px solid #2a4a2a; }
+    .message.error { display: block; background: #2a1a1a; color: #fc8181; border: 1px solid #4a2a2a; }
+    .message.info { display: block; background: #1a2a3a; color: #63b3ed; border: 1px solid #2a3a4a; }
+
+    /* ============================================
+       TIMELINE CONTROL PANEL
+       ============================================ */
+    .timeline-control {
+      background: #1a1a1a;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 18px 0;
+      border: 1px solid #2a2a2a;
+    }
+    .timeline-control .tl-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .timeline-control .tl-header .tl-title {
+      color: #6effb0;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .timeline-control .tl-header .tl-progress {
+      font-size: 14px;
+      color: #b0b0b0;
+    }
+    .timeline-control .tl-header .tl-progress span {
+      color: #6effb0;
+      font-weight: 700;
+    }
+
+    .timeline-control .tl-progress-bar {
+      width: 100%;
+      height: 6px;
+      background: #2a2a2a;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .timeline-control .tl-progress-bar .tl-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #6effb0, #667eea);
+      border-radius: 3px;
+      transition: width 0.6s ease;
+      width: 0%;
+    }
+
+    .timeline-control .tl-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .timeline-control .tl-step {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: #111;
+      border: 1px solid #222;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .timeline-control .tl-step:hover {
+      border-color: #3a3a3a;
+      background: #161616;
+    }
+    .timeline-control .tl-step .tl-step-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+      background: #222;
+      color: #4a4a4a;
+      transition: all 0.3s ease;
+    }
+    .timeline-control .tl-step .tl-step-icon.completed {
+      background: #1a2a1a;
+      color: #6effb0;
+      border: 1px solid #2a4a2a;
+    }
+    .timeline-control .tl-step .tl-step-icon.active {
+      background: #6effb0;
+      color: #0b0b0b;
+      box-shadow: 0 0 25px rgba(110, 255, 176, 0.25);
+      border: 1px solid #6effb0;
+      animation: tlPulse 1.5s ease-in-out infinite;
+    }
+    @keyframes tlPulse {
+      0%, 100% { box-shadow: 0 0 15px rgba(110, 255, 176, 0.2); }
+      50% { box-shadow: 0 0 30px rgba(110, 255, 176, 0.4); }
+    }
+    .timeline-control .tl-step .tl-step-info { flex: 1; }
+    .timeline-control .tl-step .tl-step-info .tl-step-name {
+      font-size: 14px;
+      color: #6a6a6a;
+      transition: all 0.3s ease;
+    }
+    .timeline-control .tl-step .tl-step-info .tl-step-name.completed { color: #6effb0; }
+    .timeline-control .tl-step .tl-step-info .tl-step-name.active { color: #f0f0f0; font-weight: 600; }
+    .timeline-control .tl-step .tl-step-status {
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .timeline-control .tl-step .tl-step-status.done { background: #1a2a1a; color: #6effb0; border: 1px solid #2a4a2a; }
+    .timeline-control .tl-step .tl-step-status.now { background: #2a2a2a; color: #6effb0; border: 1px solid #4a4a4a; }
+    .timeline-control .tl-step .tl-step-status.pending { background: #2a2a1a; color: #6a6a3a; border: 1px solid #3a3a2a; }
+
+    /* ============================================
+       ORDER DETAILS VIEW
+       ============================================ */
+    .order-detail-row {
+      display: flex;
+      padding: 8px 0;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .order-detail-row .label {
+      width: 120px;
+      color: #8a8a8a;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .order-detail-row .value {
+      flex: 1;
+      color: #f0f0f0;
+      word-break: break-word;
+    }
+    .order-detail-row .value code {
+      background: #1a1a1a;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #6effb0;
+    }
+
+    /* ============================================
+       STOCK MANAGEMENT
+       ============================================ */
+    .stock-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: #1a1a1a;
+      border-radius: 10px;
+      border: 1px solid #2a2a2a;
+      margin-bottom: 8px;
+      transition: 0.3s;
+    }
+    .stock-item:hover { border-color: #3a3a3a; }
+    .stock-item .stock-info { display: flex; align-items: center; gap: 12px; }
+    .stock-item .stock-info .stock-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #222;
+      color: #6effb0;
+      font-size: 14px;
+    }
+    .stock-item .stock-info .stock-name { font-size: 14px; color: #f0f0f0; font-weight: 600; }
+    .stock-item .stock-info .stock-category { font-size: 12px; color: #6a6a6a; margin-left: 8px; }
+    .stock-item .stock-control { display: flex; align-items: center; gap: 10px; }
+    .stock-item .stock-control .stock-qty {
+      font-size: 18px;
+      font-weight: 700;
+      color: #6effb0;
+      min-width: 30px;
+      text-align: center;
+    }
+    .stock-item .stock-control .stock-qty.low { color: #f6ad55; }
+    .stock-item .stock-control .stock-qty.out { color: #fc8181; }
+    .stock-item .stock-control .stock-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid #2a2a2a;
+      background: transparent;
+      color: #b0b0b0;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .stock-item .stock-control .stock-btn:hover { background: #2a2a2a; color: #6effb0; border-color: #6effb0; }
+    .stock-item .stock-control .stock-input {
+      width: 60px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid #2a2a2a;
+      background: #111;
+      color: #f0f0f0;
+      text-align: center;
+      font-size: 14px;
+      outline: none;
+    }
+    .stock-item .stock-control .stock-input:focus { border-color: #6effb0; }
+
+    @media (max-width: 768px) {
+      .admin-header { flex-direction: column; text-align: center; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .discount-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .modal-content { padding: 20px; }
+      .filter-bar input { min-width: 100%; }
+      .timeline-control .tl-step { flex-wrap: wrap; gap: 8px; }
+      .stock-item { flex-wrap: wrap; gap: 8px; }
+      .stock-item .stock-control { flex-wrap: wrap; }
+      .order-detail-row { flex-direction: column; padding: 6px 0; }
+      .order-detail-row .label { width: 100%; margin-bottom: 2px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-wrapper">
+    <div class="admin-header">
+      <h1><i class="fas fa-store"></i> PEAK Admin</h1>
+      <div class="admin-info">
+        <span id="adminEmail">admin@peakstore.com</span>
+        <button class="btn-logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="number" id="totalOrders">0</div><div class="label">Total Orders</div></div>
+      <div class="stat-card"><div class="number" id="pendingOrders">0</div><div class="label">Pending</div></div>
+      <div class="stat-card"><div class="number" id="paidOrders">0</div><div class="label">Paid</div></div>
+      <div class="stat-card"><div class="number" id="totalRevenue">₱0</div><div class="label">Revenue</div></div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- DISCOUNT CODES SECTION -->
+    <!-- ================================================================ -->
+    <div class="admin-section">
+      <div class="section-header">
+        <h2><i class="fas fa-tags"></i> Discount Codes</h2>
+        <span class="badge-count" id="discountCount">0</span>
+      </div>
+
+      <div style="margin-bottom:15px; display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-success" id="generateDiscountBtn"><i class="fas fa-plus-circle"></i> Generate Random Code</button>
+        <button class="btn btn-warning" id="clearDiscountsBtn"><i class="fas fa-trash"></i> Clear All Discounts</button>
+        <span style="color:#6a6a6a; font-size:13px; display:flex; align-items:center;">
+          <i class="fas fa-info-circle" style="margin-right:6px;"></i> Create discount codes for customers
+        </span>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:15px;">
+        <div class="input-group" style="margin-bottom:0;">
+          <label>Discount Code</label>
+          <input type="text" id="discountCodeInput" placeholder="e.g., SUMMER2026" />
+        </div>
+        <div class="input-group" style="margin-bottom:0;">
+          <label>Discount Type</label>
+          <select id="discountTypeInput">
+            <option value="percentage">Percentage (%)</option>
+            <option value="fixed">Fixed Amount (₱)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px; margin-bottom:15px;">
+        <div class="input-group" style="margin-bottom:0;">
+          <label>Discount Value</label>
+          <input type="number" id="discountValueInput" placeholder="20" min="0" />
+        </div>
+        <div class="input-group" style="margin-bottom:0;">
+          <label>Usage Limit</label>
+          <input type="number" id="discountLimitInput" placeholder="Unlimited" min="0" />
+        </div>
+        <div class="input-group" style="margin-bottom:0;">
+          <label>Expires (days)</label>
+          <input type="number" id="discountExpiresInput" placeholder="30" min="0" />
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-primary" id="createDiscountBtn"><i class="fas fa-plus"></i> Create Discount</button>
+        <button class="btn btn-info" id="refreshDiscountsBtn"><i class="fas fa-sync"></i> Refresh</button>
+      </div>
+      <div id="discountMessage" class="message"></div>
+
+      <!-- All Discount Codes Table -->
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Type</th>
+              <th>Value</th>
+              <th>Used</th>
+              <th>Limit</th>
+              <th>Expires</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="discountTableBody">
+            <tr><td colspan="8" style="text-align:center;color:#8a8a8a;">No discount codes created yet</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- STOCK MANAGEMENT SECTION -->
+    <!-- ================================================================ -->
+    <div class="admin-section">
+      <div class="section-header">
+        <h2><i class="fas fa-boxes"></i> Stock Management</h2>
+        <span class="badge-count" id="stockCount">0</span>
+      </div>
+      <div style="margin-bottom:15px; display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-success btn-sm" onclick="restockAll()"><i class="fas fa-plus-circle"></i> Restock All</button>
+        <button class="btn btn-warning btn-sm" onclick="resetStock()"><i class="fas fa-sync-alt"></i> Reset Stock</button>
+        <span style="color:#6a6a6a; font-size:13px; display:flex; align-items:center;">
+          <i class="fas fa-info-circle" style="margin-right:6px;"></i> Click +/- to adjust stock
+        </span>
+      </div>
+      <div id="stockList"></div>
+      <div id="stockMessage" class="message"></div>
+    </div>
+
+    <!-- Orders Section -->
+    <div class="admin-section">
+      <div class="section-header">
+        <h2><i class="fas fa-shopping-cart"></i> Orders</h2>
+        <span class="badge-count" id="ordersCount">0</span>
+      </div>
+
+      <div class="filter-bar">
+        <input type="text" id="searchOrder" placeholder="Search by name, order ID, product, phone, or address..." />
+        <select id="statusFilter">
+          <option value="all">All Status</option>
+          <option value="pending">⏳ Pending</option>
+          <option value="payment_confirmed">💳 Payment Confirmed</option>
+          <option value="preparing">📦 Preparing</option>
+          <option value="shipped">🚚 Shipped</option>
+          <option value="out_for_delivery">🚚 Out for Delivery</option>
+          <option value="delivered">🏠 Delivered</option>
+          <option value="cancelled">❌ Cancelled</option>
+        </select>
+        <button class="btn btn-primary btn-sm" id="searchBtn"><i class="fas fa-search"></i> Search</button>
+        <button class="btn btn-secondary btn-sm" id="refreshBtn"><i class="fas fa-sync"></i> Refresh</button>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTable">
+            <tr><td colspan="7" style="text-align:center;color:#8a8a8a;">Loading orders...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="admin-section">
+      <div class="section-header">
+        <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-success" id="markAllPaidBtn"><i class="fas fa-check-double"></i> Mark All as Paid</button>
+        <button class="btn btn-danger" id="clearAllOrdersBtn"><i class="fas fa-trash"></i> Clear All Orders</button>
+        <button class="btn btn-info" onclick="window.location.href='index.html'"><i class="fas fa-store"></i> View Store</button>
+      </div>
+      <div id="quickMessage" class="message"></div>
+    </div>
+  </div>
+
+  <!-- Order Detail Modal (View Order) -->
+  <div class="modal" id="orderDetailModal">
+    <div class="modal-content">
+      <h3><i class="fas fa-receipt"></i> Order Details</h3>
+      <div id="orderDetailContent">
+        <div class="order-detail-row"><span class="label">Order ID</span><span class="value"><code id="detailOrderId">-</code></span></div>
+        <div class="order-detail-row"><span class="label">Customer Name</span><span class="value" id="detailName">-</span></div>
+        <div class="order-detail-row"><span class="label">Address</span><span class="value" id="detailAddress">-</span></div>
+        <div class="order-detail-row"><span class="label">Phone Number</span><span class="value" id="detailPhone">-</span></div>
+        <div class="order-detail-row"><span class="label">Product</span><span class="value" id="detailProduct">-</span></div>
+        <div class="order-detail-row"><span class="label">Price</span><span class="value" id="detailPrice">-</span></div>
+        <div class="order-detail-row"><span class="label">Status</span><span class="value" id="detailStatus">-</span></div>
+        <div class="order-detail-row"><span class="label">Order Date</span><span class="value" id="detailDate">-</span></div>
+        <div class="order-detail-row" style="border-bottom: none; margin-top: 4px;">
+          <span class="label">Payment Info</span>
+          <span class="value" style="color:#6effb0;">📱 PayMaya: 09691348416</span>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-success" id="markPaidFromDetail"><i class="fas fa-check"></i> Mark as Paid</button>
+        <button class="btn btn-secondary" onclick="closeOrderDetailModal()">Close</button>
+      </div>
+      <div id="detailMessage" class="message"></div>
+    </div>
+  </div>
+
+  <!-- Edit Order Modal with Timeline Control Panel -->
+  <div class="modal" id="editModal">
+    <div class="modal-content">
+      <h3><i class="fas fa-edit"></i> Edit Order</h3>
+      <div class="input-group"><label>Order ID</label><input type="text" id="editOrderId" readonly /></div>
+      <div class="input-group"><label>Customer Name</label><input type="text" id="editName" /></div>
+      <div class="input-group"><label>Address</label><input type="text" id="editAddress" /></div>
+      <div class="input-group"><label>Phone</label><input type="text" id="editPhone" /></div>
+      <div class="input-group"><label>Product</label><input type="text" id="editProduct" /></div>
+      <div class="input-group"><label>Price</label><input type="text" id="editPrice" /></div>
+      <div class="input-group"><label>Status</label>
+        <select id="editStatus">
+          <option value="pending">⏳ Pending</option>
+          <option value="payment_confirmed">💳 Payment Confirmed</option>
+          <option value="preparing">📦 Preparing to Ship</option>
+          <option value="shipped">🚚 Shipped</option>
+          <option value="out_for_delivery">🚚 Out for Delivery</option>
+          <option value="delivered">✅ Delivered</option>
+          <option value="cancelled">❌ Cancelled</option>
+        </select>
+      </div>
+
+      <div class="timeline-control" id="timelineControl">
+        <div class="tl-header">
+          <div class="tl-title"><i class="fas fa-timeline"></i> Delivery Timeline</div>
+          <div class="tl-progress">Progress: <span id="tlProgressText">0%</span></div>
+        </div>
+        <div class="tl-progress-bar"><div class="tl-fill" id="tlProgressFill" style="width:0%;"></div></div>
+        <div class="tl-steps" id="tlStepsContainer"></div>
+        <p style="color:#6a6a6a; font-size:12px; margin-top:12px; text-align:center;">
+          <i class="fas fa-info-circle"></i> Click any step to update order status
+        </p>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-success" id="saveEditBtn"><i class="fas fa-save"></i> Save</button>
+        <button class="btn btn-secondary" id="closeEditBtn">Cancel</button>
+      </div>
+      <div id="editMessage" class="message"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      deleteDoc,
+      doc,
+      updateDoc,
+      getDoc,
+      serverTimestamp,
+      addDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCtkKzMB3ogRwwq4OIEaF9oICuV_n25xkY",
+      authDomain: "peakstore-895ff.firebaseapp.com",
+      projectId: "peakstore-895ff",
+      storageBucket: "peakstore-895ff.firebasestorage.app",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const adminEmail = document.getElementById('adminEmail');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    let allOrders = [];
+    let currentEditId = null;
+    let currentDetailId = null;
+
+    // ============================================
+    // DISCOUNT CODES
+    // ============================================
+    let allDiscounts = [];
+
+    function generateRandomCode(length = 6) {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let code = '';
+      for (let i = 0; i < length; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return code;
+    }
+
+    function getDiscountTypeDisplay(type) {
+      return type === 'percentage' ? '%' : '₱';
+    }
+
+    function renderDiscounts(discounts) {
+      const tbody = document.getElementById('discountTableBody');
+      document.getElementById('discountCount').textContent = discounts.length;
+
+      if (discounts.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#8a8a8a;">No discount codes created yet</td></tr>';
+        return;
+      }
+
+      const now = new Date();
+      tbody.innerHTML = discounts.map(d => {
+        const isExpired = d.expiresAt && new Date(d.expiresAt) < now;
+        const isActive = d.isActive !== false && !isExpired;
+        const statusClass = isActive ? 'badge-active' : (isExpired ? 'badge-expired' : 'badge-inactive');
+        const statusText = isActive ? 'Active' : (isExpired ? 'Expired' : 'Inactive');
+
+        return `
+          <tr>
+            <td><code style="color:#6effb0;font-weight:700;">${d.code}</code></td>
+            <td><span class="badge ${d.type === 'percentage' ? 'badge-active' : 'badge-info'}">${d.type === 'percentage' ? '%' : '₱'}</span></td>
+            <td><strong>${d.type === 'percentage' ? d.value + '%' : '₱' + d.value}</strong></td>
+            <td><span class="badge badge-active">${d.usedCount || 0}</span></td>
+            <td>${d.usageLimit || '∞'}</td>
+            <td>${d.expiresAt ? new Date(d.expiresAt).toLocaleDateString() : 'Never'}</td>
+            <td><span class="badge ${statusClass}">${statusText}</span></td>
+            <td>
+              <button class="btn btn-danger btn-sm" onclick="window.deleteDiscount('${d.id}')" title="Delete"><i class="fas fa-trash"></i></button>
+              ${isActive ? `<button class="btn btn-warning btn-sm" onclick="window.toggleDiscount('${d.id}')" title="Deactivate"><i class="fas fa-pause"></i></button>` :
+                `<button class="btn btn-success btn-sm" onclick="window.toggleDiscount('${d.id}')" title="Activate"><i class="fas fa-play"></i></button>`}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function loadDiscounts() {
+      try {
+        const snapshot = await getDocs(collection(db, "discountCodes"));
+        allDiscounts = [];
+        snapshot.forEach(doc => {
+          allDiscounts.push({ id: doc.id, ...doc.data() });
+        });
+        renderDiscounts(allDiscounts);
+      } catch (error) {
+        console.error('Error loading discounts:', error);
+      }
+    }
+
+    window.deleteDiscount = async function(id) {
+      if (!confirm('Delete this discount code permanently?')) return;
+      try {
+        await deleteDoc(doc(db, "discountCodes", id));
+        await loadDiscounts();
+        showDiscountMessage('✅ Discount code deleted', 'success');
+      } catch (error) {
+        showDiscountMessage('❌ Error: ' + error.message, 'error');
+      }
+    };
+
+    window.toggleDiscount = async function(id) {
+      const discount = allDiscounts.find(d => d.id === id);
+      if (!discount) return;
+      const newStatus = discount.isActive === false;
+      try {
+        await updateDoc(doc(db, "discountCodes", id), {
+          isActive: newStatus
+        });
+        await loadDiscounts();
+        showDiscountMessage(`✅ Discount ${newStatus ? 'activated' : 'deactivated'}`, 'success');
+      } catch (error) {
+        showDiscountMessage('❌ Error: ' + error.message, 'error');
+      }
+    };
+
+    function showDiscountMessage(text, type = 'success') {
+      const el = document.getElementById('discountMessage');
+      el.className = `message ${type}`;
+      el.textContent = text;
+      setTimeout(() => { el.className = 'message'; }, 3000);
+    }
+
+    // Create Discount
+    document.getElementById('createDiscountBtn').addEventListener('click', async () => {
+      const code = document.getElementById('discountCodeInput').value.trim().toUpperCase();
+      const type = document.getElementById('discountTypeInput').value;
+      const value = parseFloat(document.getElementById('discountValueInput').value);
+      const usageLimit = parseInt(document.getElementById('discountLimitInput').value) || null;
+      const expiresDays = parseInt(document.getElementById('discountExpiresInput').value) || null;
+
+      if (!code) {
+        showDiscountMessage('⚠️ Please enter a discount code', 'error');
+        return;
+      }
+      if (!value || value <= 0) {
+        showDiscountMessage('⚠️ Please enter a valid discount value', 'error');
+        return;
+      }
+
+      // Check if code already exists
+      const existing = allDiscounts.find(d => d.code === code);
+      if (existing) {
+        showDiscountMessage('❌ This discount code already exists!', 'error');
+        return;
+      }
+
+      let expiresAt = null;
+      if (expiresDays) {
+        const date = new Date();
+        date.setDate(date.getDate() + expiresDays);
+        expiresAt = date.toISOString();
+      }
+
+      try {
+        await addDoc(collection(db, "discountCodes"), {
+          code: code,
+          type: type,
+          value: value,
+          usageLimit: usageLimit,
+          expiresAt: expiresAt,
+          usedCount: 0,
+          isActive: true,
+          createdAt: serverTimestamp()
+        });
+
+        document.getElementById('discountCodeInput').value = '';
+        document.getElementById('discountValueInput').value = '';
+        document.getElementById('discountLimitInput').value = '';
+        document.getElementById('discountExpiresInput').value = '';
+        await loadDiscounts();
+        showDiscountMessage(`✅ Discount code "${code}" created!`, 'success');
+      } catch (error) {
+        showDiscountMessage('❌ Error: ' + error.message, 'error');
+      }
+    });
+
+    // Generate Random Code
+    document.getElementById('generateDiscountBtn').addEventListener('click', () => {
+      const code = generateRandomCode(8);
+      document.getElementById('discountCodeInput').value = code;
+    });
+
+    // Clear All Discounts
+    document.getElementById('clearDiscountsBtn').addEventListener('click', async () => {
+      if (!confirm('⚠️ Delete ALL discount codes? This cannot be undone!')) return;
+      try {
+        const snapshot = await getDocs(collection(db, "discountCodes"));
+        for (const docSnap of snapshot.docs) {
+          await deleteDoc(doc(db, "discountCodes", docSnap.id));
+        }
+        await loadDiscounts();
+        showDiscountMessage('✅ All discount codes deleted', 'success');
+      } catch (error) {
+        showDiscountMessage('❌ Error: ' + error.message, 'error');
+      }
+    });
+
+    document.getElementById('refreshDiscountsBtn').addEventListener('click', loadDiscounts);
+
+    // ============================================
+    // STOCK DATA
+    // ============================================
+    let stockData = [
+      { id: 'stockWhey', name: 'Whey Protein Isolate', category: 'Supplements', icon: 'fa-pills', qty: 12 },
+      { id: 'stockCreatine', name: 'Creatine Monohydrate', category: 'Supplements', icon: 'fa-pills', qty: 15 },
+      { id: 'stockPre', name: 'Pre-Workout Blast', category: 'Supplements', icon: 'fa-pills', qty: 9 },
+      { id: 'stock1', name: 'CJC-1295 + Ipamorelin', category: 'PED\'s', icon: 'fa-syringe', qty: 7 },
+      { id: 'stockBPC', name: 'BPC-157 Peptide', category: 'PED\'s', icon: 'fa-syringe', qty: 6 },
+      { id: 'stockTB', name: 'TB-500 Peptide', category: 'PED\'s', icon: 'fa-syringe', qty: 5 }
+    ];
+
+    function renderStock() {
+      const container = document.getElementById('stockList');
+      document.getElementById('stockCount').textContent = stockData.length;
+
+      let html = '';
+      stockData.forEach(item => {
+        const qtyClass = item.qty === 0 ? 'out' : (item.qty <= 3 ? 'low' : '');
+        html += `
+          <div class="stock-item">
+            <div class="stock-info">
+              <div class="stock-icon"><i class="fas ${item.icon}"></i></div>
+              <div>
+                <span class="stock-name">${item.name}</span>
+                <span class="stock-category">${item.category}</span>
+              </div>
+            </div>
+            <div class="stock-control">
+              <button class="stock-btn" onclick="window.adjustStock('${item.id}', -1)"><i class="fas fa-minus"></i></button>
+              <span class="stock-qty ${qtyClass}">${item.qty}</span>
+              <button class="stock-btn" onclick="window.adjustStock('${item.id}', 1)"><i class="fas fa-plus"></i></button>
+              <input type="number" class="stock-input" id="stockInput_${item.id}" value="${item.qty}" min="0" onchange="window.setStock('${item.id}', this.value)" />
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    window.adjustStock = function(id, amount) {
+      const item = stockData.find(s => s.id === id);
+      if (!item) return;
+      const newQty = Math.max(0, item.qty + amount);
+      item.qty = newQty;
+      localStorage.setItem('peakStock', JSON.stringify(stockData));
+      renderStock();
+      showStockMessage(`✅ ${item.name} stock updated to ${newQty}`, 'success');
+    };
+
+    window.setStock = function(id, value) {
+      const item = stockData.find(s => s.id === id);
+      if (!item) return;
+      const newQty = Math.max(0, parseInt(value) || 0);
+      item.qty = newQty;
+      localStorage.setItem('peakStock', JSON.stringify(stockData));
+      renderStock();
+    };
+
+    window.restockAll = function() {
+      if (!confirm('Restock ALL products to default quantities?')) return;
+      const defaults = { stockWhey: 12, stockCreatine: 15, stockPre: 9, stock1: 7, stockBPC: 6, stockTB: 5 };
+      stockData.forEach(item => { item.qty = defaults[item.id] || 10; });
+      localStorage.setItem('peakStock', JSON.stringify(stockData));
+      renderStock();
+      showStockMessage('✅ All products restocked!', 'success');
+    };
+
+    window.resetStock = function() {
+      if (!confirm('⚠️ Reset ALL stock to 0?')) return;
+      stockData.forEach(item => { item.qty = 0; });
+      localStorage.setItem('peakStock', JSON.stringify(stockData));
+      renderStock();
+      showStockMessage('⚠️ All stock reset to 0', 'info');
+    };
+
+    function showStockMessage(text, type = 'success') {
+      const el = document.getElementById('stockMessage');
+      el.className = `message ${type}`;
+      el.textContent = text;
+      setTimeout(() => { el.className = 'message'; }, 3000);
+    }
+
+    function loadStock() {
+      const saved = localStorage.getItem('peakStock');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          stockData.forEach(item => {
+            const found = parsed.find(p => p.id === item.id);
+            if (found) item.qty = found.qty;
+          });
+        } catch (e) {}
+      }
+      renderStock();
+    }
+
+    // ============================================
+    // TIMELINE CONFIGURATION
+    // ============================================
+    const TIMELINE_STEPS = [
+      { id: 'order_placed', icon: 'fa-clipboard-check', title: 'Order Placed', status: 'pending' },
+      { id: 'payment_confirmed', icon: 'fa-credit-card', title: 'Payment Confirmed', status: 'payment_confirmed' },
+      { id: 'preparing', icon: 'fa-box-open', title: 'Preparing to Ship', status: 'preparing' },
+      { id: 'shipped', icon: 'fa-truck', title: 'Shipped', status: 'shipped' },
+      { id: 'out_for_delivery', icon: 'fa-truck-fast', title: 'Out for Delivery', status: 'out_for_delivery' },
+      { id: 'delivered', icon: 'fa-check-circle', title: 'Delivered', status: 'delivered' }
+    ];
+
+    const STATUS_STEP_MAP = {
+      'pending': 0,
+      'payment_confirmed': 1,
+      'preparing': 2,
+      'shipped': 3,
+      'out_for_delivery': 4,
+      'delivered': 5,
+      'cancelled': -1
+    };
+
+    const STATUS_DISPLAY_MAP = {
+      'pending': '⏳ Pending',
+      'payment_confirmed': '💳 Payment Confirmed',
+      'preparing': '📦 Preparing to Ship',
+      'shipped': '🚚 Shipped',
+      'out_for_delivery': '🚚 Out for Delivery',
+      'delivered': '✅ Delivered',
+      'cancelled': '❌ Cancelled'
+    };
+
+    const STATUS_CLASS_MAP = {
+      'pending': 'pending',
+      'payment_confirmed': 'payment_confirmed',
+      'preparing': 'preparing',
+      'shipped': 'shipped',
+      'out_for_delivery': 'out_for_delivery',
+      'delivered': 'delivered',
+      'cancelled': 'cancelled'
+    };
+
+    function normalizeStatus(status) {
+      if (!status) return 'pending';
+      const s = String(status).toLowerCase().trim();
+      if (s === 'p' || s === 'pend' || s === 'pending') return 'pending';
+      if (s === 'payment_confirmed' || s === 'payment confirmed' || s === 'pay') return 'payment_confirmed';
+      if (s === 'preparing' || s === 'prepare' || s === 'prep') return 'preparing';
+      if (s === 'shipped' || s === 'ship' || s === 'sh') return 'shipped';
+      if (s === 'out_for_delivery' || s === 'out for delivery' || s === 'out') return 'out_for_delivery';
+      if (s === 'delivered' || s === 'deliver' || s === 'del' || s === 'd') return 'delivered';
+      if (s === 'cancelled' || s === 'cancel' || s === 'c') return 'cancelled';
+      return 'pending';
+    }
+
+    function getCurrentStep(status) {
+      const normalized = normalizeStatus(status);
+      const step = STATUS_STEP_MAP[normalized];
+      return step !== undefined ? step : -1;
+    }
+
+    function getProgress(status) {
+      const normalized = normalizeStatus(status);
+      const step = STATUS_STEP_MAP[normalized];
+      if (step === undefined || step === -1) return 0;
+      return Math.min(Math.round(((step + 1) / TIMELINE_STEPS.length) * 100), 100);
+    }
+
+    function renderTimelineControl(status) {
+      const container = document.getElementById('tlStepsContainer');
+      const currentStep = getCurrentStep(status);
+      const progress = getProgress(status);
+
+      document.getElementById('tlProgressText').textContent = `${progress}%`;
+      document.getElementById('tlProgressFill').style.width = `${progress}%`;
+
+      let html = '';
+      TIMELINE_STEPS.forEach((step, index) => {
+        const isCompleted = index < currentStep;
+        const isActive = index === currentStep;
+        let iconClass = '', nameClass = '', statusLabel = '', statusClass = '';
+        if (isCompleted) { iconClass = 'completed'; nameClass = 'completed'; statusLabel = '✅ Done'; statusClass = 'done'; }
+        else if (isActive) { iconClass = 'active'; nameClass = 'active'; statusLabel = '🔵 Now'; statusClass = 'now'; }
+        else { statusLabel = '⏳ Pending'; statusClass = 'pending'; }
+
+        html += `
+          <div class="tl-step" data-step-index="${index}" onclick="window.updateTimelineStep('${currentEditId}', ${index})">
+            <div class="tl-step-icon ${iconClass}"><i class="fas ${step.icon}"></i></div>
+            <div class="tl-step-info"><div class="tl-step-name ${nameClass}">${step.title}</div></div>
+            <span class="tl-step-status ${statusClass}">${statusLabel}</span>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    window.updateTimelineStep = async function(orderId, stepIndex) {
+      if (!orderId) { alert('No order selected'); return; }
+      const step = TIMELINE_STEPS[stepIndex];
+      if (!step) { alert('Step not found'); return; }
+      const newStatus = step.status;
+      if (!confirm(`Update order to "${step.title}"?`)) return;
+
+      try {
+        await updateDoc(doc(db, "orders", orderId), { status: newStatus, updatedAt: serverTimestamp() });
+        document.getElementById('editStatus').value = newStatus;
+        renderTimelineControl(newStatus);
+        const msg = document.getElementById('editMessage');
+        msg.className = 'message success';
+        msg.textContent = `✅ Order updated to "${step.title}"!`;
+        setTimeout(() => { msg.className = 'message'; }, 3000);
+        await loadOrders();
+      } catch (error) {
+        const msg = document.getElementById('editMessage');
+        msg.className = 'message error';
+        msg.textContent = '❌ Error: ' + error.message;
+      }
+    };
+
+    window.openOrderDetail = async function(orderId) {
+      const order = allOrders.find(o => o.id === orderId);
+      if (!order) { alert('Order not found'); return; }
+      currentDetailId = orderId;
+      document.getElementById('detailOrderId').textContent = order.orderId || orderId;
+      document.getElementById('detailName').textContent = order.name || 'Unknown';
+      document.getElementById('detailAddress').textContent = order.address || 'N/A';
+      document.getElementById('detailPhone').textContent = order.phone || 'N/A';
+      document.getElementById('detailProduct').textContent = order.product || 'N/A';
+      document.getElementById('detailPrice').textContent = order.price ? `₱${order.price}` : 'N/A';
+      const statusDisplay = STATUS_DISPLAY_MAP[order.status] || order.status || 'Pending';
+      const statusClass = STATUS_CLASS_MAP[order.status] || 'pending';
+      document.getElementById('detailStatus').innerHTML = `<span class="badge status-${statusClass}">${statusDisplay}</span>`;
+      document.getElementById('detailDate').textContent = order.date ? new Date(order.date).toLocaleString() : 'N/A';
+      document.getElementById('detailMessage').className = 'message';
+      document.getElementById('detailMessage').textContent = '';
+      document.getElementById('orderDetailModal').classList.add('show');
+    };
+
+    window.closeOrderDetailModal = function() {
+      document.getElementById('orderDetailModal').classList.remove('show');
+      currentDetailId = null;
+    };
+
+    document.getElementById('markPaidFromDetail').addEventListener('click', async () => {
+      if (!currentDetailId) return;
+      if (!confirm('Mark this order as PAID?')) return;
+      try {
+        await updateDoc(doc(db, "orders", currentDetailId), { status: 'payment_confirmed', updatedAt: serverTimestamp() });
+        const msg = document.getElementById('detailMessage');
+        msg.className = 'message success';
+        msg.textContent = '✅ Order marked as Paid!';
+        setTimeout(() => { closeOrderDetailModal(); loadOrders(); }, 1000);
+      } catch (error) {
+        const msg = document.getElementById('detailMessage');
+        msg.className = 'message error';
+        msg.textContent = '❌ Error: ' + error.message;
+      }
+    });
+
+    document.getElementById('orderDetailModal').addEventListener('click', function(e) {
+      if (e.target === this) closeOrderDetailModal();
+    });
+
+    // ============================================
+    // AUTH & LOAD FUNCTIONS
+    // ============================================
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { window.location.href = 'admin-login.html'; return; }
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+      if (!docSnap.exists() || !docSnap.data().isAdmin) {
+        await signOut(auth);
+        window.location.href = 'admin-login.html';
+        return;
+      }
+      adminEmail.textContent = user.email;
+      await loadOrders();
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.href = 'admin-login.html';
+    });
+
+    async function loadOrders(searchTerm = '', statusFilter = 'all') {
+      try {
+        const ordersSnap = await getDocs(collection(db, "orders"));
+        allOrders = [];
+        ordersSnap.forEach(doc => {
+          const data = doc.data();
+          allOrders.push({ id: doc.id, ...data });
+        });
+
+        allOrders.sort((a, b) => {
+          const dateA = a.date ? new Date(a.date) : (a.createdAt ? new Date(a.createdAt.seconds * 1000) : new Date(0));
+          const dateB = b.date ? new Date(b.date) : (b.createdAt ? new Date(b.createdAt.seconds * 1000) : new Date(0));
+          return dateB - dateA;
+        });
+
+        renderOrders(allOrders, searchTerm, statusFilter);
+        updateStats(allOrders);
+
+      } catch (error) {
+        console.error('Load orders error:', error);
+        document.getElementById('ordersTable').innerHTML = `<tr><td colspan="7" style="text-align:center;color:#fc8181;">Error loading orders: ${error.message}</td></tr>`;
+      }
+    }
+
+    function renderOrders(orders, searchTerm = '', statusFilter = 'all') {
+      let filtered = orders;
+      if (searchTerm) {
+        const term = searchTerm.toLowerCase();
+        filtered = filtered.filter(o =>
+          (o.name || '').toLowerCase().includes(term) ||
+          (o.orderId || o.id || '').toLowerCase().includes(term) ||
+          (o.product || '').toLowerCase().includes(term) ||
+          (o.userEmail || '').toLowerCase().includes(term) ||
+          (o.address || '').toLowerCase().includes(term) ||
+          (o.phone || '').toLowerCase().includes(term)
+        );
+      }
+      if (statusFilter !== 'all') {
+        filtered = filtered.filter(o => (o.status || 'pending').toLowerCase() === statusFilter.toLowerCase());
+      }
+
+      document.getElementById('ordersCount').textContent = filtered.length;
+      if (filtered.length === 0) {
+        document.getElementById('ordersTable').innerHTML = `<tr><td colspan="7" style="text-align:center;color:#8a8a8a;">No orders found</td></tr>`;
+        return;
+      }
+
+      const statusLabels = {
+        'pending': '⏳ Pending',
+        'payment_confirmed': '💳 Payment Confirmed',
+        'preparing': '📦 Preparing',
+        'shipped': '🚚 Shipped',
+        'out_for_delivery': '🚚 Out for Delivery',
+        'delivered': '🏠 Delivered',
+        'cancelled': '❌ Cancelled'
+      };
+
+      const statusClasses = {
+        'pending': 'pending',
+        'payment_confirmed': 'payment_confirmed',
+        'preparing': 'preparing',
+        'shipped': 'shipped',
+        'out_for_delivery': 'out_for_delivery',
+        'delivered': 'delivered',
+        'cancelled': 'cancelled'
+      };
+
+      document.getElementById('ordersTable').innerHTML = filtered.map(o => `
+        <tr>
+          <td><code style="font-size:12px;color:#63b3ed;">${o.orderId || o.id.substring(0, 8)}</code></td>
+          <td><strong>${o.name || o.userEmail || 'Unknown'}</strong></td>
+          <td>${o.product || 'N/A'}</td>
+          <td><span style="color:#6effb0;">₱${o.price || o.discountedPrice || 0}</span></td>
+          <td><span class="badge status-${statusClasses[o.status] || 'pending'}">${statusLabels[o.status] || 'Pending'}</span></td>
+          <td>${o.date ? new Date(o.date).toLocaleDateString() : (o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleDateString() : 'N/A')}</td>
+          <td>
+            <button class="btn-action edit" onclick="window.openOrderDetail('${o.id}')" title="View Details"><i class="fas fa-eye"></i></button>
+            <button class="btn-action paid" onclick="window.updateOrderStatus('${o.id}', 'payment_confirmed')" title="Mark Paid"><i class="fas fa-check"></i></button>
+            <button class="btn-action shipped" onclick="window.updateOrderStatus('${o.id}', 'shipped')" title="Mark Shipped"><i class="fas fa-truck"></i></button>
+            <button class="btn-action edit" onclick="window.openEditModal('${o.id}')" title="Edit"><i class="fas fa-edit"></i></button>
+            <button class="btn-action delete" onclick="window.deleteOrder('${o.id}')" title="Delete"><i class="fas fa-trash"></i></button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function updateStats(orders) {
+      const total = orders.length;
+      const pending = orders.filter(o => (o.status || 'pending') === 'pending').length;
+      const paid = orders.filter(o => o.status === 'payment_confirmed' || o.status === 'preparing' || o.status === 'shipped' || o.status === 'out_for_delivery' || o.status === 'delivered').length;
+      let revenue = 0;
+      orders.forEach(o => { if (o.status !== 'cancelled') revenue += parseFloat(o.price || o.discountedPrice || 0); });
+
+      document.getElementById('totalOrders').textContent = total;
+      document.getElementById('pendingOrders').textContent = pending;
+      document.getElementById('paidOrders').textContent = paid;
+      document.getElementById('totalRevenue').textContent = `₱${revenue.toLocaleString()}`;
+    }
+
+    window.openEditModal = async function(orderId) {
+      const order = allOrders.find(o => o.id === orderId);
+      if (!order) { alert('Order not found'); return; }
+      currentEditId = orderId;
+      document.getElementById('editOrderId').value = order.orderId || orderId;
+      document.getElementById('editName').value = order.name || '';
+      document.getElementById('editAddress').value = order.address || '';
+      document.getElementById('editPhone').value = order.phone || '';
+      document.getElementById('editProduct').value = order.product || '';
+      document.getElementById('editPrice').value = order.price || order.discountedPrice || '';
+      document.getElementById('editStatus').value = order.status || 'pending';
+      document.getElementById('editMessage').className = 'message';
+      document.getElementById('editMessage').textContent = '';
+      renderTimelineControl(order.status || 'pending');
+      document.getElementById('editModal').classList.add('show');
+    };
+
+    window.updateOrderStatus = async function(orderId, newStatus) {
+      const statusDisplay = STATUS_DISPLAY_MAP[newStatus] || newStatus;
+      if (!confirm(`Change order status to "${statusDisplay}"?`)) return;
+      try {
+        await updateDoc(doc(db, "orders", orderId), { status: newStatus, updatedAt: serverTimestamp() });
+        await loadOrders();
+        const msg = document.getElementById('quickMessage');
+        msg.className = 'message success';
+        msg.textContent = `✅ Order status updated to "${statusDisplay}"`;
+        setTimeout(() => { msg.className = 'message'; }, 3000);
+      } catch (error) { alert('Error updating order: ' + error.message); }
+    };
+
+    window.deleteOrder = async function(orderId) {
+      if (!confirm('⚠️ Delete this order permanently?')) return;
+      try {
+        await deleteDoc(doc(db, "orders", orderId));
+        await loadOrders();
+        const msg = document.getElementById('quickMessage');
+        msg.className = 'message success';
+        msg.textContent = '✅ Order deleted successfully';
+        setTimeout(() => { msg.className = 'message'; }, 3000);
+      } catch (error) { alert('Error deleting order: ' + error.message); }
+    };
+
+    document.getElementById('saveEditBtn').addEventListener('click', async () => {
+      if (!currentEditId) return;
+      const name = document.getElementById('editName').value.trim();
+      const address = document.getElementById('editAddress').value.trim();
+      const phone = document.getElementById('editPhone').value.trim();
+      const product = document.getElementById('editProduct').value.trim();
+      const price = document.getElementById('editPrice').value.trim();
+      const status = document.getElementById('editStatus').value;
+      if (!name || !address) {
+        const msg = document.getElementById('editMessage');
+        msg.className = 'message error';
+        msg.textContent = '⚠️ Name and Address are required';
+        return;
+      }
+      try {
+        await updateDoc(doc(db, "orders", currentEditId), {
+          name, address, phone, product, price: parseFloat(price) || 0, status, updatedAt: serverTimestamp()
+        });
+        const msg = document.getElementById('editMessage');
+        msg.className = 'message success';
+        msg.textContent = '✅ Order updated successfully!';
+        renderTimelineControl(status);
+        setTimeout(() => { document.getElementById('editModal').classList.remove('show'); loadOrders(); }, 800);
+      } catch (error) {
+        const msg = document.getElementById('editMessage');
+        msg.className = 'message error';
+        msg.textContent = '❌ Error: ' + error.message;
+      }
+    });
+
+    document.getElementById('closeEditBtn').addEventListener('click', () => {
+      document.getElementById('editModal').classList.remove('show');
+    });
+
+    document.getElementById('editModal').addEventListener('click', function(e) {
+      if (e.target === this) document.getElementById('editModal').classList.remove('show');
+    });
+
+    document.getElementById('searchBtn').addEventListener('click', () => {
+      const search = document.getElementById('searchOrder').value.trim();
+      const status = document.getElementById('statusFilter').value;
+      loadOrders(search, status);
+    });
+
+    document.getElementById('refreshBtn').addEventListener('click', () => {
+      document.getElementById('searchOrder').value = '';
+      document.getElementById('statusFilter').value = 'all';
+      loadOrders();
+    });
+
+    document.getElementById('searchOrder').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') document.getElementById('searchBtn').click();
+    });
+
+    document.getElementById('markAllPaidBtn').addEventListener('click', async () => {
+      if (!confirm('Mark ALL orders as PAID?')) return;
+      try {
+        const ordersSnap = await getDocs(collection(db, "orders"));
+        let count = 0;
+        for (const docSnap of ordersSnap.docs) {
+          const data = docSnap.data();
+          if (data.status !== 'cancelled' && data.status !== 'payment_confirmed') {
+            await updateDoc(doc(db, "orders", docSnap.id), { status: 'payment_confirmed', updatedAt: serverTimestamp() });
+            count++;
+          }
+        }
+        const msg = document.getElementById('quickMessage');
+        msg.className = 'message success';
+        msg.textContent = `✅ ${count} orders marked as paid!`;
+        setTimeout(() => { msg.className = 'message'; }, 3000);
+        await loadOrders();
+      } catch (error) { alert('Error: ' + error.message); }
+    });
+
+    document.getElementById('clearAllOrdersBtn').addEventListener('click', async () => {
+      if (!confirm('⚠️ Delete ALL orders?')) return;
+      if (!confirm('⚠️ ARE YOU ABSOLUTELY SURE?')) return;
+      try {
+        const ordersSnap = await getDocs(collection(db, "orders"));
+        let count = 0;
+        for (const docSnap of ordersSnap.docs) { await deleteDoc(doc(db, "orders", docSnap.id)); count++; }
+        const msg = document.getElementById('quickMessage');
+        msg.className = 'message success';
+        msg.textContent = `✅ ${count} orders deleted!`;
+        setTimeout(() => { msg.className = 'message'; }, 3000);
+        await loadOrders();
+      } catch (error) { alert('Error: ' + error.message); }
+    });
+
+    // ============================================
+    // INIT
+    // ============================================
+    loadStock();
+    loadOrders();
+    loadDiscounts();
+    console.log('🚀 PEAK Store Admin Panel loaded with Discount Codes');
+  </script>
+</body>
+</html>

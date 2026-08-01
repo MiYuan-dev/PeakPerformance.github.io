@@ -1,0 +1,19 @@
+Icon Class Use For
+💉 Syringe fa-syringe Injectables, peptides
+🧪 Flask fa-flask Lab-grade peptides
+💊 Capsule fa-capsules Oral peptides
+🧬 DNA fa-dna Peptide research
+🔬 Microscope fa-microscope Research peptides
+💉 Droplet fa-tint Liquid peptides
+⚗️ Beaker fa-flask Peptide solutions
+
+
+
+Product Description
+CJC-1295 + Ipamorelin "Peptide blend · GH release · anti-aging"
+BPC-157 "Healing peptide · gut health · recovery"
+TB-500 "Tissue repair · inflammation · recovery"
+Semaglutide "GLP-1 agonist · weight management"
+Melanotan II "Tanning peptide · melanin stimulation"
+AOD-9604 "Fat loss · metabolism · weight management"
+NAD+ "Cellular energy · anti-aging · longevity"

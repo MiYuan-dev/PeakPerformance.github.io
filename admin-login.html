@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login · PEAK Store</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0b0b0b 0%, #1a1a2e 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .login-container {
+      background: #141414;
+      border-radius: 24px;
+      padding: 45px 40px;
+      max-width: 420px;
+      width: 100%;
+      border: 1px solid #2a2a2a;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+      animation: slideUp 0.5s ease;
+    }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+    .logo { text-align: center; margin-bottom: 30px; }
+    .logo .icon {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+      font-size: 28px;
+      color: white;
+    }
+    .logo h1 { font-size: 24px; color: #f0f0f0; letter-spacing: -0.5px; }
+    .logo h1 span { color: #6effb0; }
+    .logo p { color: #8a8a8a; font-size: 14px; margin-top: 4px; }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 18px;
+    }
+    .input-group i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6a6a6a;
+      font-size: 18px;
+      z-index: 2;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 15px 20px 15px 50px;
+      border: 2px solid #2a2a2a;
+      border-radius: 14px;
+      font-size: 15px;
+      transition: all 0.3s;
+      background: #1a1a1a;
+      color: #f0f0f0;
+      outline: none;
+    }
+    .input-group input:focus {
+      border-color: #6effb0;
+      background: #1f1f1f;
+      box-shadow: 0 0 0 4px rgba(110,255,176,0.08);
+    }
+    .input-group input::placeholder { color: #5a5a5a; }
+
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(102,126,234,0.4); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
+
+    .message {
+      text-align: center;
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 16px;
+      display: none;
+      font-weight: 500;
+      font-size: 14px;
+    }
+    .message.error { display: block; background: #2a1a1a; color: #ff6b6b; border: 1px solid #4a2a2a; }
+    .message.success { display: block; background: #1a2a1a; color: #6effb0; border: 1px solid #2a4a2a; }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,0.2);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.8s ease infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .back-link {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 13px;
+      color: #6a6a6a;
+    }
+    .back-link a { color: #667eea; text-decoration: none; }
+    .back-link a:hover { text-decoration: underline; }
+
+    .security-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 20px;
+      font-size: 12px;
+      color: #4a4a4a;
+      border-top: 1px solid #2a2a2a;
+      padding-top: 18px;
+    }
+    .security-badge i { color: #48bb78; }
+
+    @media (max-width: 480px) {
+      .login-container { padding: 30px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-container">
+  <div class="logo">
+    <div class="icon"><i class="fas fa-shield-alt"></i></div>
+    <h1>PEAK <span>Admin</span></h1>
+    <p>Secure access · administrators only</p>
+  </div>
+
+  <div class="input-group">
+    <i class="fas fa-envelope"></i>
+    <input type="email" id="adminEmail" placeholder="Admin Email" value="admin@peakstore.com" />
+  </div>
+
+  <div class="input-group">
+    <i class="fas fa-lock"></i>
+    <input type="password" id="adminPassword" placeholder="Password" />
+  </div>
+
+  <button class="btn" id="loginBtn">
+    <i class="fas fa-sign-in-alt"></i> Login
+  </button>
+
+  <div id="message" class="message"></div>
+
+  <div class="back-link">
+    <a href="index.html">← Back to Store</a>
+  </div>
+
+  <div class="security-badge">
+    <i class="fas fa-lock"></i> Secure · Firebase Auth
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  // Your Firebase config (update with your own)
+  const firebaseConfig = {
+    apiKey: "AIzaSyCtkKzMB3ogRwwq4OIEaF9oICuV_n25xkY",
+    authDomain: "peakstore-895ff.firebaseapp.com",
+    projectId: "peakstore-895ff",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const emailInput = document.getElementById('adminEmail');
+  const passwordInput = document.getElementById('adminPassword');
+  const loginBtn = document.getElementById('loginBtn');
+  const messageEl = document.getElementById('message');
+
+  function showMessage(text, type = 'error') {
+    messageEl.textContent = text;
+    messageEl.className = `message ${type}`;
+  }
+
+  function hideMessage() {
+    messageEl.className = 'message';
+    messageEl.textContent = '';
+  }
+
+  // Check if already logged in
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      try {
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists() && docSnap.data().isAdmin === true) {
+          // Already admin, redirect to panel
+          window.location.href = 'admin-panel.html';
+          return;
+        } else {
+          // Not admin, sign out
+          await signOut(auth);
+          showMessage('⛔ You do not have admin privileges.', 'error');
+        }
+      } catch (e) {
+        console.error('Auth check error:', e);
+      }
+    }
+  });
+
+  // Login handler
+  loginBtn.addEventListener('click', async () => {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!email || !password) {
+      showMessage('Please fill in all fields', 'error');
+      return;
+    }
+
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = '<span class="loading"></span> Logging in...';
+    hideMessage();
+
+    try {
+      const userCred = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCred.user;
+
+      // Verify admin status
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists() && docSnap.data().isAdmin === true) {
+        showMessage('✅ Access granted! Redirecting...', 'success');
+        setTimeout(() => {
+          window.location.href = 'admin-panel.html';
+        }, 800);
+      } else {
+        showMessage('⛔ You do not have admin privileges.', 'error');
+        await signOut(auth);
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+      }
+
+    } catch (error) {
+      console.error('Login error:', error);
+      let errorMessage = 'Login failed. Please try again.';
+      if (error.code === 'auth/user-not-found') {
+        errorMessage = 'No account found with this email.';
+      } else if (error.code === 'auth/wrong-password') {
+        errorMessage = 'Incorrect password.';
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = 'Too many attempts. Please try again later.';
+      }
+      showMessage(errorMessage, 'error');
+      loginBtn.disabled = false;
+      loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+    }
+  });
+
+  // Enter key support
+  document.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') loginBtn.click();
+  });
+
+  console.log('🔐 Admin Login page loaded');
+  console.log('📌 Only users with isAdmin=true can access the panel.');
+</script>
+
+</body>
+</html>
