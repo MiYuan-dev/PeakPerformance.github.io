@@ -88,13 +88,6 @@
       font-weight: 600;
     }
 
-    .discount-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-    }
-    .discount-grid .input-group { margin-bottom: 0; }
-
     .btn {
       padding: 10px 20px;
       border: none;
@@ -455,6 +448,21 @@
     .btn-action.shipped:hover { color: #63b3ed; }
     .btn-action.edit:hover { color: #f6ad55; }
 
+    /* Stock sync indicator */
+    .sync-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #6a6a6a;
+      padding: 4px 12px;
+      border-radius: 12px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+    }
+    .sync-status.synced { color: #6effb0; border-color: #2a4a2a; background: #1a2a1a; }
+    .sync-status.syncing { color: #f6ad55; border-color: #4a3a2a; background: #2a2a1a; }
+
     @media (max-width: 768px) {
       .admin-header { flex-direction: column; text-align: center; }
       .stats-grid { grid-template-columns: 1fr 1fr; }
@@ -564,13 +572,17 @@
     <div class="admin-section">
       <div class="section-header">
         <h2><i class="fas fa-boxes"></i> Stock Management</h2>
-        <span class="badge-count" id="stockCount">0</span>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <span class="badge-count" id="stockCount">0</span>
+          <span class="sync-status" id="syncStatus"><i class="fas fa-cloud"></i> Synced</span>
+        </div>
       </div>
       <div style="margin-bottom:15px; display:flex; gap:10px; flex-wrap:wrap;">
         <button class="btn btn-success btn-sm" id="restockAllBtn"><i class="fas fa-plus-circle"></i> Restock All</button>
         <button class="btn btn-warning btn-sm" id="resetStockBtn"><i class="fas fa-sync-alt"></i> Reset Stock</button>
+        <button class="btn btn-info btn-sm" id="syncStockBtn"><i class="fas fa-cloud-upload-alt"></i> Sync to Firebase</button>
         <span style="color:#6a6a6a; font-size:13px; display:flex; align-items:center;">
-          <i class="fas fa-info-circle" style="margin-right:6px;"></i> Click +/- to adjust stock
+          <i class="fas fa-info-circle" style="margin-right:6px;"></i> Changes save to Firebase (all devices)
         </span>
       </div>
       <div id="stockList"></div>
@@ -629,7 +641,6 @@
         <button class="btn btn-success" id="markAllPaidBtn"><i class="fas fa-check-double"></i> Mark All as Paid</button>
         <button class="btn btn-danger" id="clearAllOrdersBtn"><i class="fas fa-trash"></i> Clear All Orders</button>
         <button class="btn btn-info" onclick="window.location.href='index.html'"><i class="fas fa-store"></i> View Store</button>
-        <button class="btn btn-warning" id="syncStockBtn"><i class="fas fa-sync"></i> Sync Stock</button>
       </div>
       <div id="quickMessage" class="message"></div>
     </div>
@@ -746,11 +757,12 @@
     let currentDetailId = null;
     let allDiscounts = [];
     let stockData = [];
+    let stockDocId = null;
 
     // ============================================
-    // STOCK DATA - Load from localStorage
+    // STOCK DATA - Load from Firebase (Global)
     // ============================================
-    const DEFAULT_STOCK = [
+    const DEFAULT_STOCK_ITEMS = [
       { id: 'stockWhey', name: 'Whey Protein Isolate', category: 'Supplements', icon: 'fa-pills', qty: 12 },
       { id: 'stockCreatine', name: 'Creatine Monohydrate', category: 'Supplements', icon: 'fa-pills', qty: 15 },
       { id: 'stockPre', name: 'Pre-Workout Blast', category: 'Supplements', icon: 'fa-pills', qty: 9 },
@@ -759,24 +771,103 @@
       { id: 'stockTB', name: 'TB-500 Peptide', category: 'PED\'s', icon: 'fa-syringe', qty: 5 }
     ];
 
-    function loadStockData() {
+    // Load stock from Firebase
+    async function loadStockFromFirebase() {
+      try {
+        const stockRef = collection(db, "stock");
+        const snapshot = await getDocs(stockRef);
+        
+        if (!snapshot.empty) {
+          const docSnap = snapshot.docs[0];
+          stockDocId = docSnap.id;
+          const data = docSnap.data();
+          
+          stockData = DEFAULT_STOCK_ITEMS.map(defaultItem => {
+            const found = data.items?.find(item => item.id === defaultItem.id);
+            return found ? { ...defaultItem, qty: found.qty } : { ...defaultItem };
+          });
+        } else {
+          stockData = DEFAULT_STOCK_ITEMS.map(item => ({ ...item }));
+          const docRef = await addDoc(collection(db, "stock"), {
+            items: stockData,
+            updatedAt: serverTimestamp()
+          });
+          stockDocId = docRef.id;
+        }
+        
+        syncStockToLocalStorage();
+        renderStock();
+        updateSyncStatus(true);
+        return stockData;
+      } catch (error) {
+        console.error('Error loading stock from Firebase:', error);
+        loadStockFromLocalStorage();
+        renderStock();
+        updateSyncStatus(false);
+        return stockData;
+      }
+    }
+
+    // Save stock to Firebase
+    async function saveStockToFirebase() {
+      try {
+        updateSyncStatus(false, true);
+        if (!stockDocId) {
+          const docRef = await addDoc(collection(db, "stock"), {
+            items: stockData,
+            updatedAt: serverTimestamp()
+          });
+          stockDocId = docRef.id;
+        } else {
+          const docRef = doc(db, "stock", stockDocId);
+          await updateDoc(docRef, {
+            items: stockData,
+            updatedAt: serverTimestamp()
+          });
+        }
+        syncStockToLocalStorage();
+        updateSyncStatus(true);
+        return true;
+      } catch (error) {
+        console.error('Error saving stock to Firebase:', error);
+        syncStockToLocalStorage();
+        updateSyncStatus(false);
+        return false;
+      }
+    }
+
+    function syncStockToLocalStorage() {
+      const toSave = stockData.map(item => ({ id: item.id, qty: item.qty }));
+      localStorage.setItem('peakStock', JSON.stringify(toSave));
+    }
+
+    function loadStockFromLocalStorage() {
       const saved = localStorage.getItem('peakStock');
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          stockData = DEFAULT_STOCK.map(item => {
+          stockData = DEFAULT_STOCK_ITEMS.map(item => {
             const found = parsed.find(p => p.id === item.id);
             return found ? { ...item, qty: found.qty } : { ...item };
           });
           return;
         } catch (e) {}
       }
-      stockData = DEFAULT_STOCK.map(item => ({ ...item }));
+      stockData = DEFAULT_STOCK_ITEMS.map(item => ({ ...item }));
     }
 
-    function saveStockData() {
-      const toSave = stockData.map(item => ({ id: item.id, qty: item.qty }));
-      localStorage.setItem('peakStock', JSON.stringify(toSave));
+    function updateSyncStatus(synced, syncing = false) {
+      const el = document.getElementById('syncStatus');
+      if (syncing) {
+        el.className = 'sync-status syncing';
+        el.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing...';
+      } else if (synced) {
+        el.className = 'sync-status synced';
+        el.innerHTML = '<i class="fas fa-cloud"></i> Synced';
+      } else {
+        el.className = 'sync-status';
+        el.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Offline';
+      }
     }
 
     function renderStock() {
@@ -806,7 +897,6 @@
       });
       container.innerHTML = html;
 
-      // Event listeners
       container.querySelectorAll('[data-action="adjust"]').forEach(btn => {
         btn.addEventListener('click', function() {
           const id = this.dataset.id;
@@ -828,36 +918,38 @@
       });
     }
 
-    function adjustStock(id, amount) {
+    async function adjustStock(id, amount) {
       const item = stockData.find(s => s.id === id);
       if (!item) return;
       const newQty = Math.max(0, item.qty + amount);
       item.qty = newQty;
-      saveStockData();
+      await saveStockToFirebase();
       renderStock();
       showStockMessage(`✅ ${item.name} stock updated to ${newQty}`, 'success');
     }
 
-    function setStock(id, value) {
+    async function setStock(id, value) {
       const item = stockData.find(s => s.id === id);
       if (!item) return;
       const newQty = Math.max(0, value);
       item.qty = newQty;
-      saveStockData();
+      await saveStockToFirebase();
       renderStock();
     }
 
-    function restockAll() {
+    async function restockAll() {
+      if (!confirm('Restock ALL products to default quantities?')) return;
       const defaults = { stockWhey: 12, stockCreatine: 15, stockPre: 9, stock1: 7, stockBPC: 6, stockTB: 5 };
       stockData.forEach(item => { item.qty = defaults[item.id] || 10; });
-      saveStockData();
+      await saveStockToFirebase();
       renderStock();
       showStockMessage('✅ All products restocked!', 'success');
     }
 
-    function resetStock() {
+    async function resetStock() {
+      if (!confirm('⚠️ Reset ALL stock to 0?')) return;
       stockData.forEach(item => { item.qty = 0; });
-      saveStockData();
+      await saveStockToFirebase();
       renderStock();
       showStockMessage('⚠️ All stock reset to 0', 'info');
     }
@@ -867,6 +959,35 @@
       el.className = `message ${type}`;
       el.textContent = text;
       setTimeout(() => { el.className = 'message'; }, 3000);
+    }
+
+    // Listen for real-time stock updates from Firebase
+    function listenForStockUpdates() {
+      const stockRef = collection(db, "stock");
+      onSnapshot(stockRef, (snapshot) => {
+        if (!snapshot.empty) {
+          const docSnap = snapshot.docs[0];
+          const data = docSnap.data();
+          if (data.items) {
+            const newStock = DEFAULT_STOCK_ITEMS.map(defaultItem => {
+              const found = data.items.find(item => item.id === defaultItem.id);
+              return found ? { ...defaultItem, qty: found.qty } : { ...defaultItem };
+            });
+            
+            // Only update if changed
+            const changed = JSON.stringify(newStock) !== JSON.stringify(stockData);
+            if (changed) {
+              stockData = newStock;
+              stockDocId = docSnap.id;
+              renderStock();
+              syncStockToLocalStorage();
+              showStockMessage('🔄 Stock updated from Firebase', 'info');
+            }
+          }
+        }
+      }, (error) => {
+        console.error('Error listening for stock updates:', error);
+      });
     }
 
     // ============================================
@@ -929,7 +1050,6 @@
         `;
       }).join('');
 
-      // Add event listeners for discount actions
       tbody.querySelectorAll('[data-action="deleteDiscount"]').forEach(btn => {
         btn.addEventListener('click', () => deleteDiscount(btn.dataset.id));
       });
@@ -1056,7 +1176,6 @@
       });
       container.innerHTML = html;
 
-      // Add click handlers for timeline steps
       container.querySelectorAll('[data-action="timelineStep"]').forEach(el => {
         el.addEventListener('click', function() {
           const index = parseInt(this.dataset.stepIndex);
@@ -1174,7 +1293,6 @@
         `;
       }).join('');
 
-      // Add event listeners for order actions
       document.querySelectorAll('[data-action="viewOrder"]').forEach(btn => {
         btn.addEventListener('click', () => openOrderDetail(btn.dataset.id));
       });
@@ -1317,6 +1435,8 @@
       adminEmail.textContent = user.email;
       await loadOrders();
       await loadDiscounts();
+      await loadStockFromFirebase();
+      listenForStockUpdates();
     });
 
     logoutBtn.addEventListener('click', async () => {
@@ -1327,7 +1447,6 @@
     // ============================================
     // EVENT LISTENERS
     // ============================================
-    // Search & Filter
     document.getElementById('searchBtn').addEventListener('click', () => {
       const search = document.getElementById('searchOrder').value.trim();
       const status = document.getElementById('statusFilter').value;
@@ -1344,7 +1463,6 @@
       if (e.key === 'Enter') document.getElementById('searchBtn').click();
     });
 
-    // Discount creation
     document.getElementById('createDiscountBtn').addEventListener('click', async () => {
       const code = document.getElementById('discountCodeInput').value.trim().toUpperCase();
       const type = document.getElementById('discountTypeInput').value;
@@ -1417,16 +1535,13 @@
       }
     });
 
-    // Stock management
     document.getElementById('restockAllBtn').addEventListener('click', restockAll);
     document.getElementById('resetStockBtn').addEventListener('click', resetStock);
-    document.getElementById('syncStockBtn').addEventListener('click', () => {
-      loadStockData();
-      renderStock();
-      showQuickMessage('✅ Stock synced from localStorage', 'success');
+    document.getElementById('syncStockBtn').addEventListener('click', async () => {
+      await saveStockToFirebase();
+      showQuickMessage('✅ Stock synced to Firebase!', 'success');
     });
 
-    // Mark all as paid
     document.getElementById('markAllPaidBtn').addEventListener('click', async () => {
       if (!confirm('Mark ALL orders as PAID?')) return;
       try {
@@ -1450,7 +1565,6 @@
       }
     });
 
-    // Clear all orders
     document.getElementById('clearAllOrdersBtn').addEventListener('click', async () => {
       if (!confirm('⚠️ Delete ALL orders?')) return;
       if (!confirm('⚠️ ARE YOU ABSOLUTELY SURE?')) return;
@@ -1468,7 +1582,6 @@
       }
     });
 
-    // Modal buttons
     document.getElementById('markPaidFromDetail').addEventListener('click', async () => {
       if (!currentDetailId) return;
       if (!confirm('Mark this order as PAID?')) return;
@@ -1518,7 +1631,6 @@
 
     document.getElementById('closeEditBtn').addEventListener('click', closeEditModal);
 
-    // Modal close on overlay click
     document.getElementById('orderDetailModal').addEventListener('click', function(e) {
       if (e.target === this) closeOrderDetailModal();
     });
@@ -1529,9 +1641,8 @@
     // ============================================
     // INIT
     // ============================================
-    loadStockData();
-    renderStock();
     console.log('🚀 PEAK Store Admin Panel loaded');
+    console.log('📦 Stock will be stored in Firebase (shared across all devices)');
   </script>
 </body>
 </html>

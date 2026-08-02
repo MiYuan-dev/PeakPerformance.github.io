@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PEAK · Dropship</title>
+  <title>PEAK · Performance</title>
   <!-- Font Awesome 6 (free) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
@@ -45,10 +45,19 @@
       gap: 12px;
     }
 
+    .brand-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 1px solid #2e2e2e;
+      background: #1e1e1e;
+    }
+
     .brand-icon {
       background: #1e1e1e;
-      width: 40px;
-      height: 40px;
+      width: 48px;
+      height: 48px;
       border-radius: 12px;
       display: flex;
       align-items: center;
@@ -991,10 +1000,12 @@
   <!-- brand bar -->
   <div class="brand-bar">
     <div class="brand-left">
-      <div class="brand-icon">✦</div>
-      <span class="brand-name">PEAK STORE</span>
+      <!-- BRAND LOGO - Replace 'images/logo.png' with your actual logo path -->
+      <img src="images/logo.png" alt="PEAK Store Logo" class="brand-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="brand-icon" style="display:none;">✦</div>
+      <span class="brand-name">PEAK PERFORMANCE</span>
     </div>
-    <div class="brand-tag"><i class="fas fa-bolt"></i> dropship</div>
+    <div class="brand-tag"><i class="fas fa-bolt"></i> Performance Enhancing Drugs</div>
   </div>
 
   <!-- Track Order Button (Top) -->
@@ -1208,9 +1219,272 @@
     </div>
   </div>
 
+  <!-- ===== PRODUCT: GHK-Cu ===== -->
+  <div class="product" data-stock-id="stockGhkcu">
+    <div class="product-img">
+      <img src="images/ghkcu.jpg" alt="GHK-Cu" onerror="this.src='https://images.unsplash.com/photo-1584735935682-2f2b69d1b4b0?w=600&h=600&fit=crop&crop=center'">
+      <span class="badge"><i class="fas fa-leaf" style="margin-right:4px;"></i>NEW</span>
+    </div>
+    <h3>GHK-Cu <span>50mg</span></h3>
+    <div class="desc"><i class="fas fa-heart"></i> Copper peptide · skin repair · anti-aging · wound healing</div>
+    <div class="price-row">
+      <span class="price" id="priceGhkcu">₱850</span>
+      <span class="price-old" id="oldPriceGhkcu">₱1,200</span>
+    </div>
+    <div class="rating-block">
+      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>67 sold</span></div>
+      <div class="stock" id="stockGhkcu"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-buy" id="buyBtnGhkcu" onclick="openCheckoutModal('ghkcu', 'GHK-Cu', 850, 'images/ghkcu.jpg', 'stockGhkcu')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
+      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
+        <i class="fab fa-instagram"></i> Order via Instagram
+      </a>
+    </div>
+    <div class="reviews">
+      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+      <span class="highlight"> "Great recovery!"</span> — Mike
+    </div>
+  </div>
+
+  <!-- ===== PRODUCT: MOTS-c ===== -->
+  <div class="product" data-stock-id="stockMotsc">
+    <div class="product-img">
+      <img src="images/motsc.jpg" alt="MOTS-c" onerror="this.src='https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=600&h=600&fit=crop&crop=center'">
+      <span class="badge"><i class="fas fa-star" style="margin-right:4px;"></i>NEW</span>
+    </div>
+    <h3>MOTS-c <span>10mg</span></h3>
+    <div class="desc"><i class="fas fa-syringe"></i> Mitochondrial peptide · fat loss · energy · longevity</div>
+    <div class="price-row">
+      <span class="price" id="priceMotsc">₱1,150</span>
+      <span class="price-old" id="oldPriceMotsc">₱1,850</span>
+    </div>
+    <div class="rating-block">
+      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>45 sold</span></div>
+      <div class="stock" id="stockMotsc"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-buy" id="buyBtnMotsc" onclick="openCheckoutModal('motsc', 'MOTS-c', 1150, 'images/motsc.jpg', 'stockMotsc')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
+      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
+        <i class="fab fa-instagram"></i> Order via Instagram
+      </a>
+    </div>
+    <div class="reviews">
+      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+      <span class="highlight"> "Age reversal!"</span> — David
+    </div>
+  </div>
+
+  <!-- ===== PRODUCT: Tesamorelin ===== -->
+  <div class="product" data-stock-id="stockTesamorelin">
+    <div class="product-img">
+      <img src="images/tesa.jpg" alt="Tesamorelin" onerror="this.src='https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=600&h=600&fit=crop&crop=center'">
+      <span class="badge"><i class="fas fa-bolt" style="margin-right:4px;"></i>POWER</span>
+    </div>
+    <h3>Tesamorelin <span>10mg</span></h3>
+    <div class="desc"><i class="fas fa-syringe"></i> GH release · fat reduction · muscle growth · anti-aging</div>
+    <div class="price-row">
+      <span class="price" id="priceTesamorelin">₱2,499</span>
+      <span class="price-old" id="oldPriceTesamorelin">₱3,299</span>
+    </div>
+    <div class="rating-block">
+      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>52 sold</span></div>
+      <div class="stock" id="stockTesamorelin"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-buy" id="buyBtnTesamorelin" onclick="openCheckoutModal('tesamorelin', 'Tesamorelin', 2499, 'images/tesa.jpg', 'stockTesamorelin')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
+      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
+        <i class="fab fa-instagram"></i> Order via Instagram
+      </a>
+    </div>
+    <div class="reviews">
+      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+      <span class="highlight"> "Amazing results!"</span> — Jake
+    </div>
+  </div>
+
+  <!-- ===== PRODUCT: Oral Dbol-10 ===== -->
+  <div class="product" data-stock-id="stockDbol">
+    <div class="product-img">
+      <img src="images/dbol.jpg" alt="Oral Dbol-10" onerror="this.src='https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&h=600&fit=crop&crop=center'">
+      <span class="badge"><i class="fas fa-fire" style="margin-right:4px;"></i>BEST SELLER</span>
+    </div>
+    <h3>Oral Dbol-10 <span>10mg · 100 tablets</span></h3>
+    <div class="desc"><i class="fas fa-bolt"></i> Muscle mass · strength gains · nitrogen retention · performance</div>
+    <div class="price-row">
+      <span class="price" id="priceDbol">₱1,250</span>
+      <span class="price-old" id="oldPriceDbol">₱2,500</span>
+    </div>
+    <div class="rating-block">
+      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>156 sold</span></div>
+      <div class="stock" id="stockDbol"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-buy" id="buyBtnDbol" onclick="openCheckoutModal('dbol', 'Oral Dbol-10', 1250, 'images/dbol.jpg', 'stockDbol')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
+      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
+        <i class="fab fa-instagram"></i> Order via Instagram
+      </a>
+    </div>
+    <div class="reviews">
+      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+      <span class="highlight"> "Huge strength and mass gains!"</span> — Mike
+    </div>
+  </div>
+
+  <!-- ===== PRODUCT: Anavar 50 ===== -->
+  <div class="product" data-stock-id="stockAnavar">
+    <div class="product-img">
+      <img src="images/anavar.jpg" alt="Anavar 50" onerror="this.src='https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&h=600&fit=crop&crop=center'">
+      <span class="badge"><i class="fas fa-fire" style="margin-right:4px;"></i>TOP RATED</span>
+    </div>
+    <h3>Anavar 50 <span>50mg · 100 tablets</span></h3>
+    <div class="desc"><i class="fas fa-bolt"></i> Lean muscle · fat loss · strength · vascularity · cutting cycles</div>
+    <div class="price-row">
+      <span class="price" id="priceAnavar">₱2,550</span>
+      <span class="price-old" id="oldPriceAnavar">₱3,200</span>
+    </div>
+    <div class="rating-block">
+      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>98 sold</span></div>
+      <div class="stock" id="stockAnavar"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-buy" id="buyBtnAnavar" onclick="openCheckoutModal('anavar', 'Anavar 50', 2550, 'images/anavar.jpg', 'stockAnavar')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
+      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
+        <i class="fab fa-instagram"></i> Order via Instagram
+      </a>
+    </div>
+    <div class="reviews">
+      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+      <span class="highlight"> "Shredded and stronger than ever!"</span> — Chris
+    </div>
+  </div>
+
+  <!-- ================================================================ -->
+  <!-- ==================== MORE PRODUCTS SECTION ==================== -->
+  <!-- ================================================================ -->
+  
+  <!-- ===== CATEGORY: Health Support ===== -->
+  <div class="category-header">
+    <div class="cat-icon"><i class="fas fa-capsules"></i></div>
+    <h2>Health Support</h2>
+    <span class="cat-badge">New Arrivals</span>
+  </div>
+
+  <!-- ===== PRODUCT: Fish Oil ===== -->
+  <div class="product" data-stock-id="stockFishOil">
+    <div class="product-img">
+      <img src="images/fish-oil.jpg" alt="Omega-3 Fish Oil" onerror="this.src='https://images.unsplash.com/photo-1584483766114-2cea6facdf57?w=600&h=600&fit=crop&crop=center'">
+      <span class="badge"><i class="fas fa-heartbeat" style="margin-right:4px;"></i>TOP RATED</span>
+    </div>
+    <h3>Omega-3 Fish Oil <span>120 capsules</span></h3>
+    <div class="desc"><i class="fas fa-brain"></i> Heart health · brain function · inflammation</div>
+    <div class="price-row">
+      <span class="price" id="priceFishOil">₱380</span>
+      <span class="price-old" id="oldPriceFishOil">₱420</span>
+    </div>
+    <div class="rating-block">
+      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>112 sold</span></div>
+      <div class="stock" id="stockFishOil"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-buy" id="buyBtnFishOil" onclick="openCheckoutModal('fishoil', 'Omega-3 Fish Oil', 380, 'images/fish-oil.jpg', 'stockFishOil')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
+      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
+        <i class="fab fa-instagram"></i> Order via Instagram
+      </a>
+    </div>
+    <div class="reviews">
+      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+      <span class="highlight"> "Joint pain gone!"</span> — Sarah
+    </div>
+  </div>
+
+  <!-- ===== PRODUCT: Calcium Magnesium Zinc + D3 ===== -->
+  <div class="product" data-stock-id="stockCalMagZinc">
+    <div class="product-img">
+      <img src="images/cal-mag-zinc.jpg" alt="Calcium Magnesium Zinc + D3" onerror="this.src='https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&h=600&fit=crop&crop=center'">
+      <span class="badge"><i class="fas fa-star" style="margin-right:4px;"></i>TOP RATED</span>
+    </div>
+    <h3>Calcium Magnesium Zinc + D3 <span>120 capsules</span></h3>
+    <div class="desc"><i class="fas fa-bone"></i> Bone health · immune support · muscle function · sleep</div>
+    <div class="price-row">
+      <span class="price" id="priceCalMagZinc">₱300</span>
+      <span class="price-old" id="oldPriceCalMagZinc">₱395</span>
+    </div>
+    <div class="rating-block">
+      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>89 sold</span></div>
+      <div class="stock" id="stockCalMagZinc"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-buy" id="buyBtnCalMagZinc" onclick="openCheckoutModal('calmagzinc', 'Calcium Magnesium Zinc + D3', 300, 'images/cal-mag-zinc.jpg', 'stockCalMagZinc')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
+      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
+        <i class="fab fa-instagram"></i> Order via Instagram
+      </a>
+    </div>
+    <div class="reviews">
+      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+      <span class="highlight"> "Better sleep and stronger bones!"</span> — Maria
+    </div>
+  </div>
+
+  <!-- ===== PRODUCT: Coenzyme Q10 ===== -->
+  <div class="product" data-stock-id="stockCoQ10">
+    <div class="product-img">
+      <img src="images/coq10.jpg" alt="Coenzyme Q10" onerror="this.src='https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&h=600&fit=crop&crop=center'">
+      <span class="badge"><i class="fas fa-heart" style="margin-right:4px;"></i>HEART HEALTH</span>
+    </div>
+    <h3>Coenzyme Q10 <span>120 softgels</span></h3>
+    <div class="desc"><i class="fas fa-heartbeat"></i> Heart health · energy production · antioxidant · cellular health</div>
+    <div class="price-row">
+      <span class="price" id="priceCoQ10">₱300</span>
+      <span class="price-old" id="oldPriceCoQ10">₱420</span>
+    </div>
+    <div class="rating-block">
+      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>76 sold</span></div>
+      <div class="stock" id="stockCoQ10"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-buy" id="buyBtnCoQ10" onclick="openCheckoutModal('coq10', 'Coenzyme Q10', 300, 'images/coq10.jpg', 'stockCoQ10')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
+      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
+        <i class="fab fa-instagram"></i> Order via Instagram
+      </a>
+    </div>
+    <div class="reviews">
+      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+      <span class="highlight"> "More energy and better heart health!"</span> — Robert
+    </div>
+  </div>
+
+  <!-- ===== PRODUCT: Milk Thistle Liver Support ===== -->
+  <div class="product" data-stock-id="stockMilkThistle">
+    <div class="product-img">
+      <img src="images/milk-thistle.jpg" alt="Milk Thistle Liver Support" onerror="this.src='https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&h=600&fit=crop&crop=center'">
+      <span class="badge"><i class="fas fa-leaf" style="margin-right:4px;"></i>LIVER HEALTH</span>
+    </div>
+    <h3>Milk Thistle Liver Support <span>120 capsules</span></h3>
+    <div class="desc"><i class="fas fa-liver"></i> Liver detox · antioxidant · digestive health · skin support</div>
+    <div class="price-row">
+      <span class="price" id="priceMilkThistle">₱1,250</span>
+      <span class="price-old" id="oldPriceMilkThistle">₱1,750</span>
+    </div>
+    <div class="rating-block">
+      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>64 sold</span></div>
+      <div class="stock" id="stockMilkThistle"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-buy" id="buyBtnMilkThistle" onclick="openCheckoutModal('milkthistle', 'Milk Thistle Liver Support', 420, 'images/milk-thistle.jpg', 'stockMilkThistle')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
+      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
+        <i class="fab fa-instagram"></i> Order via Instagram
+      </a>
+    </div>
+    <div class="reviews">
+      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+      <span class="highlight"> "Great for detox and overall health!"</span> — John
+    </div>
+  </div>
+
   <!-- trust badges -->
   <div class="trust-badges">
-    <span><i class="fas fa-truck"></i> 3-5 days delivery</span>
+    <span><i class="fas fa-truck"></i> 3-7 days delivery</span>
     <span><i class="fas fa-shield-alt"></i> 100+ customers</span>
     <span><i class="fas fa-credit-card"></i> COD available</span>
   </div>
@@ -1912,9 +2186,19 @@
     stockPre: 9,
     stock1: 7,
     stockBPC: 6,
-    stockTB: 5
+    stockTB: 5,
+    stockGhkcu: 10,
+    stockFishOil: 8,
+    stockMotsc: 5,
+    stockTesamorelin: 6,
+    stockDbol: 8,
+    stockAnavar: 6,
+    stockCalMagZinc: 10,
+    stockCoQ10: 8,
+    stockMilkThistle: 10
   };
 
+  // Get current stock data (from localStorage or default)
   window.getStockData = function() {
     const saved = localStorage.getItem('peakStock');
     if (saved) {
@@ -1944,8 +2228,53 @@
     if (item && item.qty > 0) {
       item.qty--;
       localStorage.setItem('peakStock', JSON.stringify(stock));
+      // Also update Firebase to keep it in sync
+      updateFirebaseStock(stockId, item.qty);
     }
   };
+
+  // Update Firebase stock
+  async function updateFirebaseStock(stockId, newQty) {
+    try {
+      const stockRef = collection(db, "stock");
+      const snapshot = await getDocs(stockRef);
+      let docId = null;
+      let existingData = null;
+      
+      if (!snapshot.empty) {
+        const docSnap = snapshot.docs[0];
+        docId = docSnap.id;
+        existingData = docSnap.data();
+      }
+      
+      // Get all current stock data
+      const currentStock = window.getStockData();
+      
+      // Update the specific item
+      const updatedItems = currentStock.map(item => {
+        if (item.id === stockId) {
+          return { ...item, qty: newQty };
+        }
+        return item;
+      });
+      
+      // Save to Firebase
+      if (docId) {
+        await updateDoc(doc(db, "stock", docId), {
+          items: updatedItems,
+          updatedAt: new Date().toISOString()
+        });
+      } else {
+        await addDoc(collection(db, "stock"), {
+          items: updatedItems,
+          updatedAt: new Date().toISOString()
+        });
+      }
+      console.log(`✅ Stock ${stockId} updated to ${newQty} in Firebase`);
+    } catch (error) {
+      console.error('Error updating Firebase stock:', error);
+    }
+  }
 
   // Load stock from Firebase (globally shared)
   async function loadStockFromFirebase() {

@@ -760,18 +760,34 @@
     let stockDocId = null;
 
     // ============================================
-    // STOCK DATA - Load from Firebase (Global)
+    // STOCK DATA - ALL 17 PRODUCTS
     // ============================================
     const DEFAULT_STOCK_ITEMS = [
-      { id: 'stockWhey', name: 'Whey Protein Isolate', category: 'Supplements', icon: 'fa-pills', qty: 12 },
+      // Supplements (3 products)
+      { id: 'stockWhey', name: 'Promatrix7 Whey Protein', category: 'Supplements', icon: 'fa-pills', qty: 12 },
       { id: 'stockCreatine', name: 'Creatine Monohydrate', category: 'Supplements', icon: 'fa-pills', qty: 15 },
-      { id: 'stockPre', name: 'Pre-Workout Blast', category: 'Supplements', icon: 'fa-pills', qty: 9 },
+      { id: 'stockPre', name: 'C4 Pre-Workout', category: 'Supplements', icon: 'fa-pills', qty: 9 },
+      
+      // PED's (8 products)
       { id: 'stock1', name: 'CJC-1295 + Ipamorelin', category: 'PED\'s', icon: 'fa-syringe', qty: 7 },
       { id: 'stockBPC', name: 'BPC-157 Peptide', category: 'PED\'s', icon: 'fa-syringe', qty: 6 },
-      { id: 'stockTB', name: 'TB-500 Peptide', category: 'PED\'s', icon: 'fa-syringe', qty: 5 }
+      { id: 'stockTB', name: 'TB-500 Peptide', category: 'PED\'s', icon: 'fa-syringe', qty: 5 },
+      { id: 'stockGhkcu', name: 'GHK-Cu', category: 'PED\'s', icon: 'fa-syringe', qty: 10 },
+      { id: 'stockMotsc', name: 'MOTS-c', category: 'PED\'s', icon: 'fa-syringe', qty: 5 },
+      { id: 'stockTesamorelin', name: 'Tesamorelin', category: 'PED\'s', icon: 'fa-syringe', qty: 6 },
+      { id: 'stockDbol', name: 'Oral Dbol-10', category: 'PED\'s', icon: 'fa-pills', qty: 8 },
+      { id: 'stockAnavar', name: 'Anavar 50', category: 'PED\'s', icon: 'fa-pills', qty: 6 },
+      
+      // Health Support (6 products)
+      { id: 'stockFishOil', name: 'Omega-3 Fish Oil', category: 'Health Support', icon: 'fa-capsules', qty: 8 },
+      { id: 'stockCalMagZinc', name: 'Calcium Magnesium Zinc + D3', category: 'Health Support', icon: 'fa-capsules', qty: 10 },
+      { id: 'stockCoQ10', name: 'Coenzyme Q10', category: 'Health Support', icon: 'fa-heart', qty: 8 },
+      { id: 'stockMilkThistle', name: 'Milk Thistle Liver Support', category: 'Health Support', icon: 'fa-leaf', qty: 10 }
     ];
 
-    // Load stock from Firebase
+    // ============================================
+    // STOCK FUNCTIONS
+    // ============================================
     async function loadStockFromFirebase() {
       try {
         const stockRef = collection(db, "stock");
@@ -808,7 +824,6 @@
       }
     }
 
-    // Save stock to Firebase
     async function saveStockToFirebase() {
       try {
         updateSyncStatus(false, true);
@@ -939,7 +954,14 @@
 
     async function restockAll() {
       if (!confirm('Restock ALL products to default quantities?')) return;
-      const defaults = { stockWhey: 12, stockCreatine: 15, stockPre: 9, stock1: 7, stockBPC: 6, stockTB: 5 };
+      const defaults = { 
+        stockWhey: 12, stockCreatine: 15, stockPre: 9,
+        stock1: 7, stockBPC: 6, stockTB: 5, 
+        stockGhkcu: 10, stockMotsc: 5, stockTesamorelin: 6,
+        stockDbol: 8, stockAnavar: 6,
+        stockFishOil: 8, stockCalMagZinc: 10, 
+        stockCoQ10: 8, stockMilkThistle: 10
+      };
       stockData.forEach(item => { item.qty = defaults[item.id] || 10; });
       await saveStockToFirebase();
       renderStock();
@@ -961,7 +983,6 @@
       setTimeout(() => { el.className = 'message'; }, 3000);
     }
 
-    // Listen for real-time stock updates from Firebase
     function listenForStockUpdates() {
       const stockRef = collection(db, "stock");
       onSnapshot(stockRef, (snapshot) => {
@@ -974,7 +995,6 @@
               return found ? { ...defaultItem, qty: found.qty } : { ...defaultItem };
             });
             
-            // Only update if changed
             const changed = JSON.stringify(newStock) !== JSON.stringify(stockData);
             if (changed) {
               stockData = newStock;
@@ -1642,7 +1662,7 @@
     // INIT
     // ============================================
     console.log('🚀 PEAK Store Admin Panel loaded');
-    console.log('📦 Stock will be stored in Firebase (shared across all devices)');
+    console.log('📦 Managing 17 products in stock (Firebase synced)');
   </script>
 </body>
 </html>
