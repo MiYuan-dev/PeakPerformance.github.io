@@ -88,7 +88,6 @@
       font-weight: 600;
     }
 
-    /* ----- Discount Section ----- */
     .discount-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -106,6 +105,7 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      text-decoration: none;
     }
     .btn:hover { transform: translateY(-2px); }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
@@ -151,6 +151,7 @@
       font-weight: 700; 
       color: #b0b0b0;
       border-bottom: 2px solid #2a2a2a;
+      white-space: nowrap;
     }
     table td { padding: 10px 12px; border-bottom: 1px solid #2a2a2a; color: #d0d0d0; }
     table tr:hover { background: #1a1a1a; }
@@ -165,6 +166,13 @@
     .badge-active { background: #1a2a1a; color: #6effb0; }
     .badge-expired { background: #2a2a1a; color: #f6ad55; }
     .badge-inactive { background: #2a2a2a; color: #6a6a6a; }
+    .badge-pending { background: #2a2a1a; color: #f6ad55; }
+    .badge-payment_confirmed { background: #1a2a4a; color: #63b3ed; }
+    .badge-preparing { background: #1a2a3a; color: #63b3ed; }
+    .badge-shipped { background: #1a2a4a; color: #63b3ed; }
+    .badge-out_for_delivery { background: #2a1a3a; color: #9f7aea; }
+    .badge-delivered { background: #1a2a1a; color: #6effb0; }
+    .badge-cancelled { background: #2a1a1a; color: #fc8181; }
 
     .filter-bar {
       display: flex;
@@ -211,8 +219,8 @@
       overflow-y: auto;
     }
     .modal-content h3 { color: #f0f0f0; margin-bottom: 20px; }
-    .modal-content .btn-row { display: flex; gap: 10px; margin-top: 15px; }
-    .modal-content .btn-row .btn { flex: 1; }
+    .modal-content .btn-row { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+    .modal-content .btn-row .btn { flex: 1; min-width: 100px; justify-content: center; }
 
     .message {
       margin-top: 15px;
@@ -225,9 +233,7 @@
     .message.error { display: block; background: #2a1a1a; color: #fc8181; border: 1px solid #4a2a2a; }
     .message.info { display: block; background: #1a2a3a; color: #63b3ed; border: 1px solid #2a3a4a; }
 
-    /* ============================================
-       TIMELINE CONTROL PANEL
-       ============================================ */
+    /* Timeline Control */
     .timeline-control {
       background: #1a1a1a;
       border-radius: 16px;
@@ -341,9 +347,7 @@
     .timeline-control .tl-step .tl-step-status.now { background: #2a2a2a; color: #6effb0; border: 1px solid #4a4a4a; }
     .timeline-control .tl-step .tl-step-status.pending { background: #2a2a1a; color: #6a6a3a; border: 1px solid #3a3a2a; }
 
-    /* ============================================
-       ORDER DETAILS VIEW
-       ============================================ */
+    /* Order Detail */
     .order-detail-row {
       display: flex;
       padding: 8px 0;
@@ -368,9 +372,7 @@
       color: #6effb0;
     }
 
-    /* ============================================
-       STOCK MANAGEMENT
-       ============================================ */
+    /* Stock Management */
     .stock-item {
       display: flex;
       align-items: center;
@@ -381,9 +383,11 @@
       border: 1px solid #2a2a2a;
       margin-bottom: 8px;
       transition: 0.3s;
+      flex-wrap: wrap;
+      gap: 8px;
     }
     .stock-item:hover { border-color: #3a3a3a; }
-    .stock-item .stock-info { display: flex; align-items: center; gap: 12px; }
+    .stock-item .stock-info { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 120px; }
     .stock-item .stock-info .stock-icon {
       width: 32px;
       height: 32px;
@@ -397,7 +401,7 @@
     }
     .stock-item .stock-info .stock-name { font-size: 14px; color: #f0f0f0; font-weight: 600; }
     .stock-item .stock-info .stock-category { font-size: 12px; color: #6a6a6a; margin-left: 8px; }
-    .stock-item .stock-control { display: flex; align-items: center; gap: 10px; }
+    .stock-item .stock-control { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .stock-item .stock-control .stock-qty {
       font-size: 18px;
       font-weight: 700;
@@ -435,20 +439,35 @@
     }
     .stock-item .stock-control .stock-input:focus { border-color: #6effb0; }
 
+    .btn-action {
+      background: transparent;
+      border: none;
+      color: #8a8a8a;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: all 0.3s;
+      font-size: 14px;
+    }
+    .btn-action:hover { color: #6effb0; background: #1a1a1a; }
+    .btn-action.delete:hover { color: #fc8181; }
+    .btn-action.paid:hover { color: #6effb0; }
+    .btn-action.shipped:hover { color: #63b3ed; }
+    .btn-action.edit:hover { color: #f6ad55; }
+
     @media (max-width: 768px) {
       .admin-header { flex-direction: column; text-align: center; }
       .stats-grid { grid-template-columns: 1fr 1fr; }
       .discount-grid { grid-template-columns: 1fr; }
+      .modal-content { padding: 20px; }
+      .filter-bar input { min-width: 100%; }
+      .order-detail-row { flex-direction: column; padding: 6px 0; }
+      .order-detail-row .label { width: 100%; margin-bottom: 2px; }
     }
     @media (max-width: 480px) {
       .stats-grid { grid-template-columns: 1fr; }
-      .modal-content { padding: 20px; }
-      .filter-bar input { min-width: 100%; }
-      .timeline-control .tl-step { flex-wrap: wrap; gap: 8px; }
-      .stock-item { flex-wrap: wrap; gap: 8px; }
-      .stock-item .stock-control { flex-wrap: wrap; }
-      .order-detail-row { flex-direction: column; padding: 6px 0; }
-      .order-detail-row .label { width: 100%; margin-bottom: 2px; }
+      .stock-item { flex-direction: column; align-items: stretch; }
+      .stock-item .stock-control { justify-content: center; }
     }
   </style>
 </head>
@@ -466,13 +485,11 @@
     <div class="stats-grid">
       <div class="stat-card"><div class="number" id="totalOrders">0</div><div class="label">Total Orders</div></div>
       <div class="stat-card"><div class="number" id="pendingOrders">0</div><div class="label">Pending</div></div>
-      <div class="stat-card"><div class="number" id="paidOrders">0</div><div class="label">Paid</div></div>
+      <div class="stat-card"><div class="number" id="paidOrders">0</div><div class="label">Paid/Processing</div></div>
       <div class="stat-card"><div class="number" id="totalRevenue">₱0</div><div class="label">Revenue</div></div>
     </div>
 
-    <!-- ================================================================ -->
-    <!-- DISCOUNT CODES SECTION -->
-    <!-- ================================================================ -->
+    <!-- Discount Codes Section -->
     <div class="admin-section">
       <div class="section-header">
         <h2><i class="fas fa-tags"></i> Discount Codes</h2>
@@ -522,7 +539,6 @@
       </div>
       <div id="discountMessage" class="message"></div>
 
-      <!-- All Discount Codes Table -->
       <div class="table-wrapper">
         <table>
           <thead>
@@ -544,17 +560,15 @@
       </div>
     </div>
 
-    <!-- ================================================================ -->
-    <!-- STOCK MANAGEMENT SECTION -->
-    <!-- ================================================================ -->
+    <!-- Stock Management Section -->
     <div class="admin-section">
       <div class="section-header">
         <h2><i class="fas fa-boxes"></i> Stock Management</h2>
         <span class="badge-count" id="stockCount">0</span>
       </div>
       <div style="margin-bottom:15px; display:flex; gap:10px; flex-wrap:wrap;">
-        <button class="btn btn-success btn-sm" onclick="restockAll()"><i class="fas fa-plus-circle"></i> Restock All</button>
-        <button class="btn btn-warning btn-sm" onclick="resetStock()"><i class="fas fa-sync-alt"></i> Reset Stock</button>
+        <button class="btn btn-success btn-sm" id="restockAllBtn"><i class="fas fa-plus-circle"></i> Restock All</button>
+        <button class="btn btn-warning btn-sm" id="resetStockBtn"><i class="fas fa-sync-alt"></i> Reset Stock</button>
         <span style="color:#6a6a6a; font-size:13px; display:flex; align-items:center;">
           <i class="fas fa-info-circle" style="margin-right:6px;"></i> Click +/- to adjust stock
         </span>
@@ -615,12 +629,13 @@
         <button class="btn btn-success" id="markAllPaidBtn"><i class="fas fa-check-double"></i> Mark All as Paid</button>
         <button class="btn btn-danger" id="clearAllOrdersBtn"><i class="fas fa-trash"></i> Clear All Orders</button>
         <button class="btn btn-info" onclick="window.location.href='index.html'"><i class="fas fa-store"></i> View Store</button>
+        <button class="btn btn-warning" id="syncStockBtn"><i class="fas fa-sync"></i> Sync Stock</button>
       </div>
       <div id="quickMessage" class="message"></div>
     </div>
   </div>
 
-  <!-- Order Detail Modal (View Order) -->
+  <!-- Order Detail Modal -->
   <div class="modal" id="orderDetailModal">
     <div class="modal-content">
       <h3><i class="fas fa-receipt"></i> Order Details</h3>
@@ -631,11 +646,12 @@
         <div class="order-detail-row"><span class="label">Phone Number</span><span class="value" id="detailPhone">-</span></div>
         <div class="order-detail-row"><span class="label">Product</span><span class="value" id="detailProduct">-</span></div>
         <div class="order-detail-row"><span class="label">Price</span><span class="value" id="detailPrice">-</span></div>
+        <div class="order-detail-row"><span class="label">Discount Code</span><span class="value" id="detailDiscount">-</span></div>
         <div class="order-detail-row"><span class="label">Status</span><span class="value" id="detailStatus">-</span></div>
         <div class="order-detail-row"><span class="label">Order Date</span><span class="value" id="detailDate">-</span></div>
         <div class="order-detail-row" style="border-bottom: none; margin-top: 4px;">
           <span class="label">Payment Info</span>
-          <span class="value" style="color:#6effb0;">📱 PayMaya: 09691348416</span>
+          <span class="value" style="color:#6effb0;">📱 PayMaya/GCash: 09691348416</span>
         </div>
       </div>
       <div class="btn-row">
@@ -646,7 +662,7 @@
     </div>
   </div>
 
-  <!-- Edit Order Modal with Timeline Control Panel -->
+  <!-- Edit Order Modal -->
   <div class="modal" id="editModal">
     <div class="modal-content">
       <h3><i class="fas fa-edit"></i> Edit Order</h3>
@@ -655,7 +671,7 @@
       <div class="input-group"><label>Address</label><input type="text" id="editAddress" /></div>
       <div class="input-group"><label>Phone</label><input type="text" id="editPhone" /></div>
       <div class="input-group"><label>Product</label><input type="text" id="editProduct" /></div>
-      <div class="input-group"><label>Price</label><input type="text" id="editPrice" /></div>
+      <div class="input-group"><label>Price</label><input type="number" id="editPrice" step="0.01" /></div>
       <div class="input-group"><label>Status</label>
         <select id="editStatus">
           <option value="pending">⏳ Pending</option>
@@ -699,7 +715,11 @@
       updateDoc,
       getDoc,
       serverTimestamp,
-      addDoc
+      addDoc,
+      query,
+      where,
+      onSnapshot,
+      Timestamp
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import {
       getAuth,
@@ -724,187 +744,13 @@
     let allOrders = [];
     let currentEditId = null;
     let currentDetailId = null;
-
-    // ============================================
-    // DISCOUNT CODES
-    // ============================================
     let allDiscounts = [];
-
-    function generateRandomCode(length = 6) {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      let code = '';
-      for (let i = 0; i < length; i++) {
-        code += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return code;
-    }
-
-    function getDiscountTypeDisplay(type) {
-      return type === 'percentage' ? '%' : '₱';
-    }
-
-    function renderDiscounts(discounts) {
-      const tbody = document.getElementById('discountTableBody');
-      document.getElementById('discountCount').textContent = discounts.length;
-
-      if (discounts.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#8a8a8a;">No discount codes created yet</td></tr>';
-        return;
-      }
-
-      const now = new Date();
-      tbody.innerHTML = discounts.map(d => {
-        const isExpired = d.expiresAt && new Date(d.expiresAt) < now;
-        const isActive = d.isActive !== false && !isExpired;
-        const statusClass = isActive ? 'badge-active' : (isExpired ? 'badge-expired' : 'badge-inactive');
-        const statusText = isActive ? 'Active' : (isExpired ? 'Expired' : 'Inactive');
-
-        return `
-          <tr>
-            <td><code style="color:#6effb0;font-weight:700;">${d.code}</code></td>
-            <td><span class="badge ${d.type === 'percentage' ? 'badge-active' : 'badge-info'}">${d.type === 'percentage' ? '%' : '₱'}</span></td>
-            <td><strong>${d.type === 'percentage' ? d.value + '%' : '₱' + d.value}</strong></td>
-            <td><span class="badge badge-active">${d.usedCount || 0}</span></td>
-            <td>${d.usageLimit || '∞'}</td>
-            <td>${d.expiresAt ? new Date(d.expiresAt).toLocaleDateString() : 'Never'}</td>
-            <td><span class="badge ${statusClass}">${statusText}</span></td>
-            <td>
-              <button class="btn btn-danger btn-sm" onclick="window.deleteDiscount('${d.id}')" title="Delete"><i class="fas fa-trash"></i></button>
-              ${isActive ? `<button class="btn btn-warning btn-sm" onclick="window.toggleDiscount('${d.id}')" title="Deactivate"><i class="fas fa-pause"></i></button>` :
-                `<button class="btn btn-success btn-sm" onclick="window.toggleDiscount('${d.id}')" title="Activate"><i class="fas fa-play"></i></button>`}
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    async function loadDiscounts() {
-      try {
-        const snapshot = await getDocs(collection(db, "discountCodes"));
-        allDiscounts = [];
-        snapshot.forEach(doc => {
-          allDiscounts.push({ id: doc.id, ...doc.data() });
-        });
-        renderDiscounts(allDiscounts);
-      } catch (error) {
-        console.error('Error loading discounts:', error);
-      }
-    }
-
-    window.deleteDiscount = async function(id) {
-      if (!confirm('Delete this discount code permanently?')) return;
-      try {
-        await deleteDoc(doc(db, "discountCodes", id));
-        await loadDiscounts();
-        showDiscountMessage('✅ Discount code deleted', 'success');
-      } catch (error) {
-        showDiscountMessage('❌ Error: ' + error.message, 'error');
-      }
-    };
-
-    window.toggleDiscount = async function(id) {
-      const discount = allDiscounts.find(d => d.id === id);
-      if (!discount) return;
-      const newStatus = discount.isActive === false;
-      try {
-        await updateDoc(doc(db, "discountCodes", id), {
-          isActive: newStatus
-        });
-        await loadDiscounts();
-        showDiscountMessage(`✅ Discount ${newStatus ? 'activated' : 'deactivated'}`, 'success');
-      } catch (error) {
-        showDiscountMessage('❌ Error: ' + error.message, 'error');
-      }
-    };
-
-    function showDiscountMessage(text, type = 'success') {
-      const el = document.getElementById('discountMessage');
-      el.className = `message ${type}`;
-      el.textContent = text;
-      setTimeout(() => { el.className = 'message'; }, 3000);
-    }
-
-    // Create Discount
-    document.getElementById('createDiscountBtn').addEventListener('click', async () => {
-      const code = document.getElementById('discountCodeInput').value.trim().toUpperCase();
-      const type = document.getElementById('discountTypeInput').value;
-      const value = parseFloat(document.getElementById('discountValueInput').value);
-      const usageLimit = parseInt(document.getElementById('discountLimitInput').value) || null;
-      const expiresDays = parseInt(document.getElementById('discountExpiresInput').value) || null;
-
-      if (!code) {
-        showDiscountMessage('⚠️ Please enter a discount code', 'error');
-        return;
-      }
-      if (!value || value <= 0) {
-        showDiscountMessage('⚠️ Please enter a valid discount value', 'error');
-        return;
-      }
-
-      // Check if code already exists
-      const existing = allDiscounts.find(d => d.code === code);
-      if (existing) {
-        showDiscountMessage('❌ This discount code already exists!', 'error');
-        return;
-      }
-
-      let expiresAt = null;
-      if (expiresDays) {
-        const date = new Date();
-        date.setDate(date.getDate() + expiresDays);
-        expiresAt = date.toISOString();
-      }
-
-      try {
-        await addDoc(collection(db, "discountCodes"), {
-          code: code,
-          type: type,
-          value: value,
-          usageLimit: usageLimit,
-          expiresAt: expiresAt,
-          usedCount: 0,
-          isActive: true,
-          createdAt: serverTimestamp()
-        });
-
-        document.getElementById('discountCodeInput').value = '';
-        document.getElementById('discountValueInput').value = '';
-        document.getElementById('discountLimitInput').value = '';
-        document.getElementById('discountExpiresInput').value = '';
-        await loadDiscounts();
-        showDiscountMessage(`✅ Discount code "${code}" created!`, 'success');
-      } catch (error) {
-        showDiscountMessage('❌ Error: ' + error.message, 'error');
-      }
-    });
-
-    // Generate Random Code
-    document.getElementById('generateDiscountBtn').addEventListener('click', () => {
-      const code = generateRandomCode(8);
-      document.getElementById('discountCodeInput').value = code;
-    });
-
-    // Clear All Discounts
-    document.getElementById('clearDiscountsBtn').addEventListener('click', async () => {
-      if (!confirm('⚠️ Delete ALL discount codes? This cannot be undone!')) return;
-      try {
-        const snapshot = await getDocs(collection(db, "discountCodes"));
-        for (const docSnap of snapshot.docs) {
-          await deleteDoc(doc(db, "discountCodes", docSnap.id));
-        }
-        await loadDiscounts();
-        showDiscountMessage('✅ All discount codes deleted', 'success');
-      } catch (error) {
-        showDiscountMessage('❌ Error: ' + error.message, 'error');
-      }
-    });
-
-    document.getElementById('refreshDiscountsBtn').addEventListener('click', loadDiscounts);
+    let stockData = [];
 
     // ============================================
-    // STOCK DATA
+    // STOCK DATA - Load from localStorage
     // ============================================
-    let stockData = [
+    const DEFAULT_STOCK = [
       { id: 'stockWhey', name: 'Whey Protein Isolate', category: 'Supplements', icon: 'fa-pills', qty: 12 },
       { id: 'stockCreatine', name: 'Creatine Monohydrate', category: 'Supplements', icon: 'fa-pills', qty: 15 },
       { id: 'stockPre', name: 'Pre-Workout Blast', category: 'Supplements', icon: 'fa-pills', qty: 9 },
@@ -912,6 +758,26 @@
       { id: 'stockBPC', name: 'BPC-157 Peptide', category: 'PED\'s', icon: 'fa-syringe', qty: 6 },
       { id: 'stockTB', name: 'TB-500 Peptide', category: 'PED\'s', icon: 'fa-syringe', qty: 5 }
     ];
+
+    function loadStockData() {
+      const saved = localStorage.getItem('peakStock');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          stockData = DEFAULT_STOCK.map(item => {
+            const found = parsed.find(p => p.id === item.id);
+            return found ? { ...item, qty: found.qty } : { ...item };
+          });
+          return;
+        } catch (e) {}
+      }
+      stockData = DEFAULT_STOCK.map(item => ({ ...item }));
+    }
+
+    function saveStockData() {
+      const toSave = stockData.map(item => ({ id: item.id, qty: item.qty }));
+      localStorage.setItem('peakStock', JSON.stringify(toSave));
+    }
 
     function renderStock() {
       const container = document.getElementById('stockList');
@@ -930,52 +796,71 @@
               </div>
             </div>
             <div class="stock-control">
-              <button class="stock-btn" onclick="window.adjustStock('${item.id}', -1)"><i class="fas fa-minus"></i></button>
+              <button class="stock-btn" data-action="adjust" data-id="${item.id}" data-amount="-1"><i class="fas fa-minus"></i></button>
               <span class="stock-qty ${qtyClass}">${item.qty}</span>
-              <button class="stock-btn" onclick="window.adjustStock('${item.id}', 1)"><i class="fas fa-plus"></i></button>
-              <input type="number" class="stock-input" id="stockInput_${item.id}" value="${item.qty}" min="0" onchange="window.setStock('${item.id}', this.value)" />
+              <button class="stock-btn" data-action="adjust" data-id="${item.id}" data-amount="1"><i class="fas fa-plus"></i></button>
+              <input type="number" class="stock-input" data-id="${item.id}" value="${item.qty}" min="0" />
             </div>
           </div>
         `;
       });
       container.innerHTML = html;
+
+      // Event listeners
+      container.querySelectorAll('[data-action="adjust"]').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const id = this.dataset.id;
+          const amount = parseInt(this.dataset.amount);
+          adjustStock(id, amount);
+        });
+      });
+
+      container.querySelectorAll('.stock-input').forEach(input => {
+        input.addEventListener('change', function() {
+          const id = this.dataset.id;
+          const value = parseInt(this.value);
+          if (!isNaN(value) && value >= 0) {
+            setStock(id, value);
+          } else {
+            this.value = stockData.find(s => s.id === id)?.qty || 0;
+          }
+        });
+      });
     }
 
-    window.adjustStock = function(id, amount) {
+    function adjustStock(id, amount) {
       const item = stockData.find(s => s.id === id);
       if (!item) return;
       const newQty = Math.max(0, item.qty + amount);
       item.qty = newQty;
-      localStorage.setItem('peakStock', JSON.stringify(stockData));
+      saveStockData();
       renderStock();
       showStockMessage(`✅ ${item.name} stock updated to ${newQty}`, 'success');
-    };
+    }
 
-    window.setStock = function(id, value) {
+    function setStock(id, value) {
       const item = stockData.find(s => s.id === id);
       if (!item) return;
-      const newQty = Math.max(0, parseInt(value) || 0);
+      const newQty = Math.max(0, value);
       item.qty = newQty;
-      localStorage.setItem('peakStock', JSON.stringify(stockData));
+      saveStockData();
       renderStock();
-    };
+    }
 
-    window.restockAll = function() {
-      if (!confirm('Restock ALL products to default quantities?')) return;
+    function restockAll() {
       const defaults = { stockWhey: 12, stockCreatine: 15, stockPre: 9, stock1: 7, stockBPC: 6, stockTB: 5 };
       stockData.forEach(item => { item.qty = defaults[item.id] || 10; });
-      localStorage.setItem('peakStock', JSON.stringify(stockData));
+      saveStockData();
       renderStock();
       showStockMessage('✅ All products restocked!', 'success');
-    };
+    }
 
-    window.resetStock = function() {
-      if (!confirm('⚠️ Reset ALL stock to 0?')) return;
+    function resetStock() {
       stockData.forEach(item => { item.qty = 0; });
-      localStorage.setItem('peakStock', JSON.stringify(stockData));
+      saveStockData();
       renderStock();
       showStockMessage('⚠️ All stock reset to 0', 'info');
-    };
+    }
 
     function showStockMessage(text, type = 'success') {
       const el = document.getElementById('stockMessage');
@@ -984,18 +869,106 @@
       setTimeout(() => { el.className = 'message'; }, 3000);
     }
 
-    function loadStock() {
-      const saved = localStorage.getItem('peakStock');
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          stockData.forEach(item => {
-            const found = parsed.find(p => p.id === item.id);
-            if (found) item.qty = found.qty;
-          });
-        } catch (e) {}
+    // ============================================
+    // DISCOUNT CODES
+    // ============================================
+    function generateRandomCode(length = 8) {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let code = '';
+      for (let i = 0; i < length; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
       }
-      renderStock();
+      return code;
+    }
+
+    async function loadDiscounts() {
+      try {
+        const snapshot = await getDocs(collection(db, "discountCodes"));
+        allDiscounts = [];
+        snapshot.forEach(doc => {
+          allDiscounts.push({ id: doc.id, ...doc.data() });
+        });
+        renderDiscounts();
+      } catch (error) {
+        console.error('Error loading discounts:', error);
+      }
+    }
+
+    function renderDiscounts() {
+      const tbody = document.getElementById('discountTableBody');
+      document.getElementById('discountCount').textContent = allDiscounts.length;
+
+      if (allDiscounts.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#8a8a8a;">No discount codes created yet</td></tr>';
+        return;
+      }
+
+      const now = new Date();
+      tbody.innerHTML = allDiscounts.map(d => {
+        const isExpired = d.expiresAt && new Date(d.expiresAt) < now;
+        const isActive = d.isActive !== false && !isExpired;
+        const statusClass = isActive ? 'badge-active' : (isExpired ? 'badge-expired' : 'badge-inactive');
+        const statusText = isActive ? 'Active' : (isExpired ? 'Expired' : 'Inactive');
+
+        return `
+          <tr>
+            <td><code style="color:#6effb0;font-weight:700;">${d.code}</code></td>
+            <td><span class="badge ${d.type === 'percentage' ? 'badge-active' : 'badge-info'}">${d.type === 'percentage' ? '%' : '₱'}</span></td>
+            <td><strong>${d.type === 'percentage' ? d.value + '%' : '₱' + d.value}</strong></td>
+            <td><span class="badge badge-active">${d.usedCount || 0}</span></td>
+            <td>${d.usageLimit || '∞'}</td>
+            <td>${d.expiresAt ? new Date(d.expiresAt).toLocaleDateString() : 'Never'}</td>
+            <td><span class="badge ${statusClass}">${statusText}</span></td>
+            <td>
+              <button class="btn btn-danger btn-sm" data-action="deleteDiscount" data-id="${d.id}" title="Delete"><i class="fas fa-trash"></i></button>
+              ${isActive ? 
+                `<button class="btn btn-warning btn-sm" data-action="toggleDiscount" data-id="${d.id}" title="Deactivate"><i class="fas fa-pause"></i></button>` :
+                `<button class="btn btn-success btn-sm" data-action="toggleDiscount" data-id="${d.id}" title="Activate"><i class="fas fa-play"></i></button>`}
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Add event listeners for discount actions
+      tbody.querySelectorAll('[data-action="deleteDiscount"]').forEach(btn => {
+        btn.addEventListener('click', () => deleteDiscount(btn.dataset.id));
+      });
+      tbody.querySelectorAll('[data-action="toggleDiscount"]').forEach(btn => {
+        btn.addEventListener('click', () => toggleDiscount(btn.dataset.id));
+      });
+    }
+
+    async function deleteDiscount(id) {
+      if (!confirm('Delete this discount code permanently?')) return;
+      try {
+        await deleteDoc(doc(db, "discountCodes", id));
+        await loadDiscounts();
+        showDiscountMessage('✅ Discount code deleted', 'success');
+      } catch (error) {
+        showDiscountMessage('❌ Error: ' + error.message, 'error');
+      }
+    }
+
+    async function toggleDiscount(id) {
+      const discount = allDiscounts.find(d => d.id === id);
+      if (!discount) return;
+      const newStatus = discount.isActive === false;
+      try {
+        await updateDoc(doc(db, "discountCodes", id), {
+          isActive: newStatus
+        });
+        await loadDiscounts();
+        showDiscountMessage(`✅ Discount ${newStatus ? 'activated' : 'deactivated'}`, 'success');
+      } catch (error) {
+        showDiscountMessage('❌ Error: ' + error.message, 'error');
+      }
+    }
+
+    function showDiscountMessage(text, type = 'success') {
+      const el = document.getElementById('discountMessage');
+      el.className = `message ${type}`;
+      el.textContent = text;
+      setTimeout(() => { el.className = 'message'; }, 3000);
     }
 
     // ============================================
@@ -1016,8 +989,7 @@
       'preparing': 2,
       'shipped': 3,
       'out_for_delivery': 4,
-      'delivered': 5,
-      'cancelled': -1
+      'delivered': 5
     };
 
     const STATUS_DISPLAY_MAP = {
@@ -1030,39 +1002,30 @@
       'cancelled': '❌ Cancelled'
     };
 
-    const STATUS_CLASS_MAP = {
-      'pending': 'pending',
-      'payment_confirmed': 'payment_confirmed',
-      'preparing': 'preparing',
-      'shipped': 'shipped',
-      'out_for_delivery': 'out_for_delivery',
-      'delivered': 'delivered',
-      'cancelled': 'cancelled'
-    };
-
     function normalizeStatus(status) {
       if (!status) return 'pending';
       const s = String(status).toLowerCase().trim();
-      if (s === 'p' || s === 'pend' || s === 'pending') return 'pending';
-      if (s === 'payment_confirmed' || s === 'payment confirmed' || s === 'pay') return 'payment_confirmed';
-      if (s === 'preparing' || s === 'prepare' || s === 'prep') return 'preparing';
-      if (s === 'shipped' || s === 'ship' || s === 'sh') return 'shipped';
-      if (s === 'out_for_delivery' || s === 'out for delivery' || s === 'out') return 'out_for_delivery';
-      if (s === 'delivered' || s === 'deliver' || s === 'del' || s === 'd') return 'delivered';
-      if (s === 'cancelled' || s === 'cancel' || s === 'c') return 'cancelled';
+      if (['pending', 'p', 'pend'].includes(s)) return 'pending';
+      if (['payment_confirmed', 'payment confirmed', 'paid', 'pay'].includes(s)) return 'payment_confirmed';
+      if (['preparing', 'prepare', 'prep'].includes(s)) return 'preparing';
+      if (['shipped', 'ship', 'sh'].includes(s)) return 'shipped';
+      if (['out_for_delivery', 'out for delivery', 'out'].includes(s)) return 'out_for_delivery';
+      if (['delivered', 'deliver', 'del', 'd'].includes(s)) return 'delivered';
+      if (['cancelled', 'cancel', 'c'].includes(s)) return 'cancelled';
       return 'pending';
     }
 
     function getCurrentStep(status) {
       const normalized = normalizeStatus(status);
-      const step = STATUS_STEP_MAP[normalized];
-      return step !== undefined ? step : -1;
+      if (normalized === 'cancelled') return -1;
+      return STATUS_STEP_MAP[normalized] !== undefined ? STATUS_STEP_MAP[normalized] : -1;
     }
 
     function getProgress(status) {
       const normalized = normalizeStatus(status);
+      if (normalized === 'cancelled') return 0;
       const step = STATUS_STEP_MAP[normalized];
-      if (step === undefined || step === -1) return 0;
+      if (step === undefined) return 0;
       return Math.min(Math.round(((step + 1) / TIMELINE_STEPS.length) * 100), 100);
     }
 
@@ -1076,7 +1039,7 @@
 
       let html = '';
       TIMELINE_STEPS.forEach((step, index) => {
-        const isCompleted = index < currentStep;
+        const isCompleted = currentStep > index;
         const isActive = index === currentStep;
         let iconClass = '', nameClass = '', statusLabel = '', statusClass = '';
         if (isCompleted) { iconClass = 'completed'; nameClass = 'completed'; statusLabel = '✅ Done'; statusClass = 'done'; }
@@ -1084,7 +1047,7 @@
         else { statusLabel = '⏳ Pending'; statusClass = 'pending'; }
 
         html += `
-          <div class="tl-step" data-step-index="${index}" onclick="window.updateTimelineStep('${currentEditId}', ${index})">
+          <div class="tl-step" data-step-index="${index}" data-action="timelineStep">
             <div class="tl-step-icon ${iconClass}"><i class="fas ${step.icon}"></i></div>
             <div class="tl-step-info"><div class="tl-step-name ${nameClass}">${step.title}</div></div>
             <span class="tl-step-status ${statusClass}">${statusLabel}</span>
@@ -1092,97 +1055,55 @@
         `;
       });
       container.innerHTML = html;
+
+      // Add click handlers for timeline steps
+      container.querySelectorAll('[data-action="timelineStep"]').forEach(el => {
+        el.addEventListener('click', function() {
+          const index = parseInt(this.dataset.stepIndex);
+          if (currentEditId) {
+            handleTimelineStepClick(currentEditId, index);
+          }
+        });
+      });
     }
 
-    window.updateTimelineStep = async function(orderId, stepIndex) {
-      if (!orderId) { alert('No order selected'); return; }
+    async function handleTimelineStepClick(orderId, stepIndex) {
       const step = TIMELINE_STEPS[stepIndex];
-      if (!step) { alert('Step not found'); return; }
+      if (!step) return;
       const newStatus = step.status;
+      
+      const currentStatus = document.getElementById('editStatus').value;
+      if (currentStatus === newStatus) {
+        showEditMessage('ℹ️ Order is already in this status', 'info');
+        return;
+      }
+
       if (!confirm(`Update order to "${step.title}"?`)) return;
 
       try {
-        await updateDoc(doc(db, "orders", orderId), { status: newStatus, updatedAt: serverTimestamp() });
+        await updateDoc(doc(db, "orders", orderId), { 
+          status: newStatus, 
+          updatedAt: serverTimestamp() 
+        });
         document.getElementById('editStatus').value = newStatus;
         renderTimelineControl(newStatus);
-        const msg = document.getElementById('editMessage');
-        msg.className = 'message success';
-        msg.textContent = `✅ Order updated to "${step.title}"!`;
-        setTimeout(() => { msg.className = 'message'; }, 3000);
+        showEditMessage(`✅ Order updated to "${step.title}"!`, 'success');
         await loadOrders();
       } catch (error) {
-        const msg = document.getElementById('editMessage');
-        msg.className = 'message error';
-        msg.textContent = '❌ Error: ' + error.message;
+        showEditMessage('❌ Error: ' + error.message, 'error');
       }
-    };
+    }
 
-    window.openOrderDetail = async function(orderId) {
-      const order = allOrders.find(o => o.id === orderId);
-      if (!order) { alert('Order not found'); return; }
-      currentDetailId = orderId;
-      document.getElementById('detailOrderId').textContent = order.orderId || orderId;
-      document.getElementById('detailName').textContent = order.name || 'Unknown';
-      document.getElementById('detailAddress').textContent = order.address || 'N/A';
-      document.getElementById('detailPhone').textContent = order.phone || 'N/A';
-      document.getElementById('detailProduct').textContent = order.product || 'N/A';
-      document.getElementById('detailPrice').textContent = order.price ? `₱${order.price}` : 'N/A';
-      const statusDisplay = STATUS_DISPLAY_MAP[order.status] || order.status || 'Pending';
-      const statusClass = STATUS_CLASS_MAP[order.status] || 'pending';
-      document.getElementById('detailStatus').innerHTML = `<span class="badge status-${statusClass}">${statusDisplay}</span>`;
-      document.getElementById('detailDate').textContent = order.date ? new Date(order.date).toLocaleString() : 'N/A';
-      document.getElementById('detailMessage').className = 'message';
-      document.getElementById('detailMessage').textContent = '';
-      document.getElementById('orderDetailModal').classList.add('show');
-    };
-
-    window.closeOrderDetailModal = function() {
-      document.getElementById('orderDetailModal').classList.remove('show');
-      currentDetailId = null;
-    };
-
-    document.getElementById('markPaidFromDetail').addEventListener('click', async () => {
-      if (!currentDetailId) return;
-      if (!confirm('Mark this order as PAID?')) return;
-      try {
-        await updateDoc(doc(db, "orders", currentDetailId), { status: 'payment_confirmed', updatedAt: serverTimestamp() });
-        const msg = document.getElementById('detailMessage');
-        msg.className = 'message success';
-        msg.textContent = '✅ Order marked as Paid!';
-        setTimeout(() => { closeOrderDetailModal(); loadOrders(); }, 1000);
-      } catch (error) {
-        const msg = document.getElementById('detailMessage');
-        msg.className = 'message error';
-        msg.textContent = '❌ Error: ' + error.message;
-      }
-    });
-
-    document.getElementById('orderDetailModal').addEventListener('click', function(e) {
-      if (e.target === this) closeOrderDetailModal();
-    });
+    function showEditMessage(text, type = 'success') {
+      const el = document.getElementById('editMessage');
+      el.className = `message ${type}`;
+      el.textContent = text;
+      setTimeout(() => { el.className = 'message'; }, 3000);
+    }
 
     // ============================================
-    // AUTH & LOAD FUNCTIONS
+    // ORDERS
     // ============================================
-
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) { window.location.href = 'admin-login.html'; return; }
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
-      if (!docSnap.exists() || !docSnap.data().isAdmin) {
-        await signOut(auth);
-        window.location.href = 'admin-login.html';
-        return;
-      }
-      adminEmail.textContent = user.email;
-      await loadOrders();
-    });
-
-    logoutBtn.addEventListener('click', async () => {
-      await signOut(auth);
-      window.location.href = 'admin-login.html';
-    });
-
     async function loadOrders(searchTerm = '', statusFilter = 'all') {
       try {
         const ordersSnap = await getDocs(collection(db, "orders"));
@@ -1230,51 +1151,59 @@
         return;
       }
 
-      const statusLabels = {
-        'pending': '⏳ Pending',
-        'payment_confirmed': '💳 Payment Confirmed',
-        'preparing': '📦 Preparing',
-        'shipped': '🚚 Shipped',
-        'out_for_delivery': '🚚 Out for Delivery',
-        'delivered': '🏠 Delivered',
-        'cancelled': '❌ Cancelled'
-      };
+      document.getElementById('ordersTable').innerHTML = filtered.map(o => {
+        const status = normalizeStatus(o.status);
+        const statusDisplay = STATUS_DISPLAY_MAP[status] || status || 'Pending';
+        const statusClass = status === 'cancelled' ? 'cancelled' : status;
+        return `
+          <tr>
+            <td><code style="font-size:12px;color:#63b3ed;">${o.orderId || o.id.substring(0, 8)}</code></td>
+            <td><strong>${o.name || o.userEmail || 'Unknown'}</strong></td>
+            <td>${o.product || 'N/A'}</td>
+            <td><span style="color:#6effb0;">₱${(o.price || o.discountedPrice || 0).toFixed(2)}</span></td>
+            <td><span class="badge badge-${statusClass}">${statusDisplay}</span></td>
+            <td>${o.date ? new Date(o.date).toLocaleDateString() : (o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleDateString() : 'N/A')}</td>
+            <td>
+              <button class="btn-action edit" data-action="viewOrder" data-id="${o.id}" title="View Details"><i class="fas fa-eye"></i></button>
+              <button class="btn-action paid" data-action="markPaid" data-id="${o.id}" title="Mark Paid"><i class="fas fa-check"></i></button>
+              <button class="btn-action shipped" data-action="markShipped" data-id="${o.id}" title="Mark Shipped"><i class="fas fa-truck"></i></button>
+              <button class="btn-action edit" data-action="editOrder" data-id="${o.id}" title="Edit"><i class="fas fa-edit"></i></button>
+              <button class="btn-action delete" data-action="deleteOrder" data-id="${o.id}" title="Delete"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        `;
+      }).join('');
 
-      const statusClasses = {
-        'pending': 'pending',
-        'payment_confirmed': 'payment_confirmed',
-        'preparing': 'preparing',
-        'shipped': 'shipped',
-        'out_for_delivery': 'out_for_delivery',
-        'delivered': 'delivered',
-        'cancelled': 'cancelled'
-      };
-
-      document.getElementById('ordersTable').innerHTML = filtered.map(o => `
-        <tr>
-          <td><code style="font-size:12px;color:#63b3ed;">${o.orderId || o.id.substring(0, 8)}</code></td>
-          <td><strong>${o.name || o.userEmail || 'Unknown'}</strong></td>
-          <td>${o.product || 'N/A'}</td>
-          <td><span style="color:#6effb0;">₱${o.price || o.discountedPrice || 0}</span></td>
-          <td><span class="badge status-${statusClasses[o.status] || 'pending'}">${statusLabels[o.status] || 'Pending'}</span></td>
-          <td>${o.date ? new Date(o.date).toLocaleDateString() : (o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleDateString() : 'N/A')}</td>
-          <td>
-            <button class="btn-action edit" onclick="window.openOrderDetail('${o.id}')" title="View Details"><i class="fas fa-eye"></i></button>
-            <button class="btn-action paid" onclick="window.updateOrderStatus('${o.id}', 'payment_confirmed')" title="Mark Paid"><i class="fas fa-check"></i></button>
-            <button class="btn-action shipped" onclick="window.updateOrderStatus('${o.id}', 'shipped')" title="Mark Shipped"><i class="fas fa-truck"></i></button>
-            <button class="btn-action edit" onclick="window.openEditModal('${o.id}')" title="Edit"><i class="fas fa-edit"></i></button>
-            <button class="btn-action delete" onclick="window.deleteOrder('${o.id}')" title="Delete"><i class="fas fa-trash"></i></button>
-          </td>
-        </tr>
-      `).join('');
+      // Add event listeners for order actions
+      document.querySelectorAll('[data-action="viewOrder"]').forEach(btn => {
+        btn.addEventListener('click', () => openOrderDetail(btn.dataset.id));
+      });
+      document.querySelectorAll('[data-action="markPaid"]').forEach(btn => {
+        btn.addEventListener('click', () => updateOrderStatus(btn.dataset.id, 'payment_confirmed'));
+      });
+      document.querySelectorAll('[data-action="markShipped"]').forEach(btn => {
+        btn.addEventListener('click', () => updateOrderStatus(btn.dataset.id, 'shipped'));
+      });
+      document.querySelectorAll('[data-action="editOrder"]').forEach(btn => {
+        btn.addEventListener('click', () => openEditModal(btn.dataset.id));
+      });
+      document.querySelectorAll('[data-action="deleteOrder"]').forEach(btn => {
+        btn.addEventListener('click', () => deleteOrder(btn.dataset.id));
+      });
     }
 
     function updateStats(orders) {
       const total = orders.length;
-      const pending = orders.filter(o => (o.status || 'pending') === 'pending').length;
-      const paid = orders.filter(o => o.status === 'payment_confirmed' || o.status === 'preparing' || o.status === 'shipped' || o.status === 'out_for_delivery' || o.status === 'delivered').length;
+      const pending = orders.filter(o => normalizeStatus(o.status) === 'pending').length;
+      const paid = orders.filter(o => {
+        const s = normalizeStatus(o.status);
+        return s !== 'pending' && s !== 'cancelled';
+      }).length;
       let revenue = 0;
-      orders.forEach(o => { if (o.status !== 'cancelled') revenue += parseFloat(o.price || o.discountedPrice || 0); });
+      orders.forEach(o => { 
+        const s = normalizeStatus(o.status);
+        if (s !== 'cancelled') revenue += parseFloat(o.price || o.discountedPrice || 0); 
+      });
 
       document.getElementById('totalOrders').textContent = total;
       document.getElementById('pendingOrders').textContent = pending;
@@ -1282,7 +1211,75 @@
       document.getElementById('totalRevenue').textContent = `₱${revenue.toLocaleString()}`;
     }
 
-    window.openEditModal = async function(orderId) {
+    // ============================================
+    // ORDER ACTIONS
+    // ============================================
+    async function updateOrderStatus(orderId, newStatus) {
+      const statusDisplay = STATUS_DISPLAY_MAP[newStatus] || newStatus;
+      if (!confirm(`Change order status to "${statusDisplay}"?`)) return;
+      try {
+        await updateDoc(doc(db, "orders", orderId), { 
+          status: newStatus, 
+          updatedAt: serverTimestamp() 
+        });
+        await loadOrders();
+        showQuickMessage(`✅ Order updated to "${statusDisplay}"`, 'success');
+      } catch (error) {
+        showQuickMessage('❌ Error: ' + error.message, 'error');
+      }
+    }
+
+    async function deleteOrder(orderId) {
+      if (!confirm('⚠️ Delete this order permanently?')) return;
+      try {
+        await deleteDoc(doc(db, "orders", orderId));
+        await loadOrders();
+        showQuickMessage('✅ Order deleted successfully', 'success');
+      } catch (error) {
+        showQuickMessage('❌ Error: ' + error.message, 'error');
+      }
+    }
+
+    function showQuickMessage(text, type = 'success') {
+      const el = document.getElementById('quickMessage');
+      el.className = `message ${type}`;
+      el.textContent = text;
+      setTimeout(() => { el.className = 'message'; }, 3000);
+    }
+
+    // ============================================
+    // ORDER DETAIL MODAL
+    // ============================================
+    async function openOrderDetail(orderId) {
+      const order = allOrders.find(o => o.id === orderId);
+      if (!order) { alert('Order not found'); return; }
+      currentDetailId = orderId;
+      document.getElementById('detailOrderId').textContent = order.orderId || orderId;
+      document.getElementById('detailName').textContent = order.name || 'Unknown';
+      document.getElementById('detailAddress').textContent = order.address || 'N/A';
+      document.getElementById('detailPhone').textContent = order.phone || 'N/A';
+      document.getElementById('detailProduct').textContent = order.product || 'N/A';
+      document.getElementById('detailPrice').textContent = order.price ? `₱${parseFloat(order.price).toFixed(2)}` : 'N/A';
+      document.getElementById('detailDiscount').textContent = order.discountCode || 'None';
+      const status = normalizeStatus(order.status);
+      const statusDisplay = STATUS_DISPLAY_MAP[status] || status || 'Pending';
+      const statusClass = status === 'cancelled' ? 'cancelled' : status;
+      document.getElementById('detailStatus').innerHTML = `<span class="badge badge-${statusClass}">${statusDisplay}</span>`;
+      document.getElementById('detailDate').textContent = order.date ? new Date(order.date).toLocaleString() : 'N/A';
+      document.getElementById('detailMessage').className = 'message';
+      document.getElementById('detailMessage').textContent = '';
+      document.getElementById('orderDetailModal').classList.add('show');
+    }
+
+    function closeOrderDetailModal() {
+      document.getElementById('orderDetailModal').classList.remove('show');
+      currentDetailId = null;
+    }
+
+    // ============================================
+    // EDIT ORDER MODAL
+    // ============================================
+    async function openEditModal(orderId) {
       const order = allOrders.find(o => o.id === orderId);
       if (!order) { alert('Order not found'); return; }
       currentEditId = orderId;
@@ -1292,76 +1289,45 @@
       document.getElementById('editPhone').value = order.phone || '';
       document.getElementById('editProduct').value = order.product || '';
       document.getElementById('editPrice').value = order.price || order.discountedPrice || '';
-      document.getElementById('editStatus').value = order.status || 'pending';
+      const status = normalizeStatus(order.status);
+      document.getElementById('editStatus').value = status;
       document.getElementById('editMessage').className = 'message';
       document.getElementById('editMessage').textContent = '';
-      renderTimelineControl(order.status || 'pending');
+      renderTimelineControl(status);
       document.getElementById('editModal').classList.add('show');
-    };
+    }
 
-    window.updateOrderStatus = async function(orderId, newStatus) {
-      const statusDisplay = STATUS_DISPLAY_MAP[newStatus] || newStatus;
-      if (!confirm(`Change order status to "${statusDisplay}"?`)) return;
-      try {
-        await updateDoc(doc(db, "orders", orderId), { status: newStatus, updatedAt: serverTimestamp() });
-        await loadOrders();
-        const msg = document.getElementById('quickMessage');
-        msg.className = 'message success';
-        msg.textContent = `✅ Order status updated to "${statusDisplay}"`;
-        setTimeout(() => { msg.className = 'message'; }, 3000);
-      } catch (error) { alert('Error updating order: ' + error.message); }
-    };
+    function closeEditModal() {
+      document.getElementById('editModal').classList.remove('show');
+      currentEditId = null;
+    }
 
-    window.deleteOrder = async function(orderId) {
-      if (!confirm('⚠️ Delete this order permanently?')) return;
-      try {
-        await deleteDoc(doc(db, "orders", orderId));
-        await loadOrders();
-        const msg = document.getElementById('quickMessage');
-        msg.className = 'message success';
-        msg.textContent = '✅ Order deleted successfully';
-        setTimeout(() => { msg.className = 'message'; }, 3000);
-      } catch (error) { alert('Error deleting order: ' + error.message); }
-    };
-
-    document.getElementById('saveEditBtn').addEventListener('click', async () => {
-      if (!currentEditId) return;
-      const name = document.getElementById('editName').value.trim();
-      const address = document.getElementById('editAddress').value.trim();
-      const phone = document.getElementById('editPhone').value.trim();
-      const product = document.getElementById('editProduct').value.trim();
-      const price = document.getElementById('editPrice').value.trim();
-      const status = document.getElementById('editStatus').value;
-      if (!name || !address) {
-        const msg = document.getElementById('editMessage');
-        msg.className = 'message error';
-        msg.textContent = '⚠️ Name and Address are required';
+    // ============================================
+    // AUTH
+    // ============================================
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { window.location.href = 'admin-login.html'; return; }
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+      if (!docSnap.exists() || !docSnap.data().isAdmin) {
+        await signOut(auth);
+        window.location.href = 'admin-login.html';
         return;
       }
-      try {
-        await updateDoc(doc(db, "orders", currentEditId), {
-          name, address, phone, product, price: parseFloat(price) || 0, status, updatedAt: serverTimestamp()
-        });
-        const msg = document.getElementById('editMessage');
-        msg.className = 'message success';
-        msg.textContent = '✅ Order updated successfully!';
-        renderTimelineControl(status);
-        setTimeout(() => { document.getElementById('editModal').classList.remove('show'); loadOrders(); }, 800);
-      } catch (error) {
-        const msg = document.getElementById('editMessage');
-        msg.className = 'message error';
-        msg.textContent = '❌ Error: ' + error.message;
-      }
+      adminEmail.textContent = user.email;
+      await loadOrders();
+      await loadDiscounts();
     });
 
-    document.getElementById('closeEditBtn').addEventListener('click', () => {
-      document.getElementById('editModal').classList.remove('show');
+    logoutBtn.addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.href = 'admin-login.html';
     });
 
-    document.getElementById('editModal').addEventListener('click', function(e) {
-      if (e.target === this) document.getElementById('editModal').classList.remove('show');
-    });
-
+    // ============================================
+    // EVENT LISTENERS
+    // ============================================
+    // Search & Filter
     document.getElementById('searchBtn').addEventListener('click', () => {
       const search = document.getElementById('searchOrder').value.trim();
       const status = document.getElementById('statusFilter').value;
@@ -1378,6 +1344,89 @@
       if (e.key === 'Enter') document.getElementById('searchBtn').click();
     });
 
+    // Discount creation
+    document.getElementById('createDiscountBtn').addEventListener('click', async () => {
+      const code = document.getElementById('discountCodeInput').value.trim().toUpperCase();
+      const type = document.getElementById('discountTypeInput').value;
+      const value = parseFloat(document.getElementById('discountValueInput').value);
+      const usageLimit = parseInt(document.getElementById('discountLimitInput').value) || null;
+      const expiresDays = parseInt(document.getElementById('discountExpiresInput').value) || null;
+
+      if (!code) {
+        showDiscountMessage('⚠️ Please enter a discount code', 'error');
+        return;
+      }
+      if (!value || value <= 0) {
+        showDiscountMessage('⚠️ Please enter a valid discount value', 'error');
+        return;
+      }
+
+      const existing = allDiscounts.find(d => d.code === code);
+      if (existing) {
+        showDiscountMessage('❌ This discount code already exists!', 'error');
+        return;
+      }
+
+      let expiresAt = null;
+      if (expiresDays && expiresDays > 0) {
+        const date = new Date();
+        date.setDate(date.getDate() + expiresDays);
+        expiresAt = date.toISOString();
+      }
+
+      try {
+        await addDoc(collection(db, "discountCodes"), {
+          code: code,
+          type: type,
+          value: value,
+          usageLimit: usageLimit,
+          expiresAt: expiresAt,
+          usedCount: 0,
+          isActive: true,
+          createdAt: serverTimestamp()
+        });
+
+        document.getElementById('discountCodeInput').value = '';
+        document.getElementById('discountValueInput').value = '';
+        document.getElementById('discountLimitInput').value = '';
+        document.getElementById('discountExpiresInput').value = '';
+        await loadDiscounts();
+        showDiscountMessage(`✅ Discount code "${code}" created!`, 'success');
+      } catch (error) {
+        showDiscountMessage('❌ Error: ' + error.message, 'error');
+      }
+    });
+
+    document.getElementById('generateDiscountBtn').addEventListener('click', () => {
+      document.getElementById('discountCodeInput').value = generateRandomCode(8);
+    });
+
+    document.getElementById('refreshDiscountsBtn').addEventListener('click', loadDiscounts);
+
+    document.getElementById('clearDiscountsBtn').addEventListener('click', async () => {
+      if (!confirm('⚠️ Delete ALL discount codes? This cannot be undone!')) return;
+      try {
+        const snapshot = await getDocs(collection(db, "discountCodes"));
+        for (const docSnap of snapshot.docs) {
+          await deleteDoc(doc(db, "discountCodes", docSnap.id));
+        }
+        await loadDiscounts();
+        showDiscountMessage('✅ All discount codes deleted', 'success');
+      } catch (error) {
+        showDiscountMessage('❌ Error: ' + error.message, 'error');
+      }
+    });
+
+    // Stock management
+    document.getElementById('restockAllBtn').addEventListener('click', restockAll);
+    document.getElementById('resetStockBtn').addEventListener('click', resetStock);
+    document.getElementById('syncStockBtn').addEventListener('click', () => {
+      loadStockData();
+      renderStock();
+      showQuickMessage('✅ Stock synced from localStorage', 'success');
+    });
+
+    // Mark all as paid
     document.getElementById('markAllPaidBtn').addEventListener('click', async () => {
       if (!confirm('Mark ALL orders as PAID?')) return;
       try {
@@ -1385,41 +1434,104 @@
         let count = 0;
         for (const docSnap of ordersSnap.docs) {
           const data = docSnap.data();
-          if (data.status !== 'cancelled' && data.status !== 'payment_confirmed') {
-            await updateDoc(doc(db, "orders", docSnap.id), { status: 'payment_confirmed', updatedAt: serverTimestamp() });
+          const status = normalizeStatus(data.status);
+          if (status !== 'cancelled' && status !== 'payment_confirmed' && status !== 'delivered') {
+            await updateDoc(doc(db, "orders", docSnap.id), { 
+              status: 'payment_confirmed', 
+              updatedAt: serverTimestamp() 
+            });
             count++;
           }
         }
-        const msg = document.getElementById('quickMessage');
-        msg.className = 'message success';
-        msg.textContent = `✅ ${count} orders marked as paid!`;
-        setTimeout(() => { msg.className = 'message'; }, 3000);
+        showQuickMessage(`✅ ${count} orders marked as paid!`, 'success');
         await loadOrders();
-      } catch (error) { alert('Error: ' + error.message); }
+      } catch (error) {
+        showQuickMessage('❌ Error: ' + error.message, 'error');
+      }
     });
 
+    // Clear all orders
     document.getElementById('clearAllOrdersBtn').addEventListener('click', async () => {
       if (!confirm('⚠️ Delete ALL orders?')) return;
       if (!confirm('⚠️ ARE YOU ABSOLUTELY SURE?')) return;
       try {
         const ordersSnap = await getDocs(collection(db, "orders"));
         let count = 0;
-        for (const docSnap of ordersSnap.docs) { await deleteDoc(doc(db, "orders", docSnap.id)); count++; }
-        const msg = document.getElementById('quickMessage');
-        msg.className = 'message success';
-        msg.textContent = `✅ ${count} orders deleted!`;
-        setTimeout(() => { msg.className = 'message'; }, 3000);
+        for (const docSnap of ordersSnap.docs) { 
+          await deleteDoc(doc(db, "orders", docSnap.id)); 
+          count++; 
+        }
+        showQuickMessage(`✅ ${count} orders deleted!`, 'success');
         await loadOrders();
-      } catch (error) { alert('Error: ' + error.message); }
+      } catch (error) {
+        showQuickMessage('❌ Error: ' + error.message, 'error');
+      }
+    });
+
+    // Modal buttons
+    document.getElementById('markPaidFromDetail').addEventListener('click', async () => {
+      if (!currentDetailId) return;
+      if (!confirm('Mark this order as PAID?')) return;
+      try {
+        await updateDoc(doc(db, "orders", currentDetailId), { 
+          status: 'payment_confirmed', 
+          updatedAt: serverTimestamp() 
+        });
+        const msg = document.getElementById('detailMessage');
+        msg.className = 'message success';
+        msg.textContent = '✅ Order marked as Paid!';
+        setTimeout(() => { closeOrderDetailModal(); loadOrders(); }, 1000);
+      } catch (error) {
+        const msg = document.getElementById('detailMessage');
+        msg.className = 'message error';
+        msg.textContent = '❌ Error: ' + error.message;
+      }
+    });
+
+    document.getElementById('saveEditBtn').addEventListener('click', async () => {
+      if (!currentEditId) return;
+      const name = document.getElementById('editName').value.trim();
+      const address = document.getElementById('editAddress').value.trim();
+      const phone = document.getElementById('editPhone').value.trim();
+      const product = document.getElementById('editProduct').value.trim();
+      const price = parseFloat(document.getElementById('editPrice').value);
+      const status = document.getElementById('editStatus').value;
+      
+      if (!name || !address) {
+        showEditMessage('⚠️ Name and Address are required', 'error');
+        return;
+      }
+      try {
+        await updateDoc(doc(db, "orders", currentEditId), {
+          name, address, phone, product, 
+          price: isNaN(price) ? 0 : price, 
+          status, 
+          updatedAt: serverTimestamp()
+        });
+        showEditMessage('✅ Order updated successfully!', 'success');
+        renderTimelineControl(status);
+        setTimeout(() => { closeEditModal(); loadOrders(); }, 800);
+      } catch (error) {
+        showEditMessage('❌ Error: ' + error.message, 'error');
+      }
+    });
+
+    document.getElementById('closeEditBtn').addEventListener('click', closeEditModal);
+
+    // Modal close on overlay click
+    document.getElementById('orderDetailModal').addEventListener('click', function(e) {
+      if (e.target === this) closeOrderDetailModal();
+    });
+    document.getElementById('editModal').addEventListener('click', function(e) {
+      if (e.target === this) closeEditModal();
     });
 
     // ============================================
     // INIT
     // ============================================
-    loadStock();
-    loadOrders();
-    loadDiscounts();
-    console.log('🚀 PEAK Store Admin Panel loaded with Discount Codes');
+    loadStockData();
+    renderStock();
+    console.log('🚀 PEAK Store Admin Panel loaded');
   </script>
 </body>
 </html>

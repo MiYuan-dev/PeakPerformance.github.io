@@ -382,7 +382,6 @@
     .btn-instagram {
       background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af);
       color: white;
-      text-decoration: none;
     }
 
     .btn-instagram:hover {
@@ -1049,9 +1048,9 @@
     </div>
     <div class="btn-group">
       <button class="btn btn-buy" id="buyBtnWhey" onclick="openCheckoutModal('whey', 'Promatrix7 Whey Protein', 1000, 'images/whey-protein.jpg', 'stockWhey')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
+      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram" style="text-decoration: none;">
+  <i class="fab fa-instagram"></i> Order via Instagram
+</a>
     </div>
     <div class="reviews">
       <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
@@ -1077,9 +1076,9 @@
     </div>
     <div class="btn-group">
       <button class="btn btn-buy" id="buyBtnCreatine" onclick="openCheckoutModal('creatine', 'Creatine Monohydrate', 950, 'images/creatine.jpg', 'stockCreatine')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
+      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram" style="text-decoration: none;">
+  <i class="fab fa-instagram"></i> Order via Instagram
+</a>
     </div>
     <div class="reviews">
       <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
@@ -1105,9 +1104,9 @@
     </div>
     <div class="btn-group">
       <button class="btn btn-buy" id="buyBtnPre" onclick="openCheckoutModal('pre', 'C4 Pre-Workout', 2200, 'images/pre-workout.jpg', 'stockPre')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
+      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram" style="text-decoration: none;">
+  <i class="fab fa-instagram"></i> Order via Instagram
+</a>
     </div>
     <div class="reviews">
       <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
@@ -1142,9 +1141,9 @@
     </div>
     <div class="btn-group">
       <button class="btn btn-buy" id="buyBtn1" onclick="openCheckoutModal('1', 'CJC-1295 no DAC + Ipamorelin', 2499, 'images/cjc-1295.jpg', 'stock1')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
+      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram" style="text-decoration: none;">
+  <i class="fab fa-instagram"></i> Order via Instagram
+</a>
     </div>
     <div class="reviews">
       <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
@@ -1170,9 +1169,9 @@
     </div>
     <div class="btn-group">
       <button class="btn btn-buy" id="buyBtnBPC" onclick="openCheckoutModal('bpc', 'BPC-157 Peptide', 1200, 'images/bpc157.jpg', 'stockBPC')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
+      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram" style="text-decoration: none;">
+  <i class="fab fa-instagram"></i> Order via Instagram
+</a>
     </div>
     <div class="reviews">
       <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
@@ -1198,9 +1197,9 @@
     </div>
     <div class="btn-group">
       <button class="btn btn-buy" id="buyBtnTB" onclick="openCheckoutModal('tb', 'TB-500 Peptide', 2199, 'images/tb500.jpg', 'stockTB')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
+      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram" style="text-decoration: none;">
+  <i class="fab fa-instagram"></i> Order via Instagram
+</a>
     </div>
     <div class="reviews">
       <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
@@ -1904,7 +1903,7 @@
   document.getElementById('checkoutPlaceOrderBtn').addEventListener('click', window.placeOrderFromCheckout);
 
   // ============================================
-  // STOCK MANAGEMENT - FIREBASE SYNC (GLOBAL)
+  // STOCK MANAGEMENT
   // ============================================
   const DEFAULT_STOCK = {
     stockWhey: 12,
@@ -1946,58 +1945,6 @@
       localStorage.setItem('peakStock', JSON.stringify(stock));
     }
   };
-
-  // Load stock from Firebase (globally shared)
-  async function loadStockFromFirebase() {
-    try {
-      const stockRef = collection(db, "stock");
-      const snapshot = await getDocs(stockRef);
-      
-      if (!snapshot.empty) {
-        const docSnap = snapshot.docs[0];
-        const data = docSnap.data();
-        if (data.items) {
-          const stockData = data.items.map(item => ({ id: item.id, qty: item.qty }));
-          localStorage.setItem('peakStock', JSON.stringify(stockData));
-          window.updateAllStockDisplay();
-          console.log('📦 Stock synced from Firebase:', stockData);
-          return;
-        }
-      }
-      // If no Firebase stock, use localStorage or defaults
-      window.getStockData();
-      window.updateAllStockDisplay();
-    } catch (error) {
-      console.error('Error loading stock from Firebase:', error);
-      window.getStockData();
-      window.updateAllStockDisplay();
-    }
-  }
-
-  // Listen for real-time stock updates from Firebase
-  function listenForStockUpdates() {
-    const stockRef = collection(db, "stock");
-    onSnapshot(stockRef, (snapshot) => {
-      if (!snapshot.empty) {
-        const docSnap = snapshot.docs[0];
-        const data = docSnap.data();
-        if (data.items) {
-          const stockData = data.items.map(item => ({ id: item.id, qty: item.qty }));
-          localStorage.setItem('peakStock', JSON.stringify(stockData));
-          window.updateAllStockDisplay();
-          console.log('📦 Stock updated in real-time:', stockData);
-        }
-      }
-    }, (error) => {
-      console.error('Error listening for stock updates:', error);
-    });
-  }
-
-  // Initialize stock with Firebase
-  async function initStockWithFirebase() {
-    await loadStockFromFirebase();
-    listenForStockUpdates();
-  }
 
   window.updateAllStockDisplay = function() {
     const stockElements = document.querySelectorAll('[id^="stock"]');
@@ -2055,7 +2002,7 @@
     }
   };
 
-  function initStockFallback() {
+  function initStock() {
     document.querySelectorAll('.product').forEach(card => {
       const badge = card.querySelector('.badge');
       if (badge && !badge.classList.contains('out-of-stock')) {
@@ -2069,6 +2016,13 @@
         window.updateAllStockDisplay();
       }
     });
+  }
+
+  // ============================================
+  // ORDER VIA INSTAGRAM
+  // ============================================
+  function orderInstagram() {
+    window.open('https://www.instagram.com/peakworkout2026/', '_blank');
   }
 
   // ============================================
@@ -2088,11 +2042,10 @@
   // ============================================
   // INIT
   // ============================================
-  initStockFallback();
-  initStockWithFirebase();
+  initStock();
   checkLastOrder();
   renderUsedCodes();
-  console.log('📦 Stock management initialized - synced with Firebase');
+  console.log('📦 Real stock management initialized');
   console.log('🎫 Discount ticket system active - each code can only be used once per customer');
   console.log('📋 Used codes:', getUsedCodes());
 </script>
