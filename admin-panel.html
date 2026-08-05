@@ -394,16 +394,17 @@
     }
     .stock-item .stock-info .stock-name { font-size: 14px; color: #f0f0f0; font-weight: 600; }
     .stock-item .stock-info .stock-category { font-size: 12px; color: #6a6a6a; margin-left: 8px; }
+    .stock-item .stock-info .stock-variants { font-size: 11px; color: #8a8a8a; margin-left: 6px; }
     .stock-item .stock-control { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .stock-item .stock-control .stock-qty {
       font-size: 18px;
       font-weight: 700;
-      color: #6effb0;
       min-width: 30px;
       text-align: center;
     }
-    .stock-item .stock-control .stock-qty.low { color: #f6ad55; }
-    .stock-item .stock-control .stock-qty.out { color: #fc8181; }
+    .stock-item .stock-control .stock-qty.in-stock { color: #6effb0; }
+    .stock-item .stock-control .stock-qty.low-stock { color: #f6ad55; }
+    .stock-item .stock-control .stock-qty.out-of-stock { color: #fc8181; }
     .stock-item .stock-control .stock-btn {
       width: 32px;
       height: 32px;
@@ -462,6 +463,18 @@
     }
     .sync-status.synced { color: #6effb0; border-color: #2a4a2a; background: #1a2a1a; }
     .sync-status.syncing { color: #f6ad55; border-color: #4a3a2a; background: #2a2a1a; }
+
+    /* Variant stock count badge in stock item */
+    .variant-count-badge {
+      background: #1a2a3a;
+      color: #63b3ed;
+      padding: 1px 10px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 600;
+      border: 1px solid #2a3a4a;
+      margin-left: 6px;
+    }
 
     @media (max-width: 768px) {
       .admin-header { flex-direction: column; text-align: center; }
@@ -588,6 +601,24 @@
       <div id="stockList"></div>
       <div id="stockMessage" class="message"></div>
     </div>
+    
+    <!-- Variant Stock Management Section -->
+    <div class="admin-section">
+      <div class="section-header">
+        <h2><i class="fas fa-layer-group"></i> Variant Stock Management</h2>
+        <span class="badge-count" id="variantStockCount">0</span>
+      </div>
+      <div style="margin-bottom:15px; display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-success btn-sm" id="restockVariantsBtn"><i class="fas fa-plus-circle"></i> Restock All Variants</button>
+        <button class="btn btn-warning btn-sm" id="fixVariantIdsBtn"><i class="fas fa-wrench"></i> Fix Variant IDs</button>
+        <button class="btn btn-primary btn-sm" id="refreshVariantsBtn"><i class="fas fa-sync"></i> Refresh</button>
+        <span style="color:#6a6a6a; font-size:13px; display:flex; align-items:center;">
+          <i class="fas fa-info-circle" style="margin-right:6px;"></i> Manage individual variant stock
+        </span>
+      </div>
+      <div id="variantStockList"></div>
+      <div id="variantStockMessage" class="message"></div>
+    </div>
 
     <!-- Orders Section -->
     <div class="admin-section">
@@ -619,6 +650,8 @@
               <th>Order ID</th>
               <th>Customer</th>
               <th>Product</th>
+              <th>Variant</th>
+              <th>Qty</th>
               <th>Price</th>
               <th>Status</th>
               <th>Date</th>
@@ -626,7 +659,7 @@
             </tr>
           </thead>
           <tbody id="ordersTable">
-            <tr><td colspan="7" style="text-align:center;color:#8a8a8a;">Loading orders...</td></tr>
+            <tr><td colspan="9" style="text-align:center;color:#8a8a8a;">Loading orders...</td></tr>
           </tbody>
         </table>
       </div>
@@ -656,6 +689,8 @@
         <div class="order-detail-row"><span class="label">Address</span><span class="value" id="detailAddress">-</span></div>
         <div class="order-detail-row"><span class="label">Phone Number</span><span class="value" id="detailPhone">-</span></div>
         <div class="order-detail-row"><span class="label">Product</span><span class="value" id="detailProduct">-</span></div>
+        <div class="order-detail-row"><span class="label">Variant</span><span class="value" id="detailVariant">-</span></div>
+        <div class="order-detail-row"><span class="label">Quantity</span><span class="value" id="detailQuantity">-</span></div>
         <div class="order-detail-row"><span class="label">Price</span><span class="value" id="detailPrice">-</span></div>
         <div class="order-detail-row"><span class="label">Discount Code</span><span class="value" id="detailDiscount">-</span></div>
         <div class="order-detail-row"><span class="label">Status</span><span class="value" id="detailStatus">-</span></div>
@@ -682,6 +717,8 @@
       <div class="input-group"><label>Address</label><input type="text" id="editAddress" /></div>
       <div class="input-group"><label>Phone</label><input type="text" id="editPhone" /></div>
       <div class="input-group"><label>Product</label><input type="text" id="editProduct" /></div>
+      <div class="input-group"><label>Variant</label><input type="text" id="editVariant" /></div>
+      <div class="input-group"><label>Quantity</label><input type="number" id="editQuantity" min="1" /></div>
       <div class="input-group"><label>Price</label><input type="number" id="editPrice" step="0.01" /></div>
       <div class="input-group"><label>Status</label>
         <select id="editStatus">
@@ -730,6 +767,7 @@
       query,
       where,
       onSnapshot,
+      setDoc,
       Timestamp
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import {
@@ -760,7 +798,333 @@
     let stockDocId = null;
 
     // ============================================
-    // STOCK DATA - ALL 17 PRODUCTS
+    // VARIANT DATA - LOAD FROM FIRESTORE
+    // ============================================
+    let variantStockData = {};
+    let variantNames = {};
+    let variantStockDocId = null;
+
+    // Default variant data - ALL PRODUCTS WITH VARIANTS
+    const DEFAULT_VARIANT_STOCK = {
+      // Whey Protein Variants
+      'promaxsberry-2lb': 5,
+      'promaxchoco-2lb': 3,
+      'promaxsberry-1lb': 9,
+      'promaxchoco-1lb': 6,
+      // Creatine Variants
+      'creatine-30': 22,
+      'creatine-60': 36,
+      'creatine-60orange': 40,
+      'creatine-60melon': 43,
+      // Pre-Workout Variants
+      'pre-30orange': 5,
+      'pre-30fruitpunch': 3,
+      'pre-30grape': 2,
+      'pre-30icy': 0,
+      // PED Variants - CJC-1295
+      'cjc-10mg': 3,
+      // PED Variants - BPC-157
+      'bpc-10mg': 3,
+      // PED Variants - TB-500
+      'tb-10mg': 3,
+      // PED Variants - GHK-Cu
+      'ghkcu-50mg': 10,
+      'ghkcu-100mg': 5,
+      // PED Variants - MOTS-c
+      'motsc-10mg': 3,
+      // PED Variants - Tesamorelin
+      'tesa-10mg': 3,
+      // PED Variants - Dbol
+      'dbol-20tabs': 3,
+      'dbol-50tabs': 8,
+      'dbol-100tabs': 4,
+      // PED Variants - Anavar
+      'anavar-50tabs': 6,
+      'anavar-100tabs': 3,
+    };
+
+    // Map product stock IDs to their variant IDs - UPDATED WITH ALL PRODUCTS
+    const PRODUCT_VARIANT_MAP = {
+      // Supplements
+      'stockWhey': ['promaxsberry-2lb', 'promaxchoco-2lb', 'promaxsberry-1lb', 'promaxchoco-1lb'],
+      'stockCreatine': ['creatine-30', 'creatine-60', 'creatine-60orange', 'creatine-60melon'],
+      'stockPre': ['pre-30orange', 'pre-30fruitpunch', 'pre-30grape', 'pre-30icy'],
+      // PED's
+      'stock1': ['cjc-10mg'],
+      'stockBPC': ['bpc-10mg'],
+      'stockTB': ['tb-10mg'],
+      'stockGhkcu': ['ghkcu-50mg', 'ghkcu-100mg'],
+      'stockMotsc': ['motsc-10mg'],
+      'stockTesamorelin': ['tesa-10mg'],
+      'stockDbol': ['dbol-20tabs', 'dbol-50tabs', 'dbol-100tabs'],
+      'stockAnavar': ['anavar-50tabs', 'anavar-100tabs'],
+    };
+
+    const VARIANT_NAMES = {
+      // Whey Protein
+      'promaxsberry-2lb': 'Strawberry 2lb',
+      'promaxchoco-2lb': 'Chocolate 2lb',
+      'promaxsberry-1lb': 'Strawberry 1lb',
+      'promaxchoco-1lb': 'Chocolate 1lb',
+      // Creatine
+      'creatine-30': 'Creatine 30 Servings (Unflavored)',
+      'creatine-60': 'Creatine 60 Servings (Unflavored)',
+      'creatine-60orange': 'Creatine 60 Servings (Orange)',
+      'creatine-60melon': 'Creatine 60 Servings (Watermelon)',
+      // Pre-Workout
+      'pre-30orange': '30 Servings (Orange Burst)',
+      'pre-30fruitpunch': '30 Servings (Fruit Punch)',
+      'pre-30grape': '30 Servings (Grape)',
+      'pre-30icy': '30 Servings (Icy Blue Razz)',
+      // PED's - CJC-1295
+      'cjc-10mg': 'CJC-1295 + Ipamorelin 10mg',
+      // PED's - BPC-157
+      'bpc-10mg': 'BPC-157 10mg',
+      // PED's - TB-500
+      'tb-10mg': 'TB-500 10mg',
+      // PED's - GHK-Cu
+      'ghkcu-50mg': 'GHK-Cu 50mg',
+      'ghkcu-100mg': 'GHK-Cu 100mg',
+      // PED's - MOTS-c
+      'motsc-10mg': 'MOTS-c 10mg',
+      // PED's - Tesamorelin
+      'tesa-10mg': 'Tesamorelin 10mg',
+      // PED's - Dbol
+      'dbol-20tabs': 'Dbol-10 20 tablets',
+      'dbol-50tabs': 'Dbol-10 50 tablets',
+      'dbol-100tabs': 'Dbol-10 100 tablets',
+      // PED's - Anavar
+      'anavar-50tabs': 'Anavar 50 tablets',
+      'anavar-100tabs': 'Anavar 100 tablets',
+    };
+
+    // ============================================
+    // LOAD VARIANT DATA FROM FIRESTORE
+    // ============================================
+    async function loadVariantDataFromFirebase() {
+      try {
+        const stockRef = collection(db, "variantStock");
+        const snapshot = await getDocs(stockRef);
+        
+        if (!snapshot.empty) {
+          const docSnap = snapshot.docs[0];
+          variantStockDocId = docSnap.id;
+          const data = docSnap.data();
+          variantStockData = {};
+          variantNames = {};
+          
+          Object.keys(data).forEach(key => {
+            if (typeof data[key] === 'number') {
+              variantStockData[key] = data[key];
+            } else if (typeof data[key] === 'string') {
+              variantNames[key] = data[key];
+            }
+          });
+          console.log('📦 Variant data loaded from Firebase:', Object.keys(variantStockData).length, 'variants');
+        } else {
+          // Initialize with defaults
+          variantStockData = { ...DEFAULT_VARIANT_STOCK };
+          variantNames = { ...VARIANT_NAMES };
+          await saveVariantStockToFirebase();
+          console.log('📦 Created default variant data in Firebase');
+        }
+        renderVariantStock();
+        return variantStockData;
+      } catch (error) {
+        console.error('Error loading variant data from Firebase:', error);
+        variantStockData = { ...DEFAULT_VARIANT_STOCK };
+        variantNames = { ...VARIANT_NAMES };
+        renderVariantStock();
+        return variantStockData;
+      }
+    }
+
+    // ============================================
+    // SAVE VARIANT STOCK TO FIRESTORE
+    // ============================================
+    async function saveVariantStockToFirebase() {
+      try {
+        const data = { ...variantStockData, ...variantNames };
+        
+        if (variantStockDocId) {
+          await updateDoc(doc(db, "variantStock", variantStockDocId), data);
+        } else {
+          const docRef = await addDoc(collection(db, "variantStock"), data);
+          variantStockDocId = docRef.id;
+        }
+        console.log('✅ Variant stock saved to Firebase');
+        return true;
+      } catch (error) {
+        console.error('Error saving variant stock to Firebase:', error);
+        return false;
+      }
+    }
+
+    // Listen for real-time variant stock updates
+    function listenForVariantStockUpdates() {
+      const stockRef = collection(db, "variantStock");
+      onSnapshot(stockRef, (snapshot) => {
+        if (!snapshot.empty) {
+          const docSnap = snapshot.docs[0];
+          const data = docSnap.data();
+          let changed = false;
+          
+          Object.keys(data).forEach(key => {
+            if (typeof data[key] === 'number') {
+              if (variantStockData[key] !== data[key]) {
+                variantStockData[key] = data[key];
+                changed = true;
+              }
+            } else if (typeof data[key] === 'string') {
+              if (variantNames[key] !== data[key]) {
+                variantNames[key] = data[key];
+                changed = true;
+              }
+            }
+          });
+          
+          if (changed) {
+            renderVariantStock();
+            renderStock(); // Re-render main stock to show updated totals
+            console.log('🔄 Variant stock updated in real-time');
+          }
+        }
+      }, (error) => {
+        console.error('Error listening for variant stock updates:', error);
+      });
+    }
+
+    // ============================================
+    // RENDER VARIANT STOCK WITH COLOR CODING
+    // ============================================
+    function renderVariantStock() {
+      const container = document.getElementById('variantStockList');
+      const variants = Object.keys(variantStockData).sort();
+      document.getElementById('variantStockCount').textContent = variants.length;
+      
+      if (variants.length === 0) {
+        container.innerHTML = '<p style="color:#6a6a6a; text-align:center; padding:20px;">No variants found. Click "Restock All Variants" to add defaults.</p>';
+        return;
+      }
+      
+      let html = '';
+      variants.forEach(variantId => {
+        const stock = variantStockData[variantId] || 0;
+        const name = variantNames[variantId] || variantId;
+        
+        let stockClass = 'in-stock';
+        if (stock === 0) {
+          stockClass = 'out-of-stock';
+        } else if (stock <= 3) {
+          stockClass = 'low-stock';
+        }
+        
+        html += `
+          <div class="stock-item">
+            <div class="stock-info">
+              <div class="stock-icon"><i class="fas fa-cube"></i></div>
+              <div>
+                <span class="stock-name">${name}</span>
+                <span class="stock-category">${variantId}</span>
+              </div>
+            </div>
+            <div class="stock-control">
+              <button class="stock-btn variant-adjust" data-id="${variantId}" data-amount="-1"><i class="fas fa-minus"></i></button>
+              <span class="stock-qty ${stockClass}">${stock}</span>
+              <button class="stock-btn variant-adjust" data-id="${variantId}" data-amount="1"><i class="fas fa-plus"></i></button>
+              <input type="number" class="stock-input variant-input" data-id="${variantId}" value="${stock}" min="0" />
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+      
+      container.querySelectorAll('.variant-adjust').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const id = this.dataset.id;
+          const amount = parseInt(this.dataset.amount);
+          adjustVariantStock(id, amount);
+        });
+      });
+      
+      container.querySelectorAll('.variant-input').forEach(input => {
+        input.addEventListener('change', function() {
+          const id = this.dataset.id;
+          const value = parseInt(this.value);
+          if (!isNaN(value) && value >= 0) {
+            setVariantStock(id, value);
+          } else {
+            this.value = variantStockData[id] || 0;
+          }
+        });
+      });
+    }
+
+    // ============================================
+    // GET TOTAL VARIANT STOCK FOR A PRODUCT
+    // ============================================
+    function getTotalVariantStockForProduct(stockId) {
+      const variantIds = PRODUCT_VARIANT_MAP[stockId];
+      if (!variantIds) return null;
+      
+      let total = 0;
+      variantIds.forEach(vid => {
+        total += variantStockData[vid] || 0;
+      });
+      return total;
+    }
+
+    // ============================================
+    // ADJUST VARIANT STOCK
+    // ============================================
+    async function adjustVariantStock(variantId, amount) {
+      if (variantStockData[variantId] === undefined) return;
+      const newQty = Math.max(0, (variantStockData[variantId] || 0) + amount);
+      variantStockData[variantId] = newQty;
+      await saveVariantStockToFirebase();
+      renderVariantStock();
+      renderStock(); // Re-render main stock
+      showVariantStockMessage(`✅ ${variantNames[variantId] || variantId} stock updated to ${newQty}`, 'success');
+    }
+
+    // ============================================
+    // SET VARIANT STOCK
+    // ============================================
+    async function setVariantStock(variantId, value) {
+      if (variantStockData[variantId] === undefined) return;
+      const newQty = Math.max(0, value);
+      variantStockData[variantId] = newQty;
+      await saveVariantStockToFirebase();
+      renderVariantStock();
+      renderStock(); // Re-render main stock
+      showVariantStockMessage(`✅ ${variantNames[variantId] || variantId} stock set to ${newQty}`, 'success');
+    }
+
+    // ============================================
+    // RESTOCK ALL VARIANTS
+    // ============================================
+    async function restockAllVariants() {
+      if (!confirm('Restock ALL variants to default quantities?')) return;
+      variantStockData = { ...DEFAULT_VARIANT_STOCK };
+      variantNames = { ...VARIANT_NAMES };
+      await saveVariantStockToFirebase();
+      renderVariantStock();
+      renderStock(); // Re-render main stock
+      showVariantStockMessage('✅ All variants restocked!', 'success');
+    }
+
+    // ============================================
+    // SHOW VARIANT STOCK MESSAGE
+    // ============================================
+    function showVariantStockMessage(text, type = 'success') {
+      const el = document.getElementById('variantStockMessage');
+      el.className = `message ${type}`;
+      el.textContent = text;
+      setTimeout(() => { el.className = 'message'; }, 3000);
+    }
+
+    // ============================================
+    // STOCK FUNCTIONS - ALL 17 PRODUCTS
     // ============================================
     const DEFAULT_STOCK_ITEMS = [
       // Supplements (3 products)
@@ -785,9 +1149,6 @@
       { id: 'stockMilkThistle', name: 'Milk Thistle Liver Support', category: 'Health Support', icon: 'fa-leaf', qty: 10 }
     ];
 
-    // ============================================
-    // STOCK FUNCTIONS
-    // ============================================
     async function loadStockFromFirebase() {
       try {
         const stockRef = collection(db, "stock");
@@ -829,14 +1190,14 @@
         updateSyncStatus(false, true);
         if (!stockDocId) {
           const docRef = await addDoc(collection(db, "stock"), {
-            items: stockData,
+            items: stockData.map(item => ({ id: item.id, qty: item.qty })),
             updatedAt: serverTimestamp()
           });
           stockDocId = docRef.id;
         } else {
           const docRef = doc(db, "stock", stockDocId);
           await updateDoc(docRef, {
-            items: stockData,
+            items: stockData.map(item => ({ id: item.id, qty: item.qty })),
             updatedAt: serverTimestamp()
           });
         }
@@ -885,13 +1246,43 @@
       }
     }
 
+    // ============================================
+    // RENDER STOCK WITH TOTAL VARIANT STOCK
+    // ============================================
     function renderStock() {
       const container = document.getElementById('stockList');
       document.getElementById('stockCount').textContent = stockData.length;
 
       let html = '';
       stockData.forEach(item => {
-        const qtyClass = item.qty === 0 ? 'out' : (item.qty <= 3 ? 'low' : '');
+        // Get total stock from variants if this product has variants
+        let displayQty = item.qty;
+        let variantInfo = '';
+        const variantIds = PRODUCT_VARIANT_MAP[item.id];
+        
+        if (variantIds) {
+          let totalVariantStock = 0;
+          let variantDetails = [];
+          variantIds.forEach(vid => {
+            const stock = variantStockData[vid] || 0;
+            totalVariantStock += stock;
+            const name = variantNames[vid] || vid;
+            variantDetails.push(`${name}: ${stock}`);
+          });
+          displayQty = totalVariantStock;
+          variantInfo = `<span class="variant-count-badge"><i class="fas fa-layer-group"></i> ${variantIds.length} variants</span>`;
+        }
+        
+        let stockClass = 'in-stock';
+        if (displayQty === 0) {
+          stockClass = 'out-of-stock';
+        } else if (displayQty <= 3) {
+          stockClass = 'low-stock';
+        }
+        
+        // Determine if this item has variants and show a special indicator
+        const hasVariants = variantIds && variantIds.length > 0;
+        
         html += `
           <div class="stock-item">
             <div class="stock-info">
@@ -899,13 +1290,15 @@
               <div>
                 <span class="stock-name">${item.name}</span>
                 <span class="stock-category">${item.category}</span>
+                ${variantInfo}
+                ${hasVariants ? `<span style="font-size:10px;color:#63b3ed;margin-left:4px;"><i class="fas fa-info-circle"></i> Total from variants</span>` : ''}
               </div>
             </div>
             <div class="stock-control">
               <button class="stock-btn" data-action="adjust" data-id="${item.id}" data-amount="-1"><i class="fas fa-minus"></i></button>
-              <span class="stock-qty ${qtyClass}">${item.qty}</span>
+              <span class="stock-qty ${stockClass}">${displayQty}</span>
               <button class="stock-btn" data-action="adjust" data-id="${item.id}" data-amount="1"><i class="fas fa-plus"></i></button>
-              <input type="number" class="stock-input" data-id="${item.id}" value="${item.qty}" min="0" />
+              <input type="number" class="stock-input" data-id="${item.id}" value="${displayQty}" min="0" />
             </div>
           </div>
         `;
@@ -927,7 +1320,15 @@
           if (!isNaN(value) && value >= 0) {
             setStock(id, value);
           } else {
-            this.value = stockData.find(s => s.id === id)?.qty || 0;
+            const item = stockData.find(s => s.id === id);
+            const variantIds = PRODUCT_VARIANT_MAP[id];
+            if (variantIds) {
+              let total = 0;
+              variantIds.forEach(vid => { total += variantStockData[vid] || 0; });
+              this.value = total;
+            } else {
+              this.value = item?.qty || 0;
+            }
           }
         });
       });
@@ -936,20 +1337,62 @@
     async function adjustStock(id, amount) {
       const item = stockData.find(s => s.id === id);
       if (!item) return;
-      const newQty = Math.max(0, item.qty + amount);
-      item.qty = newQty;
-      await saveStockToFirebase();
-      renderStock();
-      showStockMessage(`✅ ${item.name} stock updated to ${newQty}`, 'success');
+      
+      const variantIds = PRODUCT_VARIANT_MAP[id];
+      if (variantIds) {
+        // For variant products, adjust all variants equally
+        let currentTotal = 0;
+        variantIds.forEach(vid => { currentTotal += variantStockData[vid] || 0; });
+        const newTotal = Math.max(0, currentTotal + amount);
+        // Distribute the change across variants proportionally
+        if (variantIds.length > 0) {
+          const perVariant = Math.floor(newTotal / variantIds.length);
+          const remainder = newTotal % variantIds.length;
+          variantIds.forEach((vid, index) => {
+            const extra = index < remainder ? 1 : 0;
+            variantStockData[vid] = perVariant + extra;
+          });
+          await saveVariantStockToFirebase();
+          renderVariantStock();
+          renderStock();
+          showStockMessage(`✅ ${item.name} total stock updated to ${newTotal}`, 'success');
+        }
+      } else {
+        const newQty = Math.max(0, item.qty + amount);
+        item.qty = newQty;
+        await saveStockToFirebase();
+        renderStock();
+        showStockMessage(`✅ ${item.name} stock updated to ${newQty}`, 'success');
+      }
     }
 
     async function setStock(id, value) {
       const item = stockData.find(s => s.id === id);
       if (!item) return;
-      const newQty = Math.max(0, value);
-      item.qty = newQty;
-      await saveStockToFirebase();
-      renderStock();
+      
+      const variantIds = PRODUCT_VARIANT_MAP[id];
+      if (variantIds) {
+        // For variant products, set total stock distributed across variants
+        const newTotal = Math.max(0, value);
+        if (variantIds.length > 0) {
+          const perVariant = Math.floor(newTotal / variantIds.length);
+          const remainder = newTotal % variantIds.length;
+          variantIds.forEach((vid, index) => {
+            const extra = index < remainder ? 1 : 0;
+            variantStockData[vid] = perVariant + extra;
+          });
+          await saveVariantStockToFirebase();
+          renderVariantStock();
+          renderStock();
+          showStockMessage(`✅ ${item.name} total stock set to ${newTotal}`, 'success');
+        }
+      } else {
+        const newQty = Math.max(0, value);
+        item.qty = newQty;
+        await saveStockToFirebase();
+        renderStock();
+        showStockMessage(`✅ ${item.name} stock set to ${newQty}`, 'success');
+      }
     }
 
     async function restockAll() {
@@ -962,10 +1405,19 @@
         stockFishOil: 8, stockCalMagZinc: 10, 
         stockCoQ10: 8, stockMilkThistle: 10
       };
+      
+      // Reset main stock
       stockData.forEach(item => { item.qty = defaults[item.id] || 10; });
       await saveStockToFirebase();
+      
+      // Reset variants
+      variantStockData = { ...DEFAULT_VARIANT_STOCK };
+      variantNames = { ...VARIANT_NAMES };
+      await saveVariantStockToFirebase();
+      
+      renderVariantStock();
       renderStock();
-      showStockMessage('✅ All products restocked!', 'success');
+      showStockMessage('✅ All products and variants restocked!', 'success');
     }
 
     async function resetStock() {
@@ -1263,7 +1715,7 @@
 
       } catch (error) {
         console.error('Load orders error:', error);
-        document.getElementById('ordersTable').innerHTML = `<tr><td colspan="7" style="text-align:center;color:#fc8181;">Error loading orders: ${error.message}</td></tr>`;
+        document.getElementById('ordersTable').innerHTML = `<tr><td colspan="9" style="text-align:center;color:#fc8181;">Error loading orders: ${error.message}</td></tr>`;
       }
     }
 
@@ -1275,6 +1727,7 @@
           (o.name || '').toLowerCase().includes(term) ||
           (o.orderId || o.id || '').toLowerCase().includes(term) ||
           (o.product || '').toLowerCase().includes(term) ||
+          (o.variant || '').toLowerCase().includes(term) ||
           (o.userEmail || '').toLowerCase().includes(term) ||
           (o.address || '').toLowerCase().includes(term) ||
           (o.phone || '').toLowerCase().includes(term)
@@ -1286,7 +1739,7 @@
 
       document.getElementById('ordersCount').textContent = filtered.length;
       if (filtered.length === 0) {
-        document.getElementById('ordersTable').innerHTML = `<tr><td colspan="7" style="text-align:center;color:#8a8a8a;">No orders found</td></tr>`;
+        document.getElementById('ordersTable').innerHTML = `<tr><td colspan="9" style="text-align:center;color:#8a8a8a;">No orders found</td></tr>`;
         return;
       }
 
@@ -1294,12 +1747,21 @@
         const status = normalizeStatus(o.status);
         const statusDisplay = STATUS_DISPLAY_MAP[status] || status || 'Pending';
         const statusClass = status === 'cancelled' ? 'cancelled' : status;
+        let price = parseFloat(o.price || o.discountedPrice || 0);
+        if (price > 0 && price < 10) {
+          price = price * 1000;
+        } else if (price > 0 && price < 100) {
+          price = price * 100;
+        }
+        const formattedPrice = isNaN(price) ? '0' : price.toLocaleString();
         return `
           <tr>
             <td><code style="font-size:12px;color:#63b3ed;">${o.orderId || o.id.substring(0, 8)}</code></td>
             <td><strong>${o.name || o.userEmail || 'Unknown'}</strong></td>
             <td>${o.product || 'N/A'}</td>
-            <td><span style="color:#6effb0;">₱${(o.price || o.discountedPrice || 0).toFixed(2)}</span></td>
+            <td><span style="color:#6effb0;">${o.variant || 'N/A'}</span></td>
+            <td>${o.quantity || 1}</td>
+            <td><span style="color:#6effb0;">₱${formattedPrice}</span></td>
             <td><span class="badge badge-${statusClass}">${statusDisplay}</span></td>
             <td>${o.date ? new Date(o.date).toLocaleDateString() : (o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleDateString() : 'N/A')}</td>
             <td>
@@ -1340,7 +1802,15 @@
       let revenue = 0;
       orders.forEach(o => { 
         const s = normalizeStatus(o.status);
-        if (s !== 'cancelled') revenue += parseFloat(o.price || o.discountedPrice || 0); 
+        if (s !== 'cancelled') {
+          let price = parseFloat(o.price || o.discountedPrice || 0);
+          if (price > 0 && price < 10) {
+            price = price * 1000;
+          } else if (price > 0 && price < 100) {
+            price = price * 100;
+          }
+          if (!isNaN(price)) revenue += price;
+        }
       });
 
       document.getElementById('totalOrders').textContent = total;
@@ -1397,7 +1867,15 @@
       document.getElementById('detailAddress').textContent = order.address || 'N/A';
       document.getElementById('detailPhone').textContent = order.phone || 'N/A';
       document.getElementById('detailProduct').textContent = order.product || 'N/A';
-      document.getElementById('detailPrice').textContent = order.price ? `₱${parseFloat(order.price).toFixed(2)}` : 'N/A';
+      document.getElementById('detailVariant').textContent = order.variant || order.displayName || 'N/A';
+      document.getElementById('detailQuantity').textContent = order.quantity || 1;
+      let price = parseFloat(order.price || order.discountedPrice || 0);
+      if (price > 0 && price < 10) {
+        price = price * 1000;
+      } else if (price > 0 && price < 100) {
+        price = price * 100;
+      }
+      document.getElementById('detailPrice').textContent = price ? `₱${price.toLocaleString()}` : 'N/A';
       document.getElementById('detailDiscount').textContent = order.discountCode || 'None';
       const status = normalizeStatus(order.status);
       const statusDisplay = STATUS_DISPLAY_MAP[status] || status || 'Pending';
@@ -1426,6 +1904,8 @@
       document.getElementById('editAddress').value = order.address || '';
       document.getElementById('editPhone').value = order.phone || '';
       document.getElementById('editProduct').value = order.product || '';
+      document.getElementById('editVariant').value = order.variant || order.displayName || '';
+      document.getElementById('editQuantity').value = order.quantity || 1;
       document.getElementById('editPrice').value = order.price || order.discountedPrice || '';
       const status = normalizeStatus(order.status);
       document.getElementById('editStatus').value = status;
@@ -1457,6 +1937,13 @@
       await loadDiscounts();
       await loadStockFromFirebase();
       listenForStockUpdates();
+      
+      await loadVariantDataFromFirebase();
+      listenForVariantStockUpdates();
+      
+      console.log('🚀 PEAK Store Admin Panel fully loaded');
+      console.log('📦 Managing ' + DEFAULT_STOCK_ITEMS.length + ' products + ' + Object.keys(DEFAULT_VARIANT_STOCK).length + ' variants in stock');
+      console.log('🔄 Products with variants show total combined stock');
     });
 
     logoutBtn.addEventListener('click', async () => {
@@ -1627,6 +2114,8 @@
       const address = document.getElementById('editAddress').value.trim();
       const phone = document.getElementById('editPhone').value.trim();
       const product = document.getElementById('editProduct').value.trim();
+      const variant = document.getElementById('editVariant').value.trim();
+      const quantity = parseInt(document.getElementById('editQuantity').value) || 1;
       const price = parseFloat(document.getElementById('editPrice').value);
       const status = document.getElementById('editStatus').value;
       
@@ -1636,7 +2125,8 @@
       }
       try {
         await updateDoc(doc(db, "orders", currentEditId), {
-          name, address, phone, product, 
+          name, address, phone, product, variant,
+          quantity: quantity,
           price: isNaN(price) ? 0 : price, 
           status, 
           updatedAt: serverTimestamp()
@@ -1647,6 +2137,57 @@
       } catch (error) {
         showEditMessage('❌ Error: ' + error.message, 'error');
       }
+    });
+
+    // Variant Stock Event Listeners
+    document.getElementById('restockVariantsBtn').addEventListener('click', restockAllVariants);
+    
+    document.getElementById('fixVariantIdsBtn').addEventListener('click', function() {
+      if (!confirm('Fix variant IDs? This will clean up any old variant IDs.')) return;
+      let changed = false;
+      // Fix any old variant IDs that might still exist
+      const wrongIds = {
+        'whey-1lb': 'promaxsberry-1lb',
+        'whey-2lb': 'promaxsberry-2lb',
+        'whey-5lb': 'promaxchoco-2lb',
+        'promaxchoco-1lb': 'promaxchoco-1lb',
+        'creatine-300g': 'creatine-30',
+        'creatine-500g': 'creatine-60',
+        'creatine-1kg': 'creatine-60orange',
+        'creatine-melon': 'creatine-60melon',
+        'pre-30serv': 'pre-30orange',
+        'pre-60serv': 'pre-30fruitpunch',
+        'pre-90serv': 'pre-30grape',
+      };
+      
+      Object.keys(wrongIds).forEach(wrongId => {
+        if (variantStockData[wrongId] !== undefined) {
+          const correctId = wrongIds[wrongId];
+          if (variantStockData[correctId] === undefined) {
+            variantStockData[correctId] = variantStockData[wrongId];
+            delete variantStockData[wrongId];
+            changed = true;
+          } else {
+            delete variantStockData[wrongId];
+            changed = true;
+          }
+        }
+      });
+      
+      if (changed) {
+        saveVariantStockToFirebase();
+        renderVariantStock();
+        renderStock();
+        showVariantStockMessage('✅ Fixed variant IDs!', 'success');
+      } else {
+        showVariantStockMessage('ℹ️ No variant IDs needed fixing', 'info');
+      }
+    });
+
+    document.getElementById('refreshVariantsBtn').addEventListener('click', async function() {
+      await loadVariantDataFromFirebase();
+      renderStock();
+      showVariantStockMessage('✅ Variants refreshed from Firebase!', 'success');
     });
 
     document.getElementById('closeEditBtn').addEventListener('click', closeEditModal);
@@ -1662,7 +2203,9 @@
     // INIT
     // ============================================
     console.log('🚀 PEAK Store Admin Panel loaded');
-    console.log('📦 Managing 17 products in stock (Firebase synced)');
+    console.log('📦 Managing ' + DEFAULT_STOCK_ITEMS.length + ' products + ' + Object.keys(DEFAULT_VARIANT_STOCK).length + ' variants in stock');
+    console.log('🎨 Stock color coding: Red (0), Orange (1-3), Green (4+)');
+    console.log('🔄 Products with variants show total combined stock');
   </script>
 </body>
 </html>

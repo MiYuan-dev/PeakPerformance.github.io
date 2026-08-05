@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Firebase Variant Tool · PEAK Store</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0b0b0b;
+      min-height: 100vh;
+      padding: 20px;
+      color: #f0f0f0;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px 30px;
+      border-radius: 16px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    .header h1 { font-size: 24px; }
+    .header h1 i { margin-right: 10px; }
+    .header .stats {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    .header .stats .stat-badge {
+      background: rgba(255,255,255,0.2);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .header .stats .stat-badge i { font-size: 14px; }
+
+    /* Cards */
+    .card {
+      background: #141414;
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 25px;
+      border: 1px solid #262626;
+      transition: border-color 0.3s;
+    }
+    .card:hover { border-color: #3a3a3a; }
+    .card .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .card .card-header h2 {
+      font-size: 18px;
+      color: #f0f0f0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card .card-header h2 i { color: #6effb0; }
+    .card .card-header .count {
+      background: #667eea;
+      color: white;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    /* Inputs */
+    .input-group {
+      margin-bottom: 15px;
+    }
+    .input-group label {
+      display: block;
+      font-weight: 600;
+      color: #b0b0b0;
+      margin-bottom: 5px;
+      font-size: 13px;
+    }
+    .input-group label .required { color: #fc8181; }
+    .input-group input,
+    .input-group select,
+    .input-group textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid #2a2a2a;
+      border-radius: 10px;
+      font-size: 14px;
+      transition: all 0.3s;
+      background: #1a1a1a;
+      color: #f0f0f0;
+      outline: none;
+      font-family: inherit;
+    }
+    .input-group input:focus,
+    .input-group select:focus,
+    .input-group textarea:focus {
+      border-color: #6effb0;
+      box-shadow: 0 0 0 3px rgba(110, 255, 176, 0.08);
+    }
+    .input-group input::placeholder { color: #5a5a5a; }
+    .input-group textarea { resize: vertical; min-height: 80px; font-family: monospace; }
+    .input-group .hint {
+      display: block;
+      color: #6a6a6a;
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
+    .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .btn-success { background: #48bb78; color: white; }
+    .btn-danger { background: #fc8181; color: white; }
+    .btn-warning { background: #f6ad55; color: #1a1a1a; }
+    .btn-secondary { background: #2a2a2a; color: #b0b0b0; }
+    .btn-info { background: #63b3ed; color: #1a1a1a; }
+    .btn-outline { background: transparent; border: 2px solid #2a2a2a; color: #b0b0b0; }
+    .btn-outline:hover { border-color: #6effb0; color: #6effb0; background: #1a2a1a; }
+    .btn-sm { padding: 6px 14px; font-size: 13px; }
+    .btn-xs { padding: 4px 10px; font-size: 11px; }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 15px;
+    }
+    .row-2 { grid-template-columns: 1fr 1fr; }
+    .row .input-group { margin-bottom: 0; }
+
+    /* Variant List */
+    .variant-list {
+      margin-top: 15px;
+      max-height: 550px;
+      overflow-y: auto;
+    }
+    .variant-list::-webkit-scrollbar { width: 6px; }
+    .variant-list::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 3px; }
+    .variant-list::-webkit-scrollbar-thumb { background: #3a3a3a; border-radius: 3px; }
+
+    .variant-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: #1a1a1a;
+      border-radius: 10px;
+      border: 1px solid #2a2a2a;
+      margin-bottom: 8px;
+      transition: all 0.3s;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .variant-item:hover { border-color: #4a4a4a; background: #1e1e1e; }
+    .variant-item.editing { border-color: #f6ad55; background: #2a2a1a; box-shadow: 0 0 20px rgba(246, 173, 85, 0.05); }
+    .variant-item .variant-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 1;
+      flex-wrap: wrap;
+    }
+    .variant-item .variant-info .variant-key {
+      font-family: monospace;
+      color: #6effb0;
+      font-size: 13px;
+      min-width: 120px;
+      background: #0b0b0b;
+      padding: 2px 10px;
+      border-radius: 6px;
+      border: 1px solid #1a1a1a;
+    }
+    .variant-item .variant-info .variant-name {
+      color: #f0f0f0;
+      font-size: 14px;
+      min-width: 150px;
+      font-weight: 500;
+    }
+    .variant-item .variant-info .variant-stock {
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .variant-item .variant-info .variant-stock .stock-value {
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+    }
+    .variant-item .variant-info .variant-stock .stock-value.in-stock { color: #6effb0; background: #1a2a1a; border: 1px solid #2a4a2a; }
+    .variant-item .variant-info .variant-stock .stock-value.low-stock { color: #f6ad55; background: #2a2a1a; border: 1px solid #4a3a2a; }
+    .variant-item .variant-info .variant-stock .stock-value.out-of-stock { color: #fc8181; background: #2a1a1a; border: 1px solid #4a2a2a; }
+    
+    .variant-item .variant-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    /* Messages */
+    .message {
+      margin-top: 15px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      display: none;
+      font-weight: 500;
+      animation: fadeIn 0.3s ease;
+    }
+    .message.success { display: block; background: #1a2a1a; color: #6effb0; border: 1px solid #2a4a2a; }
+    .message.error { display: block; background: #2a1a1a; color: #fc8181; border: 1px solid #4a2a2a; }
+    .message.info { display: block; background: #1a2a3a; color: #63b3ed; border: 1px solid #2a3a4a; }
+    .message.warning { display: block; background: #2a2a1a; color: #f6ad55; border: 1px solid #4a3a2a; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Code Block */
+    .code-block {
+      background: #0b0b0b;
+      border: 1px solid #2a2a2a;
+      border-radius: 10px;
+      padding: 15px;
+      font-family: monospace;
+      font-size: 13px;
+      overflow-x: auto;
+      color: #b0b0b0;
+      margin-top: 10px;
+      white-space: pre-wrap;
+      max-height: 500px;
+      overflow-y: auto;
+      position: relative;
+    }
+    .code-block .key { color: #6effb0; }
+    .code-block .string { color: #f6ad55; }
+    .code-block .number { color: #63b3ed; }
+    .code-block .comment { color: #4a4a4a; }
+    .code-block .bracket { color: #b0b0b0; }
+
+    /* Tabs */
+    .tab-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #2a2a2a;
+      padding-bottom: 15px;
+    }
+    .tab-btn {
+      padding: 10px 24px;
+      border-radius: 30px;
+      border: 1px solid #2a2a2a;
+      background: #141414;
+      color: #b0b0b0;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tab-btn:hover {
+      border-color: #6effb0;
+      color: #6effb0;
+      background: #1a2a1a;
+    }
+    .tab-btn.active {
+      border-color: #6effb0;
+      color: #6effb0;
+      background: #1a2a1a;
+      box-shadow: 0 0 20px rgba(110, 255, 176, 0.1);
+    }
+    .tab-btn .tab-badge {
+      background: #2a2a2a;
+      color: #8a8a8a;
+      padding: 0 8px;
+      border-radius: 10px;
+      font-size: 11px;
+    }
+    .tab-btn.active .tab-badge {
+      background: #1a3a2a;
+      color: #6effb0;
+    }
+    .tab-content { display: none; animation: fadeIn 0.3s ease; }
+    .tab-content.active { display: block; }
+
+    /* Search */
+    .search-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+    .search-box input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 2px solid #2a2a2a;
+      border-radius: 10px;
+      background: #1a1a1a;
+      color: #f0f0f0;
+      outline: none;
+      font-size: 14px;
+      min-width: 150px;
+    }
+    .search-box input:focus { border-color: #6effb0; }
+    .search-box input::placeholder { color: #5a5a5a; }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      color: #6a6a6a;
+    }
+    .empty-state i { font-size: 48px; margin-bottom: 15px; color: #2a2a2a; }
+    .empty-state h3 { color: #8a8a8a; margin-bottom: 8px; }
+    .empty-state p { font-size: 14px; }
+
+    /* Templates */
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .template-grid .template-btn {
+      padding: 14px 12px;
+      border-radius: 12px;
+      border: 1px solid #2a2a2a;
+      background: #1a1a1a;
+      color: #b0b0b0;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .template-grid .template-btn:hover {
+      border-color: #6effb0;
+      color: #6effb0;
+      background: #1a2a1a;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(110, 255, 176, 0.05);
+    }
+    .template-grid .template-btn i { display: block; font-size: 22px; margin-bottom: 8px; color: #6effb0; }
+    .template-grid .template-btn .sub { font-size: 10px; font-weight: 400; color: #6a6a6a; }
+
+    /* Stats bar */
+    .stats-bar {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding: 12px 16px;
+      background: #1a1a1a;
+      border-radius: 12px;
+      border: 1px solid #2a2a2a;
+      margin-bottom: 15px;
+    }
+    .stats-bar .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #b0b0b0;
+    }
+    .stats-bar .stat-item .stat-num {
+      font-weight: 700;
+      color: #f0f0f0;
+      font-size: 16px;
+    }
+    .stats-bar .stat-item .stat-num.green { color: #6effb0; }
+    .stats-bar .stat-item .stat-num.orange { color: #f6ad55; }
+    .stats-bar .stat-item .stat-num.red { color: #fc8181; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .row { grid-template-columns: 1fr; }
+      .row-2 { grid-template-columns: 1fr; }
+      .header { flex-direction: column; text-align: center; }
+      .header .stats { justify-content: center; }
+      .variant-item { flex-direction: column; align-items: stretch; }
+      .variant-item .variant-actions { justify-content: flex-end; }
+      .variant-item .variant-info { flex-direction: column; align-items: flex-start; gap: 6px; }
+      .template-grid { grid-template-columns: 1fr 1fr; }
+      .tab-bar { justify-content: center; }
+      .tab-btn { font-size: 13px; padding: 8px 16px; }
+    }
+    @media (max-width: 480px) {
+      .template-grid { grid-template-columns: 1fr; }
+      .tab-bar { flex-direction: column; align-items: stretch; }
+      .tab-btn { justify-content: center; }
+      .stats-bar { flex-direction: column; align-items: center; }
+      .header h1 { font-size: 20px; }
+    }
+
+    /* Loading spinner */
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+      border-top-color: #6effb0;
+      animation: spin 0.8s ease infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <h1><i class="fas fa-tools"></i> Firebase Variant Tool</h1>
+    <div class="stats">
+      <span class="stat-badge"><i class="fas fa-database"></i> <span id="totalVariants">0</span> variants</span>
+      <span class="stat-badge"><i class="fas fa-check-circle" style="color:#6effb0;"></i> <span id="inStockCount">0</span> in stock</span>
+      <span class="stat-badge"><i class="fas fa-exclamation-triangle" style="color:#f6ad55;"></i> <span id="lowStockCount">0</span> low stock</span>
+      <span class="stat-badge"><i class="fas fa-times-circle" style="color:#fc8181;"></i> <span id="outOfStockCount">0</span> out of stock</span>
+    </div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="manage"><i class="fas fa-list"></i> Manage <span class="tab-badge" id="manageBadge">0</span></button>
+    <button class="tab-btn" data-tab="add"><i class="fas fa-plus-circle"></i> Add</button>
+    <button class="tab-btn" data-tab="templates"><i class="fas fa-copy"></i> Templates</button>
+    <button class="tab-btn" data-tab="export"><i class="fas fa-code"></i> Export</button>
+    <button class="tab-btn" data-tab="import"><i class="fas fa-file-import"></i> Import</button>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TAB 1: Manage Variants -->
+  <!-- ============================================================ -->
+  <div class="tab-content active" id="tab-manage">
+    <div class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-list"></i> Current Variants</h2>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn btn-success btn-sm" id="syncBtn"><i class="fas fa-sync"></i> Sync</button>
+          <button class="btn btn-danger btn-sm" id="clearAllBtn"><i class="fas fa-trash"></i> Clear All</button>
+        </div>
+      </div>
+      
+      <div class="search-box">
+        <input type="text" id="variantSearch" placeholder="Search by ID or Name..." />
+        <button class="btn btn-info btn-sm" id="searchVariantBtn"><i class="fas fa-search"></i> Search</button>
+        <button class="btn btn-secondary btn-sm" id="clearSearchBtn"><i class="fas fa-times"></i> Clear</button>
+        <button class="btn btn-outline btn-sm" id="showAllBtn"><i class="fas fa-eye"></i> Show All</button>
+      </div>
+
+      <div class="stats-bar" id="statsBar">
+        <div class="stat-item"><i class="fas fa-cubes"></i> Total: <span class="stat-num" id="statTotal">0</span></div>
+        <div class="stat-item"><i class="fas fa-check-circle" style="color:#6effb0;"></i> In Stock: <span class="stat-num green" id="statInStock">0</span></div>
+        <div class="stat-item"><i class="fas fa-exclamation-triangle" style="color:#f6ad55;"></i> Low Stock: <span class="stat-num orange" id="statLowStock">0</span></div>
+        <div class="stat-item"><i class="fas fa-times-circle" style="color:#fc8181;"></i> Out of Stock: <span class="stat-num red" id="statOutOfStock">0</span></div>
+      </div>
+      
+      <div class="variant-list" id="variantListContainer">
+        <div class="empty-state">
+          <i class="fas fa-spinner fa-spin"></i>
+          <h3>Loading variants...</h3>
+        </div>
+      </div>
+      
+      <div id="manageMessage" class="message"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-save"></i> Save to Firebase</h2>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-success" id="saveToFirebaseBtn"><i class="fas fa-cloud-upload-alt"></i> Save All to Firebase</button>
+        <button class="btn btn-warning" id="restoreDefaultsBtn"><i class="fas fa-undo"></i> Restore Defaults</button>
+        <span style="color:#6a6a6a; font-size:13px; display:flex; align-items:center;">
+          <i class="fas fa-info-circle" style="margin-right:6px;"></i> This will overwrite Firebase data
+        </span>
+      </div>
+      <div id="saveMessage" class="message"></div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TAB 2: Add New Variant -->
+  <!-- ============================================================ -->
+  <div class="tab-content" id="tab-add">
+    <div class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-plus-circle"></i> Add / Edit Variant</h2>
+        <span id="editModeIndicator" style="color:#f6ad55; display:none;"><i class="fas fa-edit"></i> Editing Mode</span>
+      </div>
+
+      <div class="row">
+        <div class="input-group">
+          <label>Variant ID <span class="required">*</span></label>
+          <input type="text" id="newVariantId" placeholder="e.g., whey-1lb" />
+          <span class="hint">Format: product-size (e.g., whey-1lb, creatine-300g)</span>
+        </div>
+        <div class="input-group">
+          <label>Display Name <span class="required">*</span></label>
+          <input type="text" id="newVariantName" placeholder="e.g., Whey Protein 1lb" />
+        </div>
+        <div class="input-group">
+          <label>Stock Quantity</label>
+          <input type="number" id="newVariantStock" placeholder="5" min="0" value="5" />
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+        <button class="btn btn-success" id="addVariantBtn"><i class="fas fa-plus"></i> Add Variant</button>
+        <button class="btn btn-secondary" id="clearFormBtn"><i class="fas fa-eraser"></i> Clear Form</button>
+        <button class="btn btn-danger" id="cancelEditBtn" style="display:none;"><i class="fas fa-times"></i> Cancel Edit</button>
+        <button class="btn btn-warning" id="duplicateVariantBtn" style="display:none;"><i class="fas fa-copy"></i> Duplicate</button>
+      </div>
+      <div id="addMessage" class="message"></div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TAB 3: Templates -->
+  <!-- ============================================================ -->
+  <div class="tab-content" id="tab-templates">
+    <div class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-copy"></i> Quick Add Templates</h2>
+        <span style="color:#6a6a6a; font-size:12px;">Click a template to load it into the form</span>
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:15px;">
+        <button class="btn btn-success btn-sm" id="addAllTemplatesBtn"><i class="fas fa-plus-circle"></i> Add All Templates</button>
+        <button class="btn btn-secondary btn-sm" id="showTemplateIdsBtn"><i class="fas fa-code"></i> Show IDs</button>
+      </div>
+
+      <div class="template-grid" id="templateGrid">
+        <!-- Templates loaded by JavaScript -->
+      </div>
+      <div id="templateMessage" class="message"></div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TAB 4: Export Code -->
+  <!-- ============================================================ -->
+  <div class="tab-content" id="tab-export">
+    <div class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-code"></i> Generated Code</h2>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn btn-info btn-sm" id="copyCodeBtn"><i class="fas fa-copy"></i> Copy Code</button>
+          <button class="btn btn-secondary btn-sm" id="refreshCodeBtn"><i class="fas fa-sync"></i> Refresh</button>
+          <button class="btn btn-success btn-sm" id="downloadCodeBtn"><i class="fas fa-download"></i> Download</button>
+        </div>
+      </div>
+      <p style="color:#8a8a8a; font-size:13px; margin-bottom:10px;">
+        Copy this code into your <strong>index.html</strong> and <strong>admin-panel.html</strong> files.
+      </p>
+      <div class="code-block" id="generatedCode">
+        <span class="comment">// Loading...</span>
+      </div>
+      <div id="exportMessage" class="message"></div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TAB 5: Import Config -->
+  <!-- ============================================================ -->
+  <div class="tab-content" id="tab-import">
+    <div class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-file-import"></i> Import Configuration</h2>
+      </div>
+      <div class="input-group">
+        <label>Paste JSON Configuration</label>
+        <textarea id="importJson" rows="10" placeholder='{
+  "variantStock": {
+    "whey-1lb": 5,
+    "whey-2lb": 3
+  },
+  "variantNames": {
+    "whey-1lb": "Whey Protein 1lb",
+    "whey-2lb": "Whey Protein 2lb"
+  }
+}'></textarea>
+        <span class="hint">JSON format with <code>variantStock</code> and <code>variantNames</code> objects</span>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-success" id="importBtn"><i class="fas fa-file-import"></i> Import (Replace)</button>
+        <button class="btn btn-warning" id="importMergeBtn"><i class="fas fa-code-branch"></i> Merge (Keep Existing)</button>
+        <button class="btn btn-secondary" id="importExampleBtn"><i class="fas fa-file-alt"></i> Load Example</button>
+        <button class="btn btn-secondary" id="importClearBtn"><i class="fas fa-eraser"></i> Clear</button>
+      </div>
+      <div id="importMessage" class="message"></div>
+    </div>
+  </div>
+
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    getDocs,
+    doc,
+    getDoc,
+    setDoc,
+    deleteDoc,
+    onSnapshot
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCtkKzMB3ogRwwq4OIEaF9oICuV_n25xkY",
+    authDomain: "peakstore-895ff.firebaseapp.com",
+    projectId: "peakstore-895ff",
+    storageBucket: "peakstore-895ff.firebasestorage.app",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // ============================================
+  // STATE
+  // ============================================
+  let variantStock = {};
+  let variantNames = {};
+  let isEditing = false;
+  let editingKey = null;
+  let searchTerm = '';
+  let currentSort = 'id';
+  let sortDirection = 'asc';
+  const STOCK_DOC_PATH = "variantStock/stockData";
+
+  // ============================================
+  // DEFAULT TEMPLATES
+  // ============================================
+  const DEFAULT_VARIANTS = {
+    // Whey Protein
+    'whey-1lb': { name: 'Whey Protein 1lb', stock: 5 },
+    'whey-2lb': { name: 'Whey Protein 2lb', stock: 3 },
+    'whey-5lb': { name: 'Whey Protein 5lb', stock: 2 },
+    'promaxsberry-2lb': { name: 'Strawberry 2lb', stock: 5 },
+    'promaxchoco-2lb': { name: 'Chocolate 2lb', stock: 3 },
+    'promaxsberry-1lb': { name: 'Strawberry 1lb', stock: 9 },
+    'promaxchoco-1lb': { name: 'Chocolate 1lb', stock: 6 },
+    // Creatine
+    'creatine-30': { name: 'Creatine 30 Servings (Unflavored)', stock: 22 },
+    'creatine-60': { name: 'Creatine 60 Servings (Unflavored)', stock: 36 },
+    'creatine-60orange': { name: 'Creatine 60 Servings (Orange)', stock: 40 },
+    'creatine-60melon': { name: 'Creatine 60 Servings (Watermelon)', stock: 43 },
+    // Pre-Workout
+    'pre-30orange': { name: '30 Servings (Orange Burst)', stock: 5 },
+    'pre-30fruitpunch': { name: '30 Servings (Fruit Punch)', stock: 3 },
+    'pre-30grape': { name: '30 Servings (Grape)', stock: 2 },
+    'pre-30icy': { name: '30 Servings (Icy Blue Razz)', stock: 0 },
+    // PED's - CJC-1295
+    'cjc-5mg': { name: 'CJC-1295 + Ipamorelin 5mg', stock: 5 },
+    'cjc-10mg': { name: 'CJC-1295 + Ipamorelin 10mg', stock: 3 },
+    // PED's - BPC-157
+    'bpc-5mg': { name: 'BPC-157 5mg', stock: 6 },
+    'bpc-10mg': { name: 'BPC-157 10mg', stock: 4 },
+    // PED's - TB-500
+    'tb-5mg': { name: 'TB-500 5mg', stock: 5 },
+    'tb-10mg': { name: 'TB-500 10mg', stock: 3 },
+    // PED's - GHK-Cu
+    'ghkcu-50mg': { name: 'GHK-Cu 50mg', stock: 10 },
+    'ghkcu-100mg': { name: 'GHK-Cu 100mg', stock: 5 },
+    // PED's - MOTS-c
+    'motsc-5mg': { name: 'MOTS-c 5mg', stock: 5 },
+    'motsc-10mg': { name: 'MOTS-c 10mg', stock: 3 },
+    // PED's - Tesamorelin
+    'tesa-5mg': { name: 'Tesamorelin 5mg', stock: 6 },
+    'tesa-10mg': { name: 'Tesamorelin 10mg', stock: 3 },
+    // PED's - Dbol
+    'dbol-50tabs': { name: 'Dbol-10 50 tablets', stock: 8 },
+    'dbol-100tabs': { name: 'Dbol-10 100 tablets', stock: 4 },
+    // PED's - Anavar
+    'anavar-50tabs': { name: 'Anavar 50 50 tablets', stock: 6 },
+    'anavar-100tabs': { name: 'Anavar 50 100 tablets', stock: 3 },
+  };
+
+  // ============================================
+  // TEMPLATE PRESETS
+  // ============================================
+  const TEMPLATES = {
+    'Whey Protein': [
+      { id: 'whey-1lb', name: 'Whey Protein 1lb', stock: 5 },
+      { id: 'whey-2lb', name: 'Whey Protein 2lb', stock: 3 },
+      { id: 'whey-5lb', name: 'Whey Protein 5lb', stock: 2 },
+      { id: 'promaxsberry-2lb', name: 'Strawberry 2lb', stock: 5 },
+      { id: 'promaxchoco-2lb', name: 'Chocolate 2lb', stock: 3 },
+      { id: 'promaxsberry-1lb', name: 'Strawberry 1lb', stock: 9 },
+      { id: 'promaxchoco-1lb', name: 'Chocolate 1lb', stock: 6 },
+    ],
+    'Creatine': [
+      { id: 'creatine-30', name: 'Creatine 30 Servings (Unflavored)', stock: 22 },
+      { id: 'creatine-60', name: 'Creatine 60 Servings (Unflavored)', stock: 36 },
+      { id: 'creatine-60orange', name: 'Creatine 60 Servings (Orange)', stock: 40 },
+      { id: 'creatine-60melon', name: 'Creatine 60 Servings (Watermelon)', stock: 43 },
+    ],
+    'Pre-Workout': [
+      { id: 'pre-30orange', name: '30 Servings (Orange Burst)', stock: 5 },
+      { id: 'pre-30fruitpunch', name: '30 Servings (Fruit Punch)', stock: 3 },
+      { id: 'pre-30grape', name: '30 Servings (Grape)', stock: 2 },
+      { id: 'pre-30icy', name: '30 Servings (Icy Blue Razz)', stock: 0 },
+    ],
+    'CJC-1295': [
+      { id: 'cjc-5mg', name: 'CJC-1295 + Ipamorelin 5mg', stock: 5 },
+      { id: 'cjc-10mg', name: 'CJC-1295 + Ipamorelin 10mg', stock: 3 },
+    ],
+    'BPC-157': [
+      { id: 'bpc-5mg', name: 'BPC-157 5mg', stock: 6 },
+      { id: 'bpc-10mg', name: 'BPC-157 10mg', stock: 4 },
+    ],
+    'TB-500': [
+      { id: 'tb-5mg', name: 'TB-500 5mg', stock: 5 },
+      { id: 'tb-10mg', name: 'TB-500 10mg', stock: 3 },
+    ],
+    'GHK-Cu': [
+      { id: 'ghkcu-50mg', name: 'GHK-Cu 50mg', stock: 10 },
+      { id: 'ghkcu-100mg', name: 'GHK-Cu 100mg', stock: 5 },
+    ],
+    'MOTS-c': [
+      { id: 'motsc-5mg', name: 'MOTS-c 5mg', stock: 5 },
+      { id: 'motsc-10mg', name: 'MOTS-c 10mg', stock: 3 },
+    ],
+    'Tesamorelin': [
+      { id: 'tesa-5mg', name: 'Tesamorelin 5mg', stock: 6 },
+      { id: 'tesa-10mg', name: 'Tesamorelin 10mg', stock: 3 },
+    ],
+    'Dbol-10': [
+      { id: 'dbol-50tabs', name: 'Dbol-10 50 tablets', stock: 8 },
+      { id: 'dbol-100tabs', name: 'Dbol-10 100 tablets', stock: 4 },
+    ],
+    'Anavar 50': [
+      { id: 'anavar-50tabs', name: 'Anavar 50 50 tablets', stock: 6 },
+      { id: 'anavar-100tabs', name: 'Anavar 50 100 tablets', stock: 3 },
+    ],
+  };
+
+  // ============================================
+  // FIREBASE FUNCTIONS
+  // ============================================
+  async function loadFromFirebase() {
+    try {
+      const docRef = doc(db, STOCK_DOC_PATH);
+      const docSnap = await getDoc(docRef);
+      
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        variantStock = {};
+        variantNames = {};
+        
+        Object.keys(data).forEach(key => {
+          if (typeof data[key] === 'number') {
+            variantStock[key] = data[key];
+          } else if (typeof data[key] === 'string') {
+            variantNames[key] = data[key];
+          }
+        });
+        console.log('📦 Loaded from Firebase:', Object.keys(variantStock).length, 'variants');
+      } else {
+        loadDefaults();
+        await saveToFirebase();
+      }
+      
+      renderAll();
+      return true;
+    } catch (error) {
+      console.error('Error loading from Firebase:', error);
+      showMessage('manageMessage', '❌ Error loading from Firebase: ' + error.message, 'error');
+      loadDefaults();
+      renderAll();
+      return false;
+    }
+  }
+
+  function loadDefaults() {
+    variantStock = {};
+    variantNames = {};
+    Object.keys(DEFAULT_VARIANTS).forEach(key => {
+      variantStock[key] = DEFAULT_VARIANTS[key].stock;
+      variantNames[key] = DEFAULT_VARIANTS[key].name;
+    });
+  }
+
+  async function saveToFirebase() {
+    try {
+      const data = { ...variantStock, ...variantNames };
+      const docRef = doc(db, STOCK_DOC_PATH);
+      await setDoc(docRef, data);
+      console.log('✅ Saved to Firebase:', Object.keys(variantStock).length, 'variants');
+      showMessage('saveMessage', '✅ Successfully saved ' + Object.keys(variantStock).length + ' variants to Firebase!', 'success');
+      return true;
+    } catch (error) {
+      console.error('Error saving to Firebase:', error);
+      showMessage('saveMessage', '❌ Error saving to Firebase: ' + error.message, 'error');
+      return false;
+    }
+  }
+
+  function listenForChanges() {
+    const docRef = doc(db, STOCK_DOC_PATH);
+    onSnapshot(docRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        let changed = false;
+        
+        Object.keys(data).forEach(key => {
+          if (typeof data[key] === 'number') {
+            if (variantStock[key] !== data[key]) {
+              variantStock[key] = data[key];
+              changed = true;
+            }
+          } else if (typeof data[key] === 'string') {
+            if (variantNames[key] !== data[key]) {
+              variantNames[key] = data[key];
+              changed = true;
+            }
+          }
+        });
+        
+        Object.keys(variantStock).forEach(key => {
+          if (data[key] === undefined) {
+            delete variantStock[key];
+            changed = true;
+          }
+        });
+        Object.keys(variantNames).forEach(key => {
+          if (data[key] === undefined) {
+            delete variantNames[key];
+            changed = true;
+          }
+        });
+        
+        if (changed) {
+          renderAll();
+          console.log('🔄 Real-time update from Firebase');
+          showMessage('manageMessage', '🔄 Variants updated from Firebase', 'info');
+        }
+      }
+    }, (error) => {
+      console.error('Error listening for changes:', error);
+    });
+  }
+
+  // ============================================
+  // RENDER FUNCTIONS
+  // ============================================
+  function renderAll() {
+    renderVariants();
+    updateStats();
+    updateCounts();
+    generateCode();
+    renderTemplates();
+  }
+
+  function renderVariants() {
+    const container = document.getElementById('variantListContainer');
+    const keys = getFilteredAndSortedKeys();
+    
+    if (keys.length === 0) {
+      const hasVariants = Object.keys(variantStock).length > 0;
+      container.innerHTML = `
+        <div class="empty-state">
+          <i class="${hasVariants ? 'fas fa-search' : 'fas fa-box-open'}"></i>
+          <h3>${hasVariants ? 'No matching variants' : 'No Variants Found'}</h3>
+          <p>${hasVariants ? 'Try adjusting your search term.' : 'Add your first variant using the "Add" tab.'}</p>
+        </div>
+      `;
+      return;
+    }
+
+    let html = '';
+    keys.forEach(key => {
+      const stock = variantStock[key] || 0;
+      const name = variantNames[key] || key;
+      let stockClass = 'in-stock';
+      let stockText = `${stock} available`;
+      let statusIcon = 'fa-check-circle';
+      let statusColor = '#6effb0';
+      
+      if (stock === 0) { 
+        stockClass = 'out-of-stock'; 
+        stockText = 'Out of Stock'; 
+        statusIcon = 'fa-times-circle';
+        statusColor = '#fc8181';
+      } else if (stock <= 3) { 
+        stockClass = 'low-stock'; 
+        stockText = `${stock} left`; 
+        statusIcon = 'fa-exclamation-triangle';
+        statusColor = '#f6ad55';
+      }
+      
+      const isEditingThis = isEditing && editingKey === key;
+      
+      html += `
+        <div class="variant-item ${isEditingThis ? 'editing' : ''}">
+          <div class="variant-info">
+            <span class="variant-key"><code>${key}</code></span>
+            <span class="variant-name">${name}</span>
+            <span class="variant-stock">
+              <i class="fas ${statusIcon}" style="color:${statusColor};"></i>
+              <span class="stock-value ${stockClass}">${stockText}</span>
+            </span>
+          </div>
+          <div class="variant-actions">
+            <button class="btn btn-sm btn-secondary" onclick="editVariant('${key}')"><i class="fas fa-edit"></i> Edit</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteVariant('${key}')"><i class="fas fa-trash"></i> Delete</button>
+          </div>
+        </div>
+      `;
+    });
+    container.innerHTML = html;
+  }
+
+  function getFilteredAndSortedKeys() {
+    let keys = Object.keys(variantStock);
+    
+    // Filter
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      keys = keys.filter(key => {
+        const name = variantNames[key] || key;
+        return key.toLowerCase().includes(term) || name.toLowerCase().includes(term);
+      });
+    }
+    
+    // Sort
+    keys.sort((a, b) => {
+      let valA, valB;
+      if (currentSort === 'id') {
+        valA = a;
+        valB = b;
+      } else if (currentSort === 'name') {
+        valA = (variantNames[a] || a).toLowerCase();
+        valB = (variantNames[b] || b).toLowerCase();
+      } else if (currentSort === 'stock') {
+        valA = variantStock[a] || 0;
+        valB = variantStock[b] || 0;
+      }
+      
+      if (valA < valB) return sortDirection === 'asc' ? -1 : 1;
+      if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+    
+    return keys;
+  }
+
+  function updateStats() {
+    const keys = Object.keys(variantStock);
+    let inStock = 0, lowStock = 0, outOfStock = 0;
+    
+    keys.forEach(key => {
+      const stock = variantStock[key] || 0;
+      if (stock === 0) outOfStock++;
+      else if (stock <= 3) lowStock++;
+      else inStock++;
+    });
+    
+    document.getElementById('statTotal').textContent = keys.length;
+    document.getElementById('statInStock').textContent = inStock;
+    document.getElementById('statLowStock').textContent = lowStock;
+    document.getElementById('statOutOfStock').textContent = outOfStock;
+  }
+
+  function updateCounts() {
+    const count = Object.keys(variantStock).length;
+    document.getElementById('totalVariants').textContent = count;
+    document.getElementById('manageBadge').textContent = count;
+    
+    // Update header stats
+    const keys = Object.keys(variantStock);
+    let inStock = 0, lowStock = 0, outOfStock = 0;
+    keys.forEach(key => {
+      const stock = variantStock[key] || 0;
+      if (stock === 0) outOfStock++;
+      else if (stock <= 3) lowStock++;
+      else inStock++;
+    });
+    document.getElementById('inStockCount').textContent = inStock;
+    document.getElementById('lowStockCount').textContent = lowStock;
+    document.getElementById('outOfStockCount').textContent = outOfStock;
+  }
+
+  // ============================================
+  // GENERATE CODE
+  // ============================================
+  function generateCode() {
+    const keys = Object.keys(variantStock).sort();
+    if (keys.length === 0) {
+      document.getElementById('generatedCode').innerHTML = '<span class="comment">// No variants to export</span>';
+      return;
+    }
+
+    let stockCode = 'const DEFAULT_VARIANT_STOCK = {\n';
+    keys.forEach(key => {
+      stockCode += `  '${key}': ${variantStock[key] || 0},\n`;
+    });
+    stockCode += '};';
+
+    let namesCode = 'const VARIANT_NAMES = {\n';
+    keys.forEach(key => {
+      const name = (variantNames[key] || key).replace(/'/g, "\\'");
+      namesCode += `  '${key}': '${name}',\n`;
+    });
+    namesCode += '};';
+
+    let mapCode = '// Product to Variant Mapping\n';
+    mapCode += 'const PRODUCT_VARIANT_MAP = {\n';
+    // Group by product prefix
+    const groups = {};
+    keys.forEach(key => {
+      const prefix = key.split('-')[0];
+      if (!groups[prefix]) groups[prefix] = [];
+      groups[prefix].push(key);
+    });
+    Object.keys(groups).forEach(prefix => {
+      mapCode += `  'stock${prefix.charAt(0).toUpperCase() + prefix.slice(1)}': [`;
+      mapCode += groups[prefix].map(k => `'${k}'`).join(', ');
+      mapCode += '],\n';
+    });
+    mapCode += '};';
+
+    let firebaseData = '// Firebase Document: variantStock/stockData\n';
+    firebaseData += '{\n';
+    keys.forEach(key => {
+      const name = (variantNames[key] || key).replace(/'/g, "\\'");
+      firebaseData += `  "${key}": ${variantStock[key] || 0},  // ${name}\n`;
+    });
+    keys.forEach(key => {
+      const name = (variantNames[key] || key).replace(/'/g, "\\'");
+      firebaseData += `  "${key}": "${name}",\n`;
+    });
+    firebaseData += '}';
+
+    document.getElementById('generatedCode').innerHTML = `
+      <span class="comment">// ============================================</span>
+      <span class="comment">// Copy this into index.html</span>
+      <span class="comment">// ============================================</span>
+      <span class="key">${stockCode}</span>
+
+      <span class="comment">// ============================================</span>
+      <span class="comment">// Copy this into admin-panel.html</span>
+      <span class="comment">// ============================================</span>
+      <span class="key">${namesCode}</span>
+
+      <span class="comment">// ============================================</span>
+      <span class="comment">// For admin-panel.html - Product to Variant Mapping</span>
+      <span class="comment">// ============================================</span>
+      <span class="key">${mapCode}</span>
+
+      <span class="comment">// ============================================</span>
+      <span class="comment">// Firebase Data Structure (for reference)</span>
+      <span class="comment">// ============================================</span>
+      <span class="comment">${firebaseData}</span>
+
+      <span class="comment">// ============================================</span>
+      <span class="comment">// Total: ${keys.length} variants</span>
+      <span class="comment">// ============================================</span>
+    `;
+  }
+
+  // ============================================
+  // RENDER TEMPLATES
+  // ============================================
+  function renderTemplates() {
+    const container = document.getElementById('templateGrid');
+    const templateNames = Object.keys(TEMPLATES);
+    
+    let html = '';
+    templateNames.forEach(name => {
+      const count = TEMPLATES[name].length;
+      let icon = 'fa-cubes';
+      let color = '#6effb0';
+      
+      if (name.includes('Whey')) { icon = 'fa-dumbbell'; }
+      else if (name.includes('Creatine')) { icon = 'fa-bolt'; }
+      else if (name.includes('Pre-Workout')) { icon = 'fa-fire'; }
+      else if (name.includes('BPC')) { icon = 'fa-flask'; color = '#63b3ed'; }
+      else if (name.includes('TB')) { icon = 'fa-heartbeat'; color = '#63b3ed'; }
+      else if (name.includes('GHK')) { icon = 'fa-leaf'; color = '#63b3ed'; }
+      else if (name.includes('MOTS')) { icon = 'fa-star'; color = '#63b3ed'; }
+      else if (name.includes('Tesamorelin')) { icon = 'fa-bolt'; color = '#f6ad55'; }
+      else if (name.includes('Dbol')) { icon = 'fa-fire'; color = '#fc8181'; }
+      else if (name.includes('Anavar')) { icon = 'fa-fire'; color = '#fc8181'; }
+      
+      const existing = TEMPLATES[name].filter(t => variantStock[t.id] !== undefined).length;
+      
+      html += `
+        <button class="template-btn" data-template="${name}">
+          <i class="fas ${icon}" style="color:${color};"></i>
+          ${name}
+          <div class="sub">${count} variants · ${existing}/${count} added</div>
+        </button>
+      `;
+    });
+    container.innerHTML = html;
+    
+    // Add event listeners
+    container.querySelectorAll('.template-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const templateName = this.dataset.template;
+        loadTemplate(templateName);
+      });
+    });
+  }
+
+  // ============================================
+  // CRUD OPERATIONS
+  // ============================================
+  window.addVariant = function(id, name, stock) {
+    if (!id || !name) {
+      showMessage('addMessage', '⚠️ Please enter both ID and Name', 'error');
+      return false;
+    }
+    
+    if (!/^[a-zA-Z0-9\-_]+$/.test(id)) {
+      showMessage('addMessage', '⚠️ ID can only contain letters, numbers, hyphens, and underscores', 'error');
+      return false;
+    }
+    
+    if (variantStock[id] !== undefined) {
+      showMessage('addMessage', `⚠️ Variant "${id}" already exists!`, 'error');
+      return false;
+    }
+    
+    variantStock[id] = parseInt(stock) || 0;
+    variantNames[id] = name;
+    
+    saveToFirebase();
+    renderAll();
+    showMessage('addMessage', `✅ Added "${name}" (${id}) with stock ${stock}`, 'success');
+    return true;
+  };
+
+  window.deleteVariant = async function(id) {
+    if (!confirm(`Delete variant "${id}"?`)) return;
+    delete variantStock[id];
+    delete variantNames[id];
+    await saveToFirebase();
+    renderAll();
+    showMessage('manageMessage', `✅ Deleted "${id}"`, 'success');
+  };
+
+  window.editVariant = function(id) {
+    const stock = variantStock[id] || 0;
+    const name = variantNames[id] || id;
+    
+    document.getElementById('newVariantId').value = id;
+    document.getElementById('newVariantName').value = name;
+    document.getElementById('newVariantStock').value = stock;
+    document.getElementById('newVariantId').disabled = true;
+    
+    isEditing = true;
+    editingKey = id;
+    document.getElementById('editModeIndicator').style.display = 'inline';
+    
+    const addBtn = document.getElementById('addVariantBtn');
+    addBtn.textContent = '💾 Update Variant';
+    addBtn.className = 'btn btn-warning';
+    addBtn.onclick = function() {
+      updateVariant(id);
+    };
+    
+    document.getElementById('cancelEditBtn').style.display = 'inline-flex';
+    document.getElementById('duplicateVariantBtn').style.display = 'inline-flex';
+    
+    switchTab('add');
+    renderVariants();
+    showMessage('addMessage', `✏️ Editing "${id}" - make changes and click Update`, 'info');
+  };
+
+  function updateVariant(id) {
+    const name = document.getElementById('newVariantName').value.trim();
+    const stock = parseInt(document.getElementById('newVariantStock').value) || 0;
+    
+    if (!name) {
+      showMessage('addMessage', '⚠️ Please enter a name', 'error');
+      return;
+    }
+    
+    variantNames[id] = name;
+    variantStock[id] = stock;
+    
+    saveToFirebase();
+    renderAll();
+    resetForm();
+    showMessage('addMessage', `✅ Updated "${id}" successfully!`, 'success');
+  }
+
+  function resetForm() {
+    document.getElementById('newVariantId').value = '';
+    document.getElementById('newVariantId').disabled = false;
+    document.getElementById('newVariantName').value = '';
+    document.getElementById('newVariantStock').value = '5';
+    
+    isEditing = false;
+    editingKey = null;
+    document.getElementById('editModeIndicator').style.display = 'none';
+    
+    const addBtn = document.getElementById('addVariantBtn');
+    addBtn.textContent = 'Add Variant';
+    addBtn.className = 'btn btn-success';
+    addBtn.onclick = function() {
+      const id = document.getElementById('newVariantId').value.trim();
+      const name = document.getElementById('newVariantName').value.trim();
+      const stock = document.getElementById('newVariantStock').value;
+      window.addVariant(id, name, stock);
+    };
+    
+    document.getElementById('cancelEditBtn').style.display = 'none';
+    document.getElementById('duplicateVariantBtn').style.display = 'none';
+    renderVariants();
+  }
+
+  // ============================================
+  // TEMPLATE FUNCTIONS
+  // ============================================
+  function loadTemplate(templateName) {
+    const templates = TEMPLATES[templateName];
+    if (!templates || templates.length === 0) {
+      showMessage('addMessage', `❌ Template "${templateName}" not found`, 'error');
+      return;
+    }
+    
+    if (isEditing) resetForm();
+    
+    const first = templates[0];
+    document.getElementById('newVariantId').value = first.id;
+    document.getElementById('newVariantName').value = first.name;
+    document.getElementById('newVariantStock').value = first.stock;
+    
+    showMessage('addMessage', `📋 Loaded "${templateName}" template. Modify and click Add.`, 'info');
+    switchTab('add');
+  }
+
+  function addAllTemplates() {
+    let added = 0;
+    Object.keys(TEMPLATES).forEach(category => {
+      TEMPLATES[category].forEach(t => {
+        if (variantStock[t.id] === undefined) {
+          variantStock[t.id] = t.stock;
+          variantNames[t.id] = t.name;
+          added++;
+        }
+      });
+    });
+    
+    if (added > 0) {
+      saveToFirebase();
+      renderAll();
+      showMessage('templateMessage', `✅ Added ${added} variants from all templates!`, 'success');
+    } else {
+      showMessage('templateMessage', `ℹ️ All template variants already exist`, 'info');
+    }
+  }
+
+  // ============================================
+  // UI HELPERS
+  // ============================================
+  function showMessage(elementId, text, type = 'success') {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    el.className = `message ${type}`;
+    el.textContent = text;
+    el.style.display = 'block';
+    clearTimeout(el._timeout);
+    el._timeout = setTimeout(() => { el.className = 'message'; }, 4000);
+  }
+
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    const target = document.getElementById(`tab-${tabId}`);
+    if (target) target.classList.add('active');
+    const btn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+    if (btn) btn.classList.add('active');
+  }
+
+  // ============================================
+  // EVENT LISTENERS
+  // ============================================
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      switchTab(this.dataset.tab);
+    });
+  });
+
+  // Add/Update Variant
+  document.getElementById('addVariantBtn').addEventListener('click', function() {
+    const id = document.getElementById('newVariantId').value.trim();
+    const name = document.getElementById('newVariantName').value.trim();
+    const stock = document.getElementById('newVariantStock').value;
+    
+    if (isEditing && editingKey) {
+      updateVariant(editingKey);
+    } else {
+      window.addVariant(id, name, stock);
+    }
+  });
+
+  // Cancel Edit
+  document.getElementById('cancelEditBtn').addEventListener('click', function() {
+    resetForm();
+    showMessage('addMessage', '🔄 Edit cancelled', 'info');
+    switchTab('manage');
+  });
+
+  // Duplicate
+  document.getElementById('duplicateVariantBtn').addEventListener('click', function() {
+    if (!editingKey) return;
+    const originalId = editingKey;
+    const originalName = variantNames[originalId] || originalId;
+    const originalStock = variantStock[originalId] || 0;
+    
+    let newId = originalId + '-copy';
+    let counter = 1;
+    while (variantStock[newId] !== undefined) {
+      newId = originalId + '-copy-' + counter;
+      counter++;
+    }
+    
+    document.getElementById('newVariantId').value = newId;
+    document.getElementById('newVariantId').disabled = false;
+    document.getElementById('newVariantName').value = originalName + ' (Copy)';
+    document.getElementById('newVariantStock').value = originalStock;
+    
+    isEditing = false;
+    editingKey = null;
+    document.getElementById('editModeIndicator').style.display = 'none';
+    document.getElementById('cancelEditBtn').style.display = 'none';
+    document.getElementById('duplicateVariantBtn').style.display = 'none';
+    
+    const addBtn = document.getElementById('addVariantBtn');
+    addBtn.textContent = 'Add Variant';
+    addBtn.className = 'btn btn-success';
+    addBtn.onclick = function() {
+      const id = document.getElementById('newVariantId').value.trim();
+      const name = document.getElementById('newVariantName').value.trim();
+      const stock = document.getElementById('newVariantStock').value;
+      window.addVariant(id, name, stock);
+    };
+    
+    showMessage('addMessage', `📋 Duplicating "${originalId}" - modify and click Add`, 'info');
+  });
+
+  // Clear Form
+  document.getElementById('clearFormBtn').addEventListener('click', function() {
+    if (isEditing) {
+      if (!confirm('Cancel editing?')) return;
+      resetForm();
+    } else {
+      document.getElementById('newVariantId').value = '';
+      document.getElementById('newVariantName').value = '';
+      document.getElementById('newVariantStock').value = '5';
+    }
+    showMessage('addMessage', '🧹 Form cleared', 'info');
+  });
+
+  // Sync
+  document.getElementById('syncBtn').addEventListener('click', async function() {
+    this.disabled = true;
+    this.innerHTML = '<span class="spinner"></span> Syncing...';
+    await loadFromFirebase();
+    this.disabled = false;
+    this.innerHTML = '<i class="fas fa-sync"></i> Sync';
+    showMessage('manageMessage', '✅ Synced from Firebase', 'success');
+  });
+
+  // Save to Firebase
+  document.getElementById('saveToFirebaseBtn').addEventListener('click', saveToFirebase);
+
+  // Restore Defaults
+  document.getElementById('restoreDefaultsBtn').addEventListener('click', function() {
+    if (!confirm('⚠️ Restore default variants? This will overwrite all current variants.')) return;
+    loadDefaults();
+    saveToFirebase();
+    renderAll();
+    showMessage('manageMessage', '✅ Restored default variants', 'success');
+  });
+
+  // Clear All
+  document.getElementById('clearAllBtn').addEventListener('click', function() {
+    if (!confirm('⚠️ Delete ALL variants? This cannot be undone!')) return;
+    if (!confirm('⚠️ ARE YOU ABSOLUTELY SURE?')) return;
+    variantStock = {};
+    variantNames = {};
+    saveToFirebase();
+    renderAll();
+    showMessage('manageMessage', '🗑️ All variants deleted', 'info');
+  });
+
+  // Search
+  document.getElementById('searchVariantBtn').addEventListener('click', function() {
+    searchTerm = document.getElementById('variantSearch').value.trim();
+    renderVariants();
+  });
+  
+  document.getElementById('variantSearch').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      searchTerm = this.value.trim();
+      renderVariants();
+    }
+  });
+  
+  document.getElementById('clearSearchBtn').addEventListener('click', function() {
+    document.getElementById('variantSearch').value = '';
+    searchTerm = '';
+    renderVariants();
+  });
+
+  document.getElementById('showAllBtn').addEventListener('click', function() {
+    document.getElementById('variantSearch').value = '';
+    searchTerm = '';
+    renderVariants();
+  });
+
+  // Templates
+  document.getElementById('addAllTemplatesBtn').addEventListener('click', addAllTemplates);
+  
+  document.getElementById('showTemplateIdsBtn').addEventListener('click', function() {
+    const ids = Object.keys(variantStock).sort().join('\n');
+    alert('All Variant IDs:\n\n' + ids);
+  });
+
+  // Copy Code
+  document.getElementById('copyCodeBtn').addEventListener('click', function() {
+    const code = document.getElementById('generatedCode').textContent;
+    navigator.clipboard.writeText(code).then(() => {
+      showMessage('exportMessage', '✅ Code copied to clipboard!', 'success');
+    }).catch(() => {
+      const textarea = document.createElement('textarea');
+      textarea.value = code;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      showMessage('exportMessage', '✅ Code copied to clipboard!', 'success');
+    });
+  });
+
+  // Refresh Code
+  document.getElementById('refreshCodeBtn').addEventListener('click', function() {
+    generateCode();
+    showMessage('exportMessage', '🔄 Code refreshed', 'info');
+  });
+
+  // Download Code
+  document.getElementById('downloadCodeBtn').addEventListener('click', function() {
+    const code = document.getElementById('generatedCode').textContent;
+    const blob = new Blob([code], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `variant-config-${new Date().toISOString().slice(0,10)}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showMessage('exportMessage', '📥 Code downloaded!', 'success');
+  });
+
+  // Import
+  function importData(merge = false) {
+    try {
+      const json = document.getElementById('importJson').value.trim();
+      if (!json) {
+        showMessage('importMessage', '⚠️ Please paste JSON data', 'error');
+        return;
+      }
+      
+      const data = JSON.parse(json);
+      let importedStock = 0;
+      let importedNames = 0;
+      
+      if (data.variantStock) {
+        Object.keys(data.variantStock).forEach(key => {
+          if (merge) {
+            if (variantStock[key] === undefined) {
+              variantStock[key] = data.variantStock[key];
+              importedStock++;
+            }
+          } else {
+            variantStock[key] = data.variantStock[key];
+            importedStock++;
+          }
+        });
+      }
+      
+      if (data.variantNames) {
+        Object.keys(data.variantNames).forEach(key => {
+          if (merge) {
+            if (variantNames[key] === undefined) {
+              variantNames[key] = data.variantNames[key];
+              importedNames++;
+            }
+          } else {
+            variantNames[key] = data.variantNames[key];
+            importedNames++;
+          }
+        });
+      }
+      
+      saveToFirebase();
+      renderAll();
+      
+      const mode = merge ? 'Merged' : 'Imported';
+      showMessage('importMessage', `✅ ${mode} ${importedStock} stock entries and ${importedNames} names`, 'success');
+    } catch (error) {
+      showMessage('importMessage', '❌ Invalid JSON: ' + error.message, 'error');
+    }
+  }
+
+  document.getElementById('importBtn').addEventListener('click', function() {
+    importData(false);
+  });
+
+  document.getElementById('importMergeBtn').addEventListener('click', function() {
+    importData(true);
+  });
+
+  document.getElementById('importExampleBtn').addEventListener('click', function() {
+    const example = {
+      "variantStock": {},
+      "variantNames": {}
+    };
+    // Add first 5 variants as example
+    const keys = Object.keys(DEFAULT_VARIANTS).slice(0, 5);
+    keys.forEach(key => {
+      example.variantStock[key] = DEFAULT_VARIANTS[key].stock;
+      example.variantNames[key] = DEFAULT_VARIANTS[key].name;
+    });
+    document.getElementById('importJson').value = JSON.stringify(example, null, 2);
+    showMessage('importMessage', '📄 Example loaded! Click Import or Merge to apply.', 'info');
+  });
+
+  document.getElementById('importClearBtn').addEventListener('click', function() {
+    document.getElementById('importJson').value = '';
+    showMessage('importMessage', '🧹 JSON cleared', 'info');
+  });
+
+  // ============================================
+  // KEYBOARD SHORTCUTS
+  // ============================================
+  document.addEventListener('keydown', function(e) {
+    // Ctrl+Enter to save
+    if (e.ctrlKey && e.key === 'Enter') {
+      const activeTab = document.querySelector('.tab-content.active');
+      if (activeTab && activeTab.id === 'tab-add') {
+        document.getElementById('addVariantBtn').click();
+      }
+    }
+    // Escape to cancel edit
+    if (e.key === 'Escape' && isEditing) {
+      resetForm();
+      showMessage('addMessage', '🔄 Edit cancelled', 'info');
+    }
+    // Ctrl+F to focus search
+    if (e.ctrlKey && e.key === 'f') {
+      e.preventDefault();
+      document.getElementById('variantSearch').focus();
+    }
+  });
+
+  // ============================================
+  // INIT
+  // ============================================
+  console.log('🚀 Firebase Variant Tool loading...');
+  
+  await loadFromFirebase();
+  listenForChanges();
+  
+  console.log('✅ Firebase Variant Tool loaded');
+  console.log('📦 Total variants:', Object.keys(variantStock).length);
+  console.log('💡 Tips: Ctrl+Enter to save, Escape to cancel edit, Ctrl+F to search');
+</script>
+
+</body>
+</html>

@@ -20,7 +20,7 @@
       background: #141414;
       border-radius: 24px;
       padding: 35px;
-      max-width: 750px;
+      max-width: 850px;
       width: 100%;
       border: 1px solid #2a2a2a;
       box-shadow: 0 20px 60px rgba(0,0,0,0.5);
@@ -238,9 +238,30 @@
       color: #6effb0;
     }
 
+    .stock-preview {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0;
+      font-size: 13px;
+    }
+    .stock-preview .stock-item {
+      background: #1a1a1a;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #2a2a2a;
+      display: flex;
+      justify-content: space-between;
+    }
+    .stock-preview .stock-item .qty {
+      color: #6effb0;
+      font-weight: 700;
+    }
+
     @media (max-width: 600px) {
       .container { padding: 20px; }
       .btn-group .btn { min-width: 100%; }
+      .stock-preview { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -255,8 +276,9 @@
       • Creates <span class="highlight">2 admin accounts</span> with <code>isAdmin: true</code><br>
       • Creates <span class="highlight">3 license keys</span> with PDF passwords & watermarks<br>
       • Creates <span class="highlight">sample orders</span> matching your store<br>
-      • Creates <span class="highlight">custom plan files</span> for delivery<br>
-      • Updates existing documents if they exist
+      • Creates <span class="highlight">PRODUCT STOCK</span> (15 products) with quantities<br>
+      • Creates <span class="highlight">VARIANT STOCK</span> (10 variants) with quantities<br>
+      • <strong style="color:#f6ad55;">FORCES overwrite of existing stock data</strong>
     </div>
 
     <!-- Admin Accounts Info -->
@@ -271,10 +293,45 @@
       </div>
     </div>
 
+    <!-- Stock Preview -->
+    <div class="info-box">
+      <strong>📦 Stock Data to Upload:</strong>
+      <div class="stock-preview" id="stockPreview">
+        <div class="stock-item"><span>stockWhey</span><span class="qty">12</span></div>
+        <div class="stock-item"><span>stockCreatine</span><span class="qty">15</span></div>
+        <div class="stock-item"><span>stockPre</span><span class="qty">9</span></div>
+        <div class="stock-item"><span>stock1</span><span class="qty">7</span></div>
+        <div class="stock-item"><span>stockBPC</span><span class="qty">6</span></div>
+        <div class="stock-item"><span>stockTB</span><span class="qty">5</span></div>
+        <div class="stock-item"><span>stockGhkcu</span><span class="qty">10</span></div>
+        <div class="stock-item"><span>stockMotsc</span><span class="qty">5</span></div>
+        <div class="stock-item"><span>stockTesamorelin</span><span class="qty">6</span></div>
+        <div class="stock-item"><span>stockDbol</span><span class="qty">8</span></div>
+        <div class="stock-item"><span>stockAnavar</span><span class="qty">6</span></div>
+        <div class="stock-item"><span>stockFishOil</span><span class="qty">8</span></div>
+        <div class="stock-item"><span>stockCalMagZinc</span><span class="qty">10</span></div>
+        <div class="stock-item"><span>stockCoQ10</span><span class="qty">8</span></div>
+        <div class="stock-item"><span>stockMilkThistle</span><span class="qty">10</span></div>
+      </div>
+      <div style="margin-top:8px;"><strong>🔹 Variant Stock:</strong></div>
+      <div class="stock-preview">
+        <div class="stock-item"><span>whey-1lb</span><span class="qty">5</span></div>
+        <div class="stock-item"><span>whey-2lb</span><span class="qty">3</span></div>
+        <div class="stock-item"><span>whey-5lb</span><span class="qty">2</span></div>
+        <div class="stock-item"><span>promaxchoco-1lb</span><span class="qty">7</span></div>
+        <div class="stock-item"><span>creatine-300g</span><span class="qty">3</span></div>
+        <div class="stock-item"><span>creatine-500g</span><span class="qty">1</span></div>
+        <div class="stock-item"><span>creatine-1kg</span><span class="qty">0</span></div>
+        <div class="stock-item"><span>pre-30serv</span><span class="qty">5</span></div>
+        <div class="stock-item"><span>pre-60serv</span><span class="qty">3</span></div>
+        <div class="stock-item"><span>pre-90serv</span><span class="qty">2</span></div>
+      </div>
+    </div>
+
     <!-- OPTIONS -->
     <div class="checkbox-group">
       <input type="checkbox" id="forceUpdate" checked>
-      <label for="forceUpdate">🔄 Force update existing documents</label>
+      <label for="forceUpdate">🔄 Force overwrite existing data (RECOMMENDED)</label>
     </div>
 
     <div class="checkbox-group">
@@ -300,6 +357,12 @@
 
     <div class="btn-group">
       <button class="btn btn-warning btn-sm" id="uploadOrdersBtn"><i class="fas fa-shopping-cart"></i> Orders</button>
+      <button class="btn btn-info btn-sm" id="uploadStockBtn"><i class="fas fa-boxes"></i> Stock</button>
+      <button class="btn btn-purple btn-sm" id="uploadVariantStockBtn"><i class="fas fa-layer-group"></i> Variant Stock</button>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-danger btn-sm" id="clearStockBtn"><i class="fas fa-trash"></i> Clear Stock</button>
       <button class="btn btn-info btn-sm" id="checkStatusBtn"><i class="fas fa-search"></i> Check Status</button>
       <button class="btn btn-secondary btn-sm" id="clearLogsBtn"><i class="fas fa-trash"></i> Clear Logs</button>
     </div>
@@ -328,7 +391,8 @@
       collection,
       addDoc,
       serverTimestamp,
-      deleteDoc
+      deleteDoc,
+      updateDoc
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     // ============================================
@@ -354,6 +418,9 @@
     const uploadAdminsBtn = document.getElementById('uploadAdminsBtn');
     const uploadLicensesBtn = document.getElementById('uploadLicensesBtn');
     const uploadOrdersBtn = document.getElementById('uploadOrdersBtn');
+    const uploadStockBtn = document.getElementById('uploadStockBtn');
+    const uploadVariantStockBtn = document.getElementById('uploadVariantStockBtn');
+    const clearStockBtn = document.getElementById('clearStockBtn');
     const checkStatusBtn = document.getElementById('checkStatusBtn');
     const clearLogsBtn = document.getElementById('clearLogsBtn');
     const progressBar = document.getElementById('progressBar');
@@ -365,6 +432,40 @@
 
     let logs = [];
     const planPrices = { starter: 49, pro: 99, premium: 149, bundle: 299 };
+
+    // ============================================
+    // STOCK DATA
+    // ============================================
+    const PRODUCT_STOCK_ITEMS = [
+      { id: 'stockWhey', qty: 12 },
+      { id: 'stockCreatine', qty: 15 },
+      { id: 'stockPre', qty: 9 },
+      { id: 'stock1', qty: 7 },
+      { id: 'stockBPC', qty: 6 },
+      { id: 'stockTB', qty: 5 },
+      { id: 'stockGhkcu', qty: 10 },
+      { id: 'stockMotsc', qty: 5 },
+      { id: 'stockTesamorelin', qty: 6 },
+      { id: 'stockDbol', qty: 8 },
+      { id: 'stockAnavar', qty: 6 },
+      { id: 'stockFishOil', qty: 8 },
+      { id: 'stockCalMagZinc', qty: 10 },
+      { id: 'stockCoQ10', qty: 8 },
+      { id: 'stockMilkThistle', qty: 10 }
+    ];
+
+    const VARIANT_STOCK_DATA = {
+      'whey-1lb': 5,
+      'whey-2lb': 3,
+      'whey-5lb': 2,
+      'promaxchoco-1lb': 7,
+      'creatine-300g': 3,
+      'creatine-500g': 1,
+      'creatine-1kg': 0,
+      'pre-30serv': 5,
+      'pre-60serv': 3,
+      'pre-90serv': 2
+    };
 
     // ============================================
     // HELPERS
@@ -386,6 +487,9 @@
         uploadAdminsBtn: '<i class="fas fa-user-shield"></i> Admins',
         uploadLicensesBtn: '<i class="fas fa-key"></i> Licenses',
         uploadOrdersBtn: '<i class="fas fa-shopping-cart"></i> Orders',
+        uploadStockBtn: '<i class="fas fa-boxes"></i> Stock',
+        uploadVariantStockBtn: '<i class="fas fa-layer-group"></i> Variant Stock',
+        clearStockBtn: '<i class="fas fa-trash"></i> Clear Stock',
         checkStatusBtn: '<i class="fas fa-search"></i> Check Status',
         clearLogsBtn: '<i class="fas fa-trash"></i> Clear Logs'
       };
@@ -490,7 +594,7 @@
         } catch (error) {
           addLog(`❌ Error uploading ${user.email}: ${error.message}`, 'error');
         }
-        updateProgress((uploaded / users.length) * 30);
+        updateProgress((uploaded / users.length) * 20);
       }
       return uploaded;
     }
@@ -510,7 +614,6 @@
           const docRef = doc(db, "users", admin.email);
           const docSnap = await getDoc(docRef);
 
-          // Check if admin already exists in Firestore
           let existingUid = null;
           if (docSnap.exists()) {
             existingUid = docSnap.data().uid;
@@ -521,7 +624,6 @@
             }
           }
 
-          // Create Auth user
           let uid = existingUid;
           if (createAuthUsersCheck.checked && !existingUid) {
             try {
@@ -530,7 +632,6 @@
               addLog(`✅ Auth user created: ${admin.email}`, 'success');
             } catch (authError) {
               if (authError.code === 'auth/email-already-in-use') {
-                // Try to sign in to get the UID
                 try {
                   const signInCred = await signInWithEmailAndPassword(auth, admin.email, admin.password);
                   uid = signInCred.user.uid;
@@ -550,7 +651,6 @@
             uid = admin.email.replace(/[@.]/g, '_');
           }
 
-          // Save admin to Firestore
           const pdfPassword = generatePDFPassword(admin.email, 'premium');
           const watermark = generateWatermark(admin.email, 'premium');
 
@@ -578,7 +678,7 @@
         } catch (error) {
           addLog(`❌ Error uploading admin ${admin.email}: ${error.message}`, 'error');
         }
-        updateProgress(30 + (uploaded / admins.length) * 20);
+        updateProgress(20 + (uploaded / admins.length) * 15);
       }
       return uploaded;
     }
@@ -632,7 +732,7 @@
         } catch (error) {
           addLog(`❌ Error uploading license: ${error.message}`, 'error');
         }
-        updateProgress(50 + (uploaded / licenses.length) * 20);
+        updateProgress(35 + (uploaded / licenses.length) * 15);
       }
       return uploaded;
     }
@@ -672,9 +772,126 @@
         } catch (error) {
           addLog(`❌ Error creating order: ${error.message}`, 'error');
         }
-        updateProgress(70 + (uploaded / orderData.length) * 30);
+        updateProgress(50 + (uploaded / orderData.length) * 15);
       }
       return uploaded;
+    }
+
+    // ============================================
+    // UPLOAD PRODUCT STOCK (FORCE OVERWRITE)
+    // ============================================
+    async function uploadProductStock() {
+      try {
+        const stockRef = collection(db, "stock");
+        const snapshot = await getDocs(stockRef);
+        let docId = null;
+
+        if (!snapshot.empty) {
+          docId = snapshot.docs[0].id;
+          addLog(`⚠️ Stock collection exists. Will OVERWRITE it.`, 'warning');
+        }
+
+        const items = PRODUCT_STOCK_ITEMS.map(item => ({
+          id: item.id,
+          qty: item.qty
+        }));
+
+        if (docId) {
+          // Update existing document
+          await updateDoc(doc(db, "stock", docId), {
+            items: items,
+            updatedAt: new Date().toISOString()
+          });
+          addLog(`✅ Product stock UPDATED: ${items.length} items`, 'success');
+        } else {
+          // Create new document
+          await addDoc(collection(db, "stock"), {
+            items: items,
+            updatedAt: new Date().toISOString()
+          });
+          addLog(`✅ Product stock CREATED: ${items.length} items`, 'success');
+        }
+
+        // Also update localStorage for immediate sync
+        localStorage.setItem('peakStock', JSON.stringify(items));
+        addLog(`📦 Product stock saved to localStorage too`, 'info');
+
+        return items.length;
+      } catch (error) {
+        addLog(`❌ Error uploading product stock: ${error.message}`, 'error');
+        return 0;
+      }
+    }
+
+    // ============================================
+    // UPLOAD VARIANT STOCK (FORCE OVERWRITE)
+    // ============================================
+    async function uploadVariantStock() {
+      try {
+        const variantRef = collection(db, "variantStock");
+        const snapshot = await getDocs(variantRef);
+        let docId = null;
+
+        if (!snapshot.empty) {
+          docId = snapshot.docs[0].id;
+          addLog(`⚠️ Variant stock collection exists. Will OVERWRITE it.`, 'warning');
+        }
+
+        const data = { ...VARIANT_STOCK_DATA };
+
+        if (docId) {
+          await updateDoc(doc(db, "variantStock", docId), data);
+          addLog(`✅ Variant stock UPDATED: ${Object.keys(data).length} variants`, 'success');
+        } else {
+          await addDoc(collection(db, "variantStock"), data);
+          addLog(`✅ Variant stock CREATED: ${Object.keys(data).length} variants`, 'success');
+        }
+
+        // Also update localStorage for immediate sync
+        localStorage.setItem('variantStock', JSON.stringify(data));
+        addLog(`📦 Variant stock saved to localStorage too`, 'info');
+
+        return Object.keys(data).length;
+      } catch (error) {
+        addLog(`❌ Error uploading variant stock: ${error.message}`, 'error');
+        return 0;
+      }
+    }
+
+    // ============================================
+    // CLEAR STOCK
+    // ============================================
+    async function clearStock() {
+      if (!confirm('⚠️ Delete ALL stock data from Firebase?')) return;
+      if (!confirm('⚠️ ARE YOU ABSOLUTELY SURE?')) return;
+
+      try {
+        // Clear product stock
+        const stockRef = collection(db, "stock");
+        const stockSnap = await getDocs(stockRef);
+        for (const docSnap of stockSnap.docs) {
+          await deleteDoc(doc(db, "stock", docSnap.id));
+        }
+        addLog('🗑️ Product stock cleared from Firebase', 'info');
+
+        // Clear variant stock
+        const variantRef = collection(db, "variantStock");
+        const variantSnap = await getDocs(variantRef);
+        for (const docSnap of variantSnap.docs) {
+          await deleteDoc(doc(db, "variantStock", docSnap.id));
+        }
+        addLog('🗑️ Variant stock cleared from Firebase', 'info');
+
+        // Also clear localStorage
+        localStorage.removeItem('peakStock');
+        localStorage.removeItem('variantStock');
+        addLog('🗑️ Stock cleared from localStorage too', 'info');
+
+        showStatus('✅ Stock cleared from Firebase and localStorage', 'success');
+      } catch (error) {
+        addLog(`❌ Error clearing stock: ${error.message}`, 'error');
+        showStatus(`❌ Error: ${error.message}`, 'error');
+      }
     }
 
     // ============================================
@@ -688,6 +905,8 @@
         const usersSnap = await getDocs(collection(db, "users"));
         const licenseSnap = await getDocs(collection(db, "licenses"));
         const ordersSnap = await getDocs(collection(db, "orders"));
+        const stockSnap = await getDocs(collection(db, "stock"));
+        const variantSnap = await getDocs(collection(db, "variantStock"));
 
         let usersWithPDF = 0, usersWithWM = 0, adminCount = 0;
         usersSnap.forEach(d => {
@@ -704,6 +923,25 @@
           if (data.watermarkText) licensesWithWM++;
         });
 
+        let stockCount = 0, variantCount = 0;
+        let stockData = [];
+        if (!stockSnap.empty) {
+          const data = stockSnap.docs[0].data();
+          if (data.items) {
+            stockCount = data.items.length;
+            stockData = data.items;
+          }
+        }
+        if (!variantSnap.empty) {
+          const data = variantSnap.docs[0].data();
+          variantCount = Object.keys(data).filter(k => typeof data[k] === 'number').length;
+        }
+
+        let stockDetails = '';
+        if (stockData.length > 0) {
+          stockDetails = stockData.map(item => `  ${item.id}: ${item.qty}`).join('\n');
+        }
+
         const msg = `
 📊 Database Status:
 ─────────────────────────────
@@ -717,6 +955,11 @@
   ✅ With Watermark: ${licensesWithWM}
 
 📦 Orders: ${ordersSnap.size}
+📦 Product Stock Items: ${stockCount}
+📦 Variant Stock Items: ${variantCount}
+
+📋 Product Stock Details:
+${stockDetails || '  (none)'}
         `;
 
         addLog(msg, 'info');
@@ -742,9 +985,11 @@
         const adminCount = await uploadAdmins();
         const licenseCount = await uploadLicenses();
         const orderCount = await uploadOrders();
+        const stockCount = await uploadProductStock();
+        const variantCount = await uploadVariantStock();
 
-        addLog(`✅ Complete! ${userCount} users, ${adminCount} admins, ${licenseCount} licenses, ${orderCount} orders.`, 'success');
-        showStatus(`✅ Done! ${userCount} users, ${adminCount} admins, ${licenseCount} licenses, ${orderCount} orders.`, 'success');
+        addLog(`✅ Complete! ${userCount} users, ${adminCount} admins, ${licenseCount} licenses, ${orderCount} orders, ${stockCount} product stock items, ${variantCount} variant stock items.`, 'success');
+        showStatus(`✅ Done! ${userCount} users, ${adminCount} admins, ${licenseCount} licenses, ${orderCount} orders, ${stockCount} product stock items, ${variantCount} variant stock items.`, 'success');
         updateProgress(100);
       } catch (error) {
         addLog(`❌ Upload error: ${error.message}`, 'error');
@@ -798,6 +1043,28 @@
       setLoading(uploadOrdersBtn, false);
     });
 
+    uploadStockBtn.addEventListener('click', async () => {
+      setLoading(uploadStockBtn, true);
+      showStatus('⏳ Uploading product stock (FORCE OVERWRITE)...', 'loading');
+      updateProgress(0);
+      const count = await uploadProductStock();
+      showStatus(`✅ ${count} product stock items uploaded!`, 'success');
+      updateProgress(100);
+      setLoading(uploadStockBtn, false);
+    });
+
+    uploadVariantStockBtn.addEventListener('click', async () => {
+      setLoading(uploadVariantStockBtn, true);
+      showStatus('⏳ Uploading variant stock (FORCE OVERWRITE)...', 'loading');
+      updateProgress(0);
+      const count = await uploadVariantStock();
+      showStatus(`✅ ${count} variant stock items uploaded!`, 'success');
+      updateProgress(100);
+      setLoading(uploadVariantStockBtn, false);
+    });
+
+    clearStockBtn.addEventListener('click', clearStock);
+
     checkStatusBtn.addEventListener('click', checkStatus);
 
     clearLogsBtn.addEventListener('click', () => {
@@ -824,6 +1091,8 @@
 
     console.log('🚀 PEAK Store Firebase Uploader ready!');
     console.log('📌 Admin accounts: admin@peakstore.com / admin123');
+    console.log('📦 Stock data ready:', PRODUCT_STOCK_ITEMS.length, 'products,', Object.keys(VARIANT_STOCK_DATA).length, 'variants');
+    console.log('⚠️ This uploader FORCES overwrite of stock data');
   </script>
 </body>
 </html>

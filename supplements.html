@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PEAK · Performance</title>
-  <!-- Font Awesome 6 (free) -->
+  <title>Supplements · PEAK Performance</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     /* ----- reset & base ----- */
@@ -332,65 +331,6 @@
       text-decoration: line-through;
     }
 
-    .rating-block {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #1a1a1a;
-      padding: 8px 14px;
-      border-radius: 60px;
-      margin: 8px 0 14px;
-      border: 1px solid #282828;
-      flex-wrap: wrap;
-    }
-
-    .stars {
-      color: #f5b342;
-      font-size: 14px;
-      letter-spacing: 1px;
-    }
-
-    .stars span {
-      color: #b0b0b0;
-      font-weight: 400;
-      margin-left: 6px;
-      font-size: 13px;
-    }
-
-    .stock {
-      color: #ff7676;
-      font-weight: 600;
-      font-size: 14px;
-      background: #1f1a1a;
-      padding: 4px 14px;
-      border-radius: 40px;
-      border: 1px solid #3a2a2a;
-      transition: all 0.3s ease;
-    }
-
-    .stock.in-stock {
-      color: #6effb0 !important;
-      border-color: #2a4a2a;
-      background: #1a2a1a;
-    }
-
-    .stock.low-stock {
-      color: #f6ad55 !important;
-      border-color: #4a3a2a;
-      background: #2a2a1a;
-    }
-
-    .stock.out-of-stock {
-      color: #fc8181 !important;
-      border-color: #4a2a2a;
-      background: #2a1a1a;
-    }
-
-    .stock i {
-      margin-right: 5px;
-      font-size: 10px;
-    }
-
     /* ----- VARIANT SECTION ----- */
     .variant-section {
       background: #1a1a1a;
@@ -557,6 +497,65 @@
       color: #f0f0f0;
       min-width: 30px;
       text-align: center;
+    }
+
+    .rating-block {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1a1a1a;
+      padding: 8px 14px;
+      border-radius: 60px;
+      margin: 8px 0 14px;
+      border: 1px solid #282828;
+      flex-wrap: wrap;
+    }
+
+    .stars {
+      color: #f5b342;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
+    .stars span {
+      color: #b0b0b0;
+      font-weight: 400;
+      margin-left: 6px;
+      font-size: 13px;
+    }
+
+    .stock {
+      color: #ff7676;
+      font-weight: 600;
+      font-size: 14px;
+      background: #1f1a1a;
+      padding: 4px 14px;
+      border-radius: 40px;
+      border: 1px solid #3a2a2a;
+      transition: all 0.3s ease;
+    }
+
+    .stock.in-stock {
+      color: #6effb0 !important;
+      border-color: #2a4a2a;
+      background: #1a2a1a;
+    }
+
+    .stock.low-stock {
+      color: #f6ad55 !important;
+      border-color: #4a3a2a;
+      background: #2a2a1a;
+    }
+
+    .stock.out-of-stock {
+      color: #fc8181 !important;
+      border-color: #4a2a2a;
+      background: #2a1a1a;
+    }
+
+    .stock i {
+      margin-right: 5px;
+      font-size: 10px;
     }
 
     .btn-group {
@@ -1220,9 +1219,7 @@
   </style>
 </head>
 <body>
-
 <div class="container">
-
   <!-- brand bar -->
   <div class="brand-bar">
     <div class="brand-left">
@@ -1233,7 +1230,7 @@
     <div class="brand-tag"><i class="fas fa-bolt"></i> Performance Enhancing Drugs</div>
   </div>
 
-  <!-- Track Order Button (Top) -->
+  <!-- Track Order Button -->
   <div class="track-top">
     <a href="tracking.html" class="track-top-btn">
       <i class="fas fa-truck"></i> Track Order
@@ -1242,10 +1239,10 @@
 
   <!-- Category Navigation -->
   <div class="category-nav">
-    <a href="index.html" class="category-nav-btn active">
+    <a href="index.html" class="category-nav-btn">
       <i class="fas fa-th-large"></i> All Products
     </a>
-    <a href="supplements.html" class="category-nav-btn">
+    <a href="supplements.html" class="category-nav-btn active">
       <i class="fas fa-pills"></i> Supplements
     </a>
     <a href="peds.html" class="category-nav-btn">
@@ -1256,27 +1253,7 @@
     </a>
   </div>
 
-  <!-- section title -->
-  <div class="section-title">
-    <i class="fas fa-fire"></i> Shop Categories
-  </div>
-
-  <!-- ===== SUCCESS MESSAGE (hidden by default) ===== -->
-  <div class="order-success" id="orderSuccess">
-    <i class="fas fa-check-circle" style="color:#6effb0; font-size:40px;"></i>
-    <h3 style="color:#6effb0; margin-top:8px;">Order Placed! 🎉</h3>
-    <p style="color:#b0b0b0; font-size:14px;">Your order has been received. Here's your Order ID:</p>
-    <div class="order-id" id="successOrderId">ORD-XXXXXX</div>
-    <button class="copy-btn" onclick="copyOrderId()"><i class="fas fa-copy"></i> Copy Order ID</button>
-    <p style="color:#8a8a8a; font-size:13px; margin-top:12px;">
-      <i class="fas fa-info-circle"></i> Use this ID to <strong style="color:#b0b0b0;">track your order</strong>.
-    </p>
-    <div class="status-badge" id="successStatus">⏳ Pending</div>
-  </div>
-
-  <!-- ================================================================ -->
-  <!-- ===================== SUPPLEMENTS SECTION ===================== -->
-  <!-- ================================================================ -->
+  <!-- Supplements Category Header -->
   <div class="category-header">
     <div class="cat-icon"><i class="fas fa-pills"></i></div>
     <h2>Supplements</h2>
@@ -1496,504 +1473,7 @@
       <span class="highlight"> "Insane energy!"</span> — Chris
     </div>
   </div>
-
-  <!-- ================================================================ -->
-  <!-- ======================= PED's SECTION ======================== -->
-  <!-- ================================================================ -->
-  <div class="category-header">
-    <div class="cat-icon"><i class="fas fa-syringe"></i></div>
-    <h2>PED's</h2>
-    <span class="cat-badge">Peptides · Gears</span>
-  </div>
-
-  <!-- ===== PRODUCT: CJC-1295 + Ipamorelin (WITH VARIANTS) ===== -->
-<div class="product" data-product="cjc" data-stock-id="stock1">
-  <div class="product-img">
-    <img src="images/cjc-1295.jpg" alt="CJC-1295 no DAC + Ipamorelin" onerror="this.src='https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=600&h=600&fit=crop&crop=center'">
-    <span class="badge" id="badgeCjc"><i class="fas fa-fire" style="margin-right:4px;"></i>BEST SELLER</span>
-  </div>
-  <h3>CJC-1295 no DAC + Ipamorelin</h3>
-  <div class="desc"><i class="fas fa-syringe"></i> Peptide blend · GH release · anti-aging</div>
-
-  <!-- VARIANT SELECTOR -->
-  <div class="variant-section">
-    <div class="variant-label"><i class="fas fa-box"></i> Select Dosage</div>
-    <div class="variant-options" data-product="cjc">
-      <button class="variant-btn active" data-variant-id="cjc-10mg" data-price="2150" data-old-price="2800" onclick="selectVariant('cjc', this)">
-        <span class="variant-label-text">CJC-1295 + Ipamorelin 10mg</span>
-        <span class="variant-stock-badge" id="stock-badge-cjc-10mg">(Loading...)</span>
-      </button>
-    </div>
-  </div>
-
-  <div class="price-row">
-    <span class="price" id="priceCJC">₱2,150</span>
-    <span class="price-old" id="oldPriceCJC">₱2,800</span>
-  </div>
-
-  <div class="quantity-section">
-    <span class="qty-label"><i class="fas fa-shopping-cart"></i> Quantity</span>
-    <div class="quantity-control">
-      <button class="qty-btn" data-action="decrease" data-product="cjc">−</button>
-      <span class="qty-number" id="qtyCjc">1</span>
-      <button class="qty-btn" data-action="increase" data-product="cjc">+</button>
-    </div>
-  </div>
-
-  <div class="variant-info">
-    Selected: <span class="selected-variant" id="variantDisplayCjc">CJC-1295 + Ipamorelin 10mg</span>
-    <span class="variant-stock-info in-stock-info" id="variantStockDisplayCjc">Loading...</span>
-  </div>
-
-  <div class="rating-block">
-    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> <span>128 sold</span></div>
-    <div class="stock" id="stock1"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
-  </div>
-
-  <div class="btn-group">
-    <button class="btn btn-buy" id="buyBtnCjc" onclick="openCheckoutModal('cjc', 'CJC-1295 no DAC + Ipamorelin', 'images/cjc-1295.jpg')">
-      <i class="fas fa-bag-shopping"></i> Buy Now
-    </button>
-    <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-      <i class="fab fa-instagram"></i> Order via Instagram
-    </a>
-  </div>
-
-  <div class="reviews">
-    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-    <span class="highlight"> "Great results!"</span> — Mark
-  </div>
-</div>
-
-  <!-- ===== PRODUCT: BPC-157 (WITH VARIANTS) ===== -->
-  <div class="product" data-product="bpc" data-stock-id="stockBPC">
-    <div class="product-img">
-      <img src="images/bpc157.jpg" alt="BPC-157" onerror="this.src='https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=600&h=600&fit=crop&crop=center'">
-      <span class="badge" id="badgeBpc"><i class="fas fa-flask" style="margin-right:4px;"></i> HEALING</span>
-    </div>
-    <h3>BPC-157</h3>
-    <div class="desc"><i class="fas fa-flask"></i> Healing peptide · gut health · recovery</div>
-
-    <!-- VARIANT SELECTOR -->
-    <div class="variant-section">
-      <div class="variant-label"><i class="fas fa-box"></i> Select Dosage</div>
-      <div class="variant-options" data-product="bpc">
-        <button class="variant-btn active" data-variant-id="bpc-10mg" data-price="1200" data-old-price="1850" onclick="selectVariant('bpc', this)">
-          <span class="variant-label-text">BPC-157 10mg</span>
-          <span class="variant-stock-badge" id="stock-badge-bpc-10mg">(Loading...)</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="price-row">
-      <span class="price" id="priceBPC">₱1,200</span>
-      <span class="price-old" id="oldPriceBPC">₱1,850</span>
-    </div>
-
-    <div class="quantity-section">
-      <span class="qty-label"><i class="fas fa-shopping-cart"></i> Quantity</span>
-      <div class="quantity-control">
-        <button class="qty-btn" data-action="decrease" data-product="bpc">−</button>
-        <span class="qty-number" id="qtyBpc">1</span>
-        <button class="qty-btn" data-action="increase" data-product="bpc">+</button>
-      </div>
-    </div>
-
-    <div class="variant-info">
-      Selected: <span class="selected-variant" id="variantDisplayBpc">BPC-157 10mg</span>
-      <span class="variant-stock-info in-stock-info" id="variantStockDisplayBpc">Loading...</span>
-    </div>
-
-    <div class="rating-block">
-      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>96 sold</span></div>
-      <div class="stock" id="stockBPC"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
-    </div>
-
-    <div class="btn-group">
-      <button class="btn btn-buy" id="buyBtnBpc" onclick="openCheckoutModal('bpc', 'BPC-157 Peptide', 'images/bpc157.jpg')">
-        <i class="fas fa-bag-shopping"></i> Buy Now
-      </button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
-    </div>
-
-    <div class="reviews">
-      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-      <span class="highlight"> "Healed my injury!"</span> — Paul
-    </div>
-  </div>
-
-  <!-- ===== PRODUCT: TB-500 (WITH VARIANTS) ===== -->
-  <div class="product" data-product="tb" data-stock-id="stockTB">
-    <div class="product-img">
-      <img src="images/tb500.jpg" alt="TB-500" onerror="this.src='https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=600&h=600&fit=crop&crop=center'">
-      <span class="badge" id="badgeTb"><i class="fas fa-heartbeat" style="margin-right:4px;"></i> REPAIR</span>
-    </div>
-    <h3>TB-500</h3>
-    <div class="desc"><i class="fas fa-heartbeat"></i> Tissue repair · inflammation · recovery</div>
-
-    <!-- VARIANT SELECTOR -->
-    <div class="variant-section">
-      <div class="variant-label"><i class="fas fa-box"></i> Select Dosage</div>
-      <div class="variant-options" data-product="tb">
-        <button class="variant-btn active" data-variant-id="tb-10mg" data-price="2199" data-old-price="2900" onclick="selectVariant('tb', this)">
-          <span class="variant-label-text">TB-500 10mg</span>
-          <span class="variant-stock-badge" id="stock-badge-tb-10mg">(Loading...)</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="price-row">
-      <span class="price" id="priceTB">₱2,199</span>
-      <span class="price-old" id="oldPriceTB">₱2,900</span>
-    </div>
-
-    <div class="quantity-section">
-      <span class="qty-label"><i class="fas fa-shopping-cart"></i> Quantity</span>
-      <div class="quantity-control">
-        <button class="qty-btn" data-action="decrease" data-product="tb">−</button>
-        <span class="qty-number" id="qtyTb">1</span>
-        <button class="qty-btn" data-action="increase" data-product="tb">+</button>
-      </div>
-    </div>
-
-    <div class="variant-info">
-      Selected: <span class="selected-variant" id="variantDisplayTb">TB-500 10mg</span>
-      <span class="variant-stock-info in-stock-info" id="variantStockDisplayTb">Loading...</span>
-    </div>
-
-    <div class="rating-block">
-      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>73 sold</span></div>
-      <div class="stock" id="stockTB"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
-    </div>
-
-    <div class="btn-group">
-      <button class="btn btn-buy" id="buyBtnTb" onclick="openCheckoutModal('tb', 'TB-500 Peptide', 'images/tb500.jpg')">
-        <i class="fas fa-bag-shopping"></i> Buy Now
-      </button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
-    </div>
-
-    <div class="reviews">
-      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-      <span class="highlight"> "Fast recovery!"</span> — Alex
-    </div>
-  </div>
-
-  <!-- ===== PRODUCT: GHK-Cu (WITH VARIANTS) ===== -->
-  <div class="product" data-product="ghkcu" data-stock-id="stockGhkcu">
-    <div class="product-img">
-      <img src="images/ghkcu.jpg" alt="GHK-Cu" onerror="this.src='https://images.unsplash.com/photo-1584735935682-2f2b69d1b4b0?w=600&h=600&fit=crop&crop=center'">
-      <span class="badge" id="badgeGhkcu"><i class="fas fa-leaf" style="margin-right:4px;"></i>NEW</span>
-    </div>
-    <h3>GHK-Cu</h3>
-    <div class="desc"><i class="fas fa-heart"></i> Copper peptide · skin repair · anti-aging · wound healing</div>
-
-    <!-- VARIANT SELECTOR -->
-    <div class="variant-section">
-      <div class="variant-label"><i class="fas fa-box"></i> Select Dosage</div>
-      <div class="variant-options" data-product="ghkcu">
-        <button class="variant-btn active" data-variant-id="ghkcu-50mg" data-price="750" data-old-price="880" onclick="selectVariant('ghkcu', this)">
-          <span class="variant-label-text">GHK-Cu 50mg</span>
-          <span class="variant-stock-badge" id="stock-badge-ghkcu-50mg">(Loading...)</span>
-        </button>
-        <button class="variant-btn" data-variant-id="ghkcu-100mg" data-price="1150" data-old-price="1650" onclick="selectVariant('ghkcu', this)">
-          <span class="variant-label-text">GHK-Cu 100mg</span>
-          <span class="variant-stock-badge" id="stock-badge-ghkcu-100mg">(Loading...)</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="price-row">
-      <span class="price" id="priceGhkcu">₱750</span>
-      <span class="price-old" id="oldPriceGhkcu">₱880</span>
-    </div>
-
-    <div class="quantity-section">
-      <span class="qty-label"><i class="fas fa-shopping-cart"></i> Quantity</span>
-      <div class="quantity-control">
-        <button class="qty-btn" data-action="decrease" data-product="ghkcu">−</button>
-        <span class="qty-number" id="qtyGhkcu">1</span>
-        <button class="qty-btn" data-action="increase" data-product="ghkcu">+</button>
-      </div>
-    </div>
-
-    <div class="variant-info">
-      Selected: <span class="selected-variant" id="variantDisplayGhkcu">GHK-Cu 50mg</span>
-      <span class="variant-stock-info in-stock-info" id="variantStockDisplayGhkcu">Loading...</span>
-    </div>
-
-    <div class="rating-block">
-      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>67 sold</span></div>
-      <div class="stock" id="stockGhkcu"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
-    </div>
-
-    <div class="btn-group">
-      <button class="btn btn-buy" id="buyBtnGhkcu" onclick="openCheckoutModal('ghkcu', 'GHK-Cu', 'images/ghkcu.jpg')">
-        <i class="fas fa-bag-shopping"></i> Buy Now
-      </button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
-    </div>
-
-    <div class="reviews">
-      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-      <span class="highlight"> "Great recovery!"</span> — Mike
-    </div>
-  </div>
-
-  <!-- ===== PRODUCT: MOTS-c (WITH VARIANTS) ===== -->
-  <div class="product" data-product="motsc" data-stock-id="stockMotsc">
-    <div class="product-img">
-      <img src="images/motsc.jpg" alt="MOTS-c" onerror="this.src='https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=600&h=600&fit=crop&crop=center'">
-      <span class="badge" id="badgeMotsc"><i class="fas fa-star" style="margin-right:4px;"></i>NEW</span>
-    </div>
-    <h3>MOTS-c</h3>
-    <div class="desc"><i class="fas fa-syringe"></i> Mitochondrial peptide · fat loss · energy · longevity</div>
-
-    <!-- VARIANT SELECTOR -->
-    <div class="variant-section">
-      <div class="variant-label"><i class="fas fa-box"></i> Select Dosage</div>
-      <div class="variant-options" data-product="motsc">
-        <button class="variant-btn active" data-variant-id="motsc-10mg" data-price="1150" data-old-price="1850" onclick="selectVariant('motsc', this)">
-          <span class="variant-label-text">MOTS-c 10mg</span>
-          <span class="variant-stock-badge" id="stock-badge-motsc-10mg">(Loading...)</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="price-row">
-      <span class="price" id="priceMotsc">₱1,150</span>
-      <span class="price-old" id="oldPriceMotsc">₱1,850</span>
-    </div>
-
-    <div class="quantity-section">
-      <span class="qty-label"><i class="fas fa-shopping-cart"></i> Quantity</span>
-      <div class="quantity-control">
-        <button class="qty-btn" data-action="decrease" data-product="motsc">−</button>
-        <span class="qty-number" id="qtyMotsc">1</span>
-        <button class="qty-btn" data-action="increase" data-product="motsc">+</button>
-      </div>
-    </div>
-
-    <div class="variant-info">
-      Selected: <span class="selected-variant" id="variantDisplayMotsc">MOTS-c 10mg</span>
-      <span class="variant-stock-info in-stock-info" id="variantStockDisplayMotsc">Loading...</span>
-    </div>
-
-    <div class="rating-block">
-      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>45 sold</span></div>
-      <div class="stock" id="stockMotsc"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
-    </div>
-
-    <div class="btn-group">
-      <button class="btn btn-buy" id="buyBtnMotsc" onclick="openCheckoutModal('motsc', 'MOTS-c', 'images/motsc.jpg')">
-        <i class="fas fa-bag-shopping"></i> Buy Now
-      </button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
-    </div>
-
-    <div class="reviews">
-      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-      <span class="highlight"> "Age reversal!"</span> — David
-    </div>
-  </div>
-
-  <!-- ===== PRODUCT: Tesamorelin (WITH VARIANTS) ===== -->
-  <div class="product" data-product="tesamorelin" data-stock-id="stockTesamorelin">
-    <div class="product-img">
-      <img src="images/tesa.jpg" alt="Tesamorelin" onerror="this.src='https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=600&h=600&fit=crop&crop=center'">
-      <span class="badge" id="badgeTesamorelin"><i class="fas fa-bolt" style="margin-right:4px;"></i>POWER</span>
-    </div>
-    <h3>Tesamorelin</h3>
-    <div class="desc"><i class="fas fa-syringe"></i> GH release · fat reduction · muscle growth · anti-aging</div>
-
-    <!-- VARIANT SELECTOR -->
-    <div class="variant-section">
-      <div class="variant-label"><i class="fas fa-box"></i> Select Dosage</div>
-      <div class="variant-options" data-product="tesamorelin">
-        <button class="variant-btn active" data-variant-id="tesa-10mg" data-price="2550" data-old-price="3299" onclick="selectVariant('tesamorelin', this)">
-          <span class="variant-label-text">Tesamorelin 10mg</span>
-          <span class="variant-stock-badge" id="stock-badge-tesa-10mg">(Loading...)</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="price-row">
-      <span class="price" id="priceTesamorelin">₱2,550</span>
-      <span class="price-old" id="oldPriceTesamorelin">₱3,299</span>
-    </div>
-
-    <div class="quantity-section">
-      <span class="qty-label"><i class="fas fa-shopping-cart"></i> Quantity</span>
-      <div class="quantity-control">
-        <button class="qty-btn" data-action="decrease" data-product="tesamorelin">−</button>
-        <span class="qty-number" id="qtyTesamorelin">1</span>
-        <button class="qty-btn" data-action="increase" data-product="tesamorelin">+</button>
-      </div>
-    </div>
-
-    <div class="variant-info">
-      Selected: <span class="selected-variant" id="variantDisplayTesamorelin">Tesamorelin 10mg</span>
-      <span class="variant-stock-info in-stock-info" id="variantStockDisplayTesamorelin">Loading...</span>
-    </div>
-
-    <div class="rating-block">
-      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>52 sold</span></div>
-      <div class="stock" id="stockTesamorelin"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
-    </div>
-
-    <div class="btn-group">
-      <button class="btn btn-buy" id="buyBtnTesamorelin" onclick="openCheckoutModal('tesamorelin', 'Tesamorelin', 'images/tesa.jpg')">
-        <i class="fas fa-bag-shopping"></i> Buy Now
-      </button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
-    </div>
-
-    <div class="reviews">
-      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-      <span class="highlight"> "Amazing results!"</span> — Jake
-    </div>
-  </div>
-
-  <!-- ===== PRODUCT: Oral Dbol-10 (WITH VARIANTS) ===== -->
-  <div class="product" data-product="dbol" data-stock-id="stockDbol">
-    <div class="product-img">
-      <img src="images/dbol.jpg" alt="Oral Dbol-10" onerror="this.src='https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&h=600&fit=crop&crop=center'">
-      <span class="badge" id="badgeDbol"><i class="fas fa-fire" style="margin-right:4px;"></i>BEST SELLER</span>
-    </div>
-    <h3>Oral Dbol-10</h3>
-    <div class="desc"><i class="fas fa-bolt"></i> Muscle mass · strength gains · nitrogen retention · performance</div>
-
-    <!-- VARIANT SELECTOR -->
-    <div class="variant-section">
-      <div class="variant-label"><i class="fas fa-box"></i> Select Quantity</div>
-      <div class="variant-options" data-product="dbol">
-      <button class="variant-btn active" data-variant-id="dbol-20tabs" data-price="450" data-old-price="600" onclick="selectVariant('dbol', this)">
-          <span class="variant-label-text">Dbol-10 20 tablets</span>
-          <span class="variant-stock-badge" id="stock-badge-dbol-20tabs">(Loading...)</span>
-        </button>
-        <button class="variant-btn" data-variant-id="dbol-50tabs" data-price="750" data-old-price="980" onclick="selectVariant('dbol', this)">
-          <span class="variant-label-text">Dbol-10 50 tablets</span>
-          <span class="variant-stock-badge" id="stock-badge-dbol-50tabs">(Loading...)</span>
-        </button>
-        <button class="variant-btn" data-variant-id="dbol-100tabs" data-price="1250" data-old-price="1950" onclick="selectVariant('dbol', this)">
-          <span class="variant-label-text">Dbol-10 100 tablets</span>
-          <span class="variant-stock-badge" id="stock-badge-dbol-100tabs">(Loading...)</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="price-row">
-      <span class="price" id="priceDbol">₱450</span>
-      <span class="price-old" id="oldPriceDbol">₱600</span>
-    </div>
-
-    <div class="quantity-section">
-      <span class="qty-label"><i class="fas fa-shopping-cart"></i> Quantity</span>
-      <div class="quantity-control">
-        <button class="qty-btn" data-action="decrease" data-product="dbol">−</button>
-        <span class="qty-number" id="qtyDbol">1</span>
-        <button class="qty-btn" data-action="increase" data-product="dbol">+</button>
-      </div>
-    </div>
-
-    <div class="variant-info">
-      Selected: <span class="selected-variant" id="variantDisplayDbol">Dbol-10 20 tablets</span>
-      <span class="variant-stock-info in-stock-info" id="variantStockDisplayDbol">Loading...</span>
-    </div>
-
-    <div class="rating-block">
-      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>156 sold</span></div>
-      <div class="stock" id="stockDbol"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
-    </div>
-
-    <div class="btn-group">
-      <button class="btn btn-buy" id="buyBtnDbol" onclick="openCheckoutModal('dbol', 'Oral Dbol-10', 'images/dbol.jpg')">
-        <i class="fas fa-bag-shopping"></i> Buy Now
-      </button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
-    </div>
-
-    <div class="reviews">
-      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-      <span class="highlight"> "Huge strength and mass gains!"</span> — Mike
-    </div>
-  </div>
-
-  <!-- ===== PRODUCT: Anavar 50 (WITH VARIANTS) ===== -->
-  <div class="product" data-product="anavar" data-stock-id="stockAnavar">
-    <div class="product-img">
-      <img src="images/anavar.jpg" alt="Anavar 50" onerror="this.src='https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&h=600&fit=crop&crop=center'">
-      <span class="badge" id="badgeAnavar"><i class="fas fa-fire" style="margin-right:4px;"></i>TOP RATED</span>
-    </div>
-    <h3>Anavar 50</h3>
-    <div class="desc"><i class="fas fa-bolt"></i> Lean muscle · fat loss · strength · vascularity · cutting cycles</div>
-
-    <!-- VARIANT SELECTOR -->
-    <div class="variant-section">
-      <div class="variant-label"><i class="fas fa-box"></i> Select Quantity</div>
-      <div class="variant-options" data-product="anavar">
-        <button class="variant-btn active" data-variant-id="anavar-50tabs" data-price="2550" data-old-price="3200" onclick="selectVariant('anavar', this)">
-          <span class="variant-label-text">Anavar 50 tablets</span>
-          <span class="variant-stock-badge" id="stock-badge-anavar-50tabs">(Loading...)</span>
-        </button>
-        <button class="variant-btn" data-variant-id="anavar-100tabs" data-price="4500" data-old-price="5800" onclick="selectVariant('anavar', this)">
-          <span class="variant-label-text">Anavar 100 tablets</span>
-          <span class="variant-stock-badge" id="stock-badge-anavar-100tabs">(Loading...)</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="price-row">
-      <span class="price" id="priceAnavar">₱2,550</span>
-      <span class="price-old" id="oldPriceAnavar">₱3,200</span>
-    </div>
-
-    <div class="quantity-section">
-      <span class="qty-label"><i class="fas fa-shopping-cart"></i> Quantity</span>
-      <div class="quantity-control">
-        <button class="qty-btn" data-action="decrease" data-product="anavar">−</button>
-        <span class="qty-number" id="qtyAnavar">1</span>
-        <button class="qty-btn" data-action="increase" data-product="anavar">+</button>
-      </div>
-    </div>
-
-    <div class="variant-info">
-      Selected: <span class="selected-variant" id="variantDisplayAnavar">Anavar 50 tablets</span>
-      <span class="variant-stock-info in-stock-info" id="variantStockDisplayAnavar">Loading...</span>
-    </div>
-
-    <div class="rating-block">
-      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>98 sold</span></div>
-      <div class="stock" id="stockAnavar"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
-    </div>
-
-    <div class="btn-group">
-      <button class="btn btn-buy" id="buyBtnAnavar" onclick="openCheckoutModal('anavar', 'Anavar 50', 'images/anavar.jpg')">
-        <i class="fas fa-bag-shopping"></i> Buy Now
-      </button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
-    </div>
-
-    <div class="reviews">
-      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-      <span class="highlight"> "Shredded and stronger than ever!"</span> — Chris
-    </div>
-  </div>
-
+  
   <!-- ===== SUCCESS MESSAGE (hidden by default) ===== -->
   <div class="order-success" id="orderSuccess">
     <i class="fas fa-check-circle" style="color:#6effb0; font-size:40px;"></i>
@@ -2104,229 +1584,9 @@
   </div>
 </div>
 
-  <!-- ================================================================ -->
-  <!-- ==================== HEALTH SUPPORT SECTION ==================== -->
-  <!-- ================================================================ -->
-  <div class="category-header">
-    <div class="cat-icon"><i class="fas fa-capsules"></i></div>
-    <h2>Health Support</h2>
-    <span class="cat-badge">New Arrivals</span>
-  </div>
-
-  <!-- ===== PRODUCT: Fish Oil ===== -->
-  <div class="product" data-product="fishoil" data-stock-id="stockFishOil">
-    <div class="product-img">
-      <img src="images/fish-oil.jpg" alt="Omega-3 Fish Oil" onerror="this.src='https://images.unsplash.com/photo-1584483766114-2cea6facdf57?w=600&h=600&fit=crop&crop=center'">
-      <span class="badge" id="badgeFishOil"><i class="fas fa-heartbeat" style="margin-right:4px;"></i>TOP RATED</span>
-    </div>
-    <h3>Omega-3 Fish Oil</h3>
-    <div class="desc"><i class="fas fa-brain"></i> Heart health · brain function · inflammation</div>
-    <div class="price-row">
-      <span class="price" id="priceFishOil">₱380</span>
-      <span class="price-old" id="oldPriceFishOil">₱420</span>
-    </div>
-    <div class="rating-block">
-      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>112 sold</span></div>
-      <div class="stock" id="stockFishOil"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
-    </div>
-    <div class="btn-group">
-      <button class="btn btn-buy" id="buyBtnFishOil" onclick="openCheckoutModal('fishoil', 'Omega-3 Fish Oil', 'images/fish-oil.jpg')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
-    </div>
-    <div class="reviews">
-      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-      <span class="highlight"> "Joint pain gone!"</span> — Sarah
-    </div>
-  </div>
-
-  <!-- ===== PRODUCT: Calcium Magnesium Zinc + D3 ===== -->
-  <div class="product" data-product="calmagzinc" data-stock-id="stockCalMagZinc">
-    <div class="product-img">
-      <img src="images/cal-mag-zinc.jpg" alt="Calcium Magnesium Zinc + D3" onerror="this.src='https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&h=600&fit=crop&crop=center'">
-      <span class="badge" id="badgeCalMagZinc"><i class="fas fa-star" style="margin-right:4px;"></i>TOP RATED</span>
-    </div>
-    <h3>Calcium Magnesium Zinc + D3</h3>
-    <div class="desc"><i class="fas fa-bone"></i> Bone health · immune support · muscle function · sleep</div>
-    <div class="price-row">
-      <span class="price" id="priceCalMagZinc">₱300</span>
-      <span class="price-old" id="oldPriceCalMagZinc">₱395</span>
-    </div>
-    <div class="rating-block">
-      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>89 sold</span></div>
-      <div class="stock" id="stockCalMagZinc"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
-    </div>
-    <div class="btn-group">
-      <button class="btn btn-buy" id="buyBtnCalMagZinc" onclick="openCheckoutModal('calmagzinc', 'Calcium Magnesium Zinc + D3', 'images/cal-mag-zinc.jpg')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
-    </div>
-    <div class="reviews">
-      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-      <span class="highlight"> "Better sleep and stronger bones!"</span> — Maria
-    </div>
-  </div>
-
-  <!-- ===== PRODUCT: Coenzyme Q10 ===== -->
-  <div class="product" data-product="coq10" data-stock-id="stockCoQ10">
-    <div class="product-img">
-      <img src="images/coq10.jpg" alt="Coenzyme Q10" onerror="this.src='https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&h=600&fit=crop&crop=center'">
-      <span class="badge" id="badgeCoQ10"><i class="fas fa-heart" style="margin-right:4px;"></i>HEART HEALTH</span>
-    </div>
-    <h3>Coenzyme Q10</h3>
-    <div class="desc"><i class="fas fa-heartbeat"></i> Heart health · energy production · antioxidant · cellular health</div>
-    <div class="price-row">
-      <span class="price" id="priceCoQ10">₱300</span>
-      <span class="price-old" id="oldPriceCoQ10">₱420</span>
-    </div>
-    <div class="rating-block">
-      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>76 sold</span></div>
-      <div class="stock" id="stockCoQ10"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
-    </div>
-    <div class="btn-group">
-      <button class="btn btn-buy" id="buyBtnCoQ10" onclick="openCheckoutModal('coq10', 'Coenzyme Q10', 'images/coq10.jpg')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
-    </div>
-    <div class="reviews">
-      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-      <span class="highlight"> "More energy and better heart health!"</span> — Robert
-    </div>
-  </div>
-
-  <!-- ===== PRODUCT: Milk Thistle Liver Support ===== -->
-  <div class="product" data-product="milkthistle" data-stock-id="stockMilkThistle">
-    <div class="product-img">
-      <img src="images/milk-thistle.jpg" alt="Milk Thistle Liver Support" onerror="this.src='https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&h=600&fit=crop&crop=center'">
-      <span class="badge" id="badgeMilkThistle"><i class="fas fa-leaf" style="margin-right:4px;"></i>LIVER HEALTH</span>
-    </div>
-    <h3>Milk Thistle Liver Support</h3>
-    <div class="desc"><i class="fas fa-liver"></i> Liver detox · antioxidant · digestive health · skin support</div>
-    <div class="price-row">
-      <span class="price" id="priceMilkThistle">₱420</span>
-      <span class="price-old" id="oldPriceMilkThistle">₱550</span>
-    </div>
-    <div class="rating-block">
-      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>64 sold</span></div>
-      <div class="stock" id="stockMilkThistle"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
-    </div>
-    <div class="btn-group">
-      <button class="btn btn-buy" id="buyBtnMilkThistle" onclick="openCheckoutModal('milkthistle', 'Milk Thistle Liver Support', 'images/milk-thistle.jpg')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
-    </div>
-    <div class="reviews">
-      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-      <span class="highlight"> "Great for detox and overall health!"</span> — John
-    </div>
-  </div>
-
-  <!-- trust badges -->
-  <div class="trust-badges">
-    <span><i class="fas fa-truck"></i> 3-7 days delivery</span>
-    <span><i class="fas fa-shield-alt"></i> 100+ customers</span>
-    <span><i class="fas fa-credit-card"></i> COD available</span>
-  </div>
-
-</div>
-
-<!-- ================================================================ -->
-<!-- CHECKOUT MODAL -->
-<!-- ================================================================ -->
-<div class="checkout-overlay" id="checkoutModal">
-  <div class="checkout-modal">
-    <div class="modal-header">
-      <h3><i class="fas fa-edit"></i> Checkout</h3>
-      <button class="modal-close" onclick="closeCheckoutModal()"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="modal-body">
-      <!-- Product Summary -->
-      <div class="product-summary">
-        <img id="checkoutProductImage" src="" alt="Product">
-        <div class="info">
-          <div class="name" id="checkoutProductName">Product Name</div>
-          <div class="variant-detail" id="checkoutVariantDetail">Variant: -</div>
-          <div class="price-details">
-            <span class="original" id="checkoutOriginalPrice">₱0</span>
-            <span class="discounted" id="checkoutDiscountedPrice">₱0</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Discount Code Section -->
-      <div class="discount-section">
-        <input type="text" id="discountCodeInput" placeholder="Enter Discount Code" maxlength="20" />
-        <button class="btn-apply" id="applyDiscountBtn">Apply</button>
-        <button class="btn-remove" id="removeDiscountBtn" style="display:none;">Remove</button>
-      </div>
-      <div id="discountFeedback" class="discount-feedback"></div>
-      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:4px;">
-        <div class="discount-applied-badge" id="discountAppliedBadge">
-          <i class="fas fa-check-circle"></i> <span id="discountBadgeText">Discount Applied</span>
-        </div>
-        <div class="discount-used-badge" id="discountUsedBadge">
-          <i class="fas fa-info-circle"></i> Already Used
-        </div>
-      </div>
-
-      <!-- Used Codes List -->
-      <div class="used-codes-list" id="usedCodesList">
-        <span class="label-text"><i class="fas fa-history"></i> Used Discount Codes:</span>
-        <div id="usedCodesContainer"></div>
-      </div>
-
-      <!-- Shipping Info -->
-      <div class="input-group">
-        <label><i class="fas fa-user"></i> Full Name</label>
-        <input type="text" id="checkoutName" placeholder="Enter your full name">
-      </div>
-
-      <div class="input-group">
-        <label><i class="fas fa-map-pin"></i> Address</label>
-        <textarea id="checkoutAddress" placeholder="House #, Street, Barangay, City, Province" rows="2"></textarea>
-      </div>
-
-      <div class="input-group">
-        <label><i class="fas fa-phone"></i> Phone Number</label>
-        <input type="text" id="checkoutPhone" placeholder="09XX XXX XXXX">
-      </div>
-
-      <!-- Order Total -->
-      <div class="order-total">
-        <span class="total-label">Total</span>
-        <span class="total-price" id="checkoutTotalPrice">₱0</span>
-      </div>
-
-      <!-- Payment Info -->
-      <div class="payment-info">
-        <i class="fas fa-coins"></i>
-        <div class="details">
-          <div class="label">💳 Send payment to:</div>
-          <div class="number">09691348416</div>
-          <div class="note">PayMaya · Include your Order ID</div>
-        </div>
-      </div>
-
-      <!-- Place Order Button -->
-      <button class="btn-place-order" id="checkoutPlaceOrderBtn">
-        <i class="fas fa-check-circle"></i> Place Order
-      </button>
-
-      <div class="instagram-note">
-        <i class="fab fa-instagram"></i> After placing order, DM us your payment proof
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== FIREBASE + MAIN APP ===== -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, query, where, onSnapshot, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, query, where, onSnapshot, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCtkKzMB3ogRwwq4OIEaF9oICuV_n25xkY",
@@ -2355,18 +1615,6 @@
     'pre-30fruitpunch': '30 Servings (Fruit Punch)',
     'pre-30grape': '30 Servings (Grape)',
     'pre-30icy': '30 Servings (Icy Blue Razz)',
-    'cjc-10mg': 'CJC-1295 + Ipamorelin 10mg',
-    'bpc-10mg': 'BPC-157 10mg',
-    'tb-10mg': 'TB-500 10mg',
-    'ghkcu-50mg': 'GHK-Cu 50mg',
-    'ghkcu-100mg': 'GHK-Cu 100mg',
-    'motsc-10mg': 'MOTS-c 10mg',
-    'tesa-10mg': 'Tesamorelin 10mg',
-    'dbol-20tabs': 'Dbol-10 20 tablets',
-    'dbol-50tabs': 'Dbol-10 50 tablets',
-    'dbol-100tabs': 'Dbol-10 100 tablets',
-    'anavar-50tabs': 'Anavar 50 tablets',
-    'anavar-100tabs': 'Anavar 100 tablets',
     'promaxchoco-1lb': 'Chocolate 1lb',
   };
 
@@ -2443,18 +1691,6 @@
           'pre-30fruitpunch': 3,
           'pre-30grape': 2,
           'pre-30icy': 0,
-          'cjc-10mg': 3,
-          'bpc-10mg': 3,
-          'tb-10mg': 3,
-          'ghkcu-50mg': 3,
-          'ghkcu-100mg': 3,
-          'motsc-10mg': 3,
-          'tesa-10mg': 3,
-          'dbol-20tabs': 3,
-          'dbol-50tabs': 3,
-          'dbol-100tabs': 3,
-          'anavar-50tabs': 3,
-          'anavar-100tabs': 3,
           'promaxchoco-1lb': 6,
         };
         variantStockData = { ...defaults };
@@ -2478,17 +1714,6 @@
         'pre-30fruitpunch': 3,
         'pre-30grape': 2,
         'pre-30icy': 0,
-        'cjc-10mg': 3,
-        'bpc-10mg': 3,
-        'tb-10mg': 3,
-        'ghkcu-50mg': 3,
-        'ghkcu-100mg': 3,
-        'motsc-10mg': 3,
-        'tesa-10mg': 3,
-        'dbol-20tabs': 3,
-        'dbol-50tabs': 3,
-        'dbol-100tabs': 3,
-        'anavar-100tabs': 3,
         'promaxchoco-1lb': 6,
       };
       updateVariantUI();
@@ -2556,18 +1781,6 @@
           stockWhey: 12,
           stockCreatine: 15,
           stockPre: 9,
-          stock1: 7,
-          stockBPC: 6,
-          stockTB: 5,
-          stockGhkcu: 10,
-          stockMotsc: 5,
-          stockTesamorelin: 6,
-          stockDbol: 8,
-          stockAnavar: 6,
-          stockFishOil: 8,
-          stockCalMagZinc: 10,
-          stockCoQ10: 8,
-          stockMilkThistle: 10
         };
         productStockData = { ...defaults };
         await saveProductStockToFirebase();
@@ -2648,8 +1861,7 @@
       console.error('Error listening for variant stock updates:', error);
     });
 
-    // Listen for product stock changes
-    const productRef = collection(db, PRODUCT_STOCK_COLLECTION);
+    // Listen for product stock changes    const productRef = collection(db, PRODUCT_STOCK_COLLECTION);
     onSnapshot(productRef, (snapshot) => {
       if (!snapshot.empty) {
         const docSnap = snapshot.docs[0];
@@ -2801,74 +2013,6 @@
             const stock = getVariantStock(variantId);
             updateBuyButton(productId, stock);
           }
-        }
-      }
-    });
-  }
-
-  // ============================================
-  // INITIALIZE VARIANT STATE FOR ALL PRODUCTS
-  // ============================================
-  function initializeVariantStates() {
-    const productsWithoutVariants = ['cjc', 'bpc', 'tb', 'ghkcu', 'motsc', 'tesamorelin', 'dbol', 'anavar', 'fishoil', 'calmagzinc', 'coq10', 'milkthistle'];
-    
-    productsWithoutVariants.forEach(productId => {
-      const productCard = document.querySelector(`.product[data-product="${productId}"]`);
-      if (!productCard) return;
-      
-      const priceEl = document.getElementById(`price${productId.charAt(0).toUpperCase() + productId.slice(1)}`);
-      const oldPriceEl = document.getElementById(`oldPrice${productId.charAt(0).toUpperCase() + productId.slice(1)}`);
-      
-      const price = parseInt(priceEl?.textContent?.replace(/[₱,]/g, '') || 0);
-      const oldPrice = parseInt(oldPriceEl?.textContent?.replace(/[₱,]/g, '') || 0);
-      
-      const stockEl = productCard.querySelector('[id^="stock"]');
-      const stockId = stockEl?.id;
-      const stock = window.getStockLevel(stockId);
-      
-      // Get the display name from the HTML instead of overwriting with "Default"
-      const displayEl = document.getElementById(`variantDisplay${productId.charAt(0).toUpperCase() + productId.slice(1)}`);
-      let displayName = 'Default';
-      if (displayEl) {
-        displayName = displayEl.textContent; // Keep the HTML value
-      }
-      
-      currentVariantState[productId] = {
-        variantId: `default-${productId}`,
-        price: price,
-        oldPrice: oldPrice,
-        stock: stock,
-        displayName: displayName,
-        quantity: 1
-      };
-      
-      // DON'T overwrite the display element - just use what's in HTML
-      // Remove this: if (displayEl) displayEl.textContent = 'Default';
-      
-      const stockDisplayEl = document.getElementById(`variantStockDisplay${productId.charAt(0).toUpperCase() + productId.slice(1)}`);
-      if (stockDisplayEl) {
-        if (stock <= 0) {
-          stockDisplayEl.textContent = 'Out of Stock ❌';
-          stockDisplayEl.className = 'variant-stock-info';
-          stockDisplayEl.style.color = '#fc8181';
-        } else if (stock <= 3) {
-          stockDisplayEl.textContent = `Stock: ${stock} available ⚠️`;
-          stockDisplayEl.className = 'variant-stock-info';
-          stockDisplayEl.style.color = '#f6ad55';
-        } else {
-          stockDisplayEl.textContent = `Stock: ${stock} available`;
-          stockDisplayEl.className = 'variant-stock-info in-stock-info';
-          stockDisplayEl.style.color = '#6effb0';
-        }
-      }
-      
-      const buyBtn = document.getElementById(`buyBtn${productId.charAt(0).toUpperCase() + productId.slice(1)}`);
-      if (buyBtn) {
-        buyBtn.disabled = stock <= 0;
-        if (stock <= 0) {
-          buyBtn.innerHTML = '<i class="fas fa-times-circle"></i> Out of Stock';
-        } else {
-          buyBtn.innerHTML = '<i class="fas fa-bag-shopping"></i> Buy Now';
         }
       }
     });
@@ -3033,6 +2177,16 @@
     }
   }
 
+  function initStockFallback() {
+    document.querySelectorAll('.product').forEach(card => {
+      const badge = card.querySelector('.badge');
+      if (badge && !badge.classList.contains('out-of-stock') && !badge.classList.contains('low-stock')) {
+        card.dataset.originalBadge = badge.innerHTML;
+      }
+    });
+    window.updateAllStockDisplay();
+  }
+
   // ============================================
   // DISCOUNT CODE FUNCTIONS
   // ============================================
@@ -3058,6 +2212,21 @@
     } catch (error) {
       console.error('Error fetching discount:', error);
       return { valid: false, reason: 'error' };
+    }
+  };
+
+  window.checkDiscountUsedByCustomer = async function(code, customerId) {
+    try {
+      const q = query(
+        collection(db, "orders"),
+        where("discountCode", "==", code),
+        where("customerId", "==", customerId)
+      );
+      const querySnapshot = await getDocs(q);
+      return !querySnapshot.empty;
+    } catch (error) {
+      console.error('Error checking discount usage:', error);
+      return false;
     }
   };
 
@@ -3249,7 +2418,7 @@
   // ============================================
   // PLACE ORDER
   // ============================================
-  // Replace the placeOrderFromCheckout function in index.html with this:
+  // Replace the placeOrderFromCheckout function in supplements.html with this:
 
 window.placeOrderFromCheckout = async function() {
   const name = document.getElementById('checkoutName').value.trim();
@@ -3341,9 +2510,9 @@ window.placeOrderFromCheckout = async function() {
       variant: state.displayName,
       variantId: variantId,
       quantity: quantity,
-      originalPrice: variantTotalOldPrice,
-      price: finalPrice,
-      variantPrice: variantPrice,
+      originalPrice: variantTotalOldPrice,  // Original price (with old price)
+      price: finalPrice,                    // Final price after discount
+      variantPrice: variantPrice,           // Store the variant price per unit
       discountCode: discountCode,
       status: "pending",
       date: new Date().toISOString()
@@ -3671,43 +2840,20 @@ window.placeOrderFromCheckout = async function() {
   }
 
   // ============================================
-  // STOCK DISPLAY INITIALIZATION
-  // ============================================
-  function initStockFallback() {
-    document.querySelectorAll('.product').forEach(card => {
-      const badge = card.querySelector('.badge');
-      if (badge && !badge.classList.contains('out-of-stock') && !badge.classList.contains('low-stock')) {
-        card.dataset.originalBadge = badge.innerHTML;
-      }
-    });
-    window.updateAllStockDisplay();
-  }
-
-  // ============================================
   // INIT
   // ============================================
-  console.log('🚀 PEAK Store initializing...');
+  console.log('🚀 PEAK Store Supplements page initializing...');
   
-  // Load stock from Firebase
   await loadVariantStockFromFirebase();
   await loadProductStockFromFirebase();
   
-  // Listen for real-time updates
   listenForStockUpdates();
-  
-  // Auto-select first variant for each product
   autoSelectFirstVariant();
-  
-  // Initialize variant states for products without variants
-  initializeVariantStates();
-  
-  // Initialize stock display
   initStockFallback();
-  
   checkLastOrder();
   renderUsedCodes();
   
-  console.log('✅ PEAK Store fully loaded');
+  console.log('✅ Supplements page fully loaded');
   console.log('📦 Variant Stock:', variantStockData);
   console.log('📦 Product Stock:', productStockData);
 </script>
@@ -3718,6 +2864,5 @@ window.placeOrderFromCheckout = async function() {
     to { transform: rotate(360deg); }
   }
 </style>
-
 </body>
 </html>

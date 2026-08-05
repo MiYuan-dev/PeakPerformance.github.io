@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PEAK · Performance</title>
-  <!-- Font Awesome 6 (free) -->
+  <title>PED's · PEAK Performance</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     /* ----- reset & base ----- */
@@ -1220,9 +1219,7 @@
   </style>
 </head>
 <body>
-
 <div class="container">
-
   <!-- brand bar -->
   <div class="brand-bar">
     <div class="brand-left">
@@ -1233,7 +1230,7 @@
     <div class="brand-tag"><i class="fas fa-bolt"></i> Performance Enhancing Drugs</div>
   </div>
 
-  <!-- Track Order Button (Top) -->
+  <!-- Track Order Button -->
   <div class="track-top">
     <a href="tracking.html" class="track-top-btn">
       <i class="fas fa-truck"></i> Track Order
@@ -1242,13 +1239,13 @@
 
   <!-- Category Navigation -->
   <div class="category-nav">
-    <a href="index.html" class="category-nav-btn active">
+    <a href="index.html" class="category-nav-btn">
       <i class="fas fa-th-large"></i> All Products
     </a>
     <a href="supplements.html" class="category-nav-btn">
       <i class="fas fa-pills"></i> Supplements
     </a>
-    <a href="peds.html" class="category-nav-btn">
+    <a href="peds.html" class="category-nav-btn active">
       <i class="fas fa-syringe"></i> PED's
     </a>
     <a href="health-support.html" class="category-nav-btn">
@@ -1256,257 +1253,14 @@
     </a>
   </div>
 
-  <!-- section title -->
-  <div class="section-title">
-    <i class="fas fa-fire"></i> Shop Categories
-  </div>
-
-  <!-- ===== SUCCESS MESSAGE (hidden by default) ===== -->
-  <div class="order-success" id="orderSuccess">
-    <i class="fas fa-check-circle" style="color:#6effb0; font-size:40px;"></i>
-    <h3 style="color:#6effb0; margin-top:8px;">Order Placed! 🎉</h3>
-    <p style="color:#b0b0b0; font-size:14px;">Your order has been received. Here's your Order ID:</p>
-    <div class="order-id" id="successOrderId">ORD-XXXXXX</div>
-    <button class="copy-btn" onclick="copyOrderId()"><i class="fas fa-copy"></i> Copy Order ID</button>
-    <p style="color:#8a8a8a; font-size:13px; margin-top:12px;">
-      <i class="fas fa-info-circle"></i> Use this ID to <strong style="color:#b0b0b0;">track your order</strong>.
-    </p>
-    <div class="status-badge" id="successStatus">⏳ Pending</div>
-  </div>
-
-  <!-- ================================================================ -->
-  <!-- ===================== SUPPLEMENTS SECTION ===================== -->
-  <!-- ================================================================ -->
-  <div class="category-header">
-    <div class="cat-icon"><i class="fas fa-pills"></i></div>
-    <h2>Supplements</h2>
-    <span class="cat-badge">Whey · Creatine · More</span>
-  </div>
-
-  <!-- ===== PRODUCT: Whey Protein (WITH VARIANTS) ===== -->
-  <div class="product" data-product="whey" data-stock-id="stockWhey">
-    <div class="product-img">
-      <img src="images/whey-protein.jpg" alt="Promatrix7 Whey Protein" onerror="this.src='https://images.unsplash.com/photo-1579722821273-49bc6b7dd02a?w=600&h=600&fit=crop&crop=center'">
-      <span class="badge" id="badgeWhey"><i class="fas fa-fire" style="margin-right:4px;"></i>BEST SELLER</span>
-    </div>
-    <h3>Promatrix7 Whey Protein</h3>
-    <div class="desc"><i class="fas fa-dumbbell"></i> 23g protein · zero sugar · fast absorption</div>
-
-    <!-- VARIANT SELECTOR -->
-    <div class="variant-section">
-      <div class="variant-label"><i class="fas fa-box"></i> Select Flavor / Size</div>
-      <div class="variant-options" data-product="whey">
-        <button class="variant-btn active" data-variant-id="promaxsberry-2lb" data-price="1200" data-old-price="1500" onclick="selectVariant('whey', this)">
-          <span class="variant-label-text">Strawberry 2lb</span>
-          <span class="variant-stock-badge" id="stock-badge-promaxsberry-2lb">(Loading...)</span>
-        </button>
-        <button class="variant-btn" data-variant-id="promaxchoco-2lb" data-price="1200" data-old-price="1500" onclick="selectVariant('whey', this)">
-          <span class="variant-label-text">Chocolate 2lb</span>
-          <span class="variant-stock-badge" id="stock-badge-promaxchoco-2lb">(Loading...)</span>
-        </button>
-        <button class="variant-btn" data-variant-id="promaxsberry-1lb" data-price="880" data-old-price="1000" onclick="selectVariant('whey', this)">
-          <span class="variant-label-text">Strawberry 1lb</span>
-          <span class="variant-stock-badge" id="stock-badge-promaxsberry-1lb">(Loading...)</span>
-        </button>
-        <button class="variant-btn" data-variant-id="promaxchoco-1lb" data-price="880" data-old-price="1000" onclick="selectVariant('whey', this)">
-          <span class="variant-label-text">Chocolate 1lb</span>
-          <span class="variant-stock-badge" id="stock-badge-promaxchoco-1lb">(Loading...)</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="price-row">
-      <span class="price" id="priceWhey">₱880</span>
-      <span class="price-old" id="oldPriceWhey">₱1,000</span>
-    </div>
-
-    <!-- Quantity Selector -->
-    <div class="quantity-section">
-      <span class="qty-label"><i class="fas fa-shopping-cart"></i> Quantity</span>
-      <div class="quantity-control">
-        <button class="qty-btn" data-action="decrease" data-product="whey">−</button>
-        <span class="qty-number" id="qtyWhey">1</span>
-        <button class="qty-btn" data-action="increase" data-product="whey">+</button>
-      </div>
-    </div>
-
-    <div class="variant-info">
-      Selected: <span class="selected-variant" id="variantDisplayWhey">Strawberry 2lb</span>
-      <span class="variant-stock-info in-stock-info" id="variantStockDisplayWhey">Loading...</span>
-    </div>
-
-    <div class="rating-block">
-      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>256 sold</span></div>
-      <div class="stock" id="stockWhey"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
-    </div>
-
-    <div class="btn-group">
-      <button class="btn btn-buy" id="buyBtnWhey" onclick="openCheckoutModal('whey', 'Promatrix7 Whey Protein', 'images/whey-protein.jpg')">
-        <i class="fas fa-bag-shopping"></i> Buy Now
-      </button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
-    </div>
-
-    <div class="reviews">
-      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-      <span class="highlight"> "Best protein I've tried!"</span> — Carlo
-    </div>
-  </div>
-
-  <!-- ===== PRODUCT: Creatine Monohydrate (WITH VARIANTS) ===== -->
-  <div class="product" data-product="creatine" data-stock-id="stockCreatine">
-    <div class="product-img">
-      <img src="images/creatine.jpg" alt="Creatine Monohydrate" onerror="this.src='https://images.unsplash.com/photo-1584735935682-2f2b69d1b4b0?w=600&h=600&fit=crop&crop=center'">
-      <span class="badge" id="badgeCreatine"><i class="fas fa-bolt" style="margin-right:4px;"></i>TOP RATED</span>
-    </div>
-    <h3>Creatine Monohydrate</h3>
-    <div class="desc"><i class="fas fa-bolt"></i> Pure micronized · strength · muscle endurance</div>
-
-    <!-- VARIANT SELECTOR -->
-    <div class="variant-section">
-      <div class="variant-label"><i class="fas fa-box"></i> Select Size</div>
-      <div class="variant-options" data-product="creatine">
-        <button class="variant-btn active" data-variant-id="creatine-30" data-price="500" data-old-price="580" onclick="selectVariant('creatine', this)">
-          <span class="variant-label-text">Creatine 30 Servings (Unflavored)</span>
-          <span class="variant-stock-badge" id="stock-badge-creatine-30">(Loading...)</span>
-        </button>
-        <button class="variant-btn" data-variant-id="creatine-60" data-price="850" data-old-price="880" onclick="selectVariant('creatine', this)">
-          <span class="variant-label-text">Creatine 60 Servings (Unflavored)</span>
-          <span class="variant-stock-badge" id="stock-badge-creatine-60">(Loading...)</span>
-        </button>
-        <button class="variant-btn" data-variant-id="creatine-60orange" data-price="920" data-old-price="980" onclick="selectVariant('creatine', this)">
-          <span class="variant-label-text">Creatine 60 Servings (Orange)</span>
-          <span class="variant-stock-badge" id="stock-badge-creatine-60orange">(Loading...)</span>
-        </button>
-        <button class="variant-btn" data-variant-id="creatine-60melon" data-price="920" data-old-price="980" onclick="selectVariant('creatine', this)">
-          <span class="variant-label-text">Creatine 60 Servings (Melon)</span>
-          <span class="variant-stock-badge" id="stock-badge-creatine-60melon">(Loading...)</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="price-row">
-      <span class="price" id="priceCreatine">₱500</span>
-      <span class="price-old" id="oldPriceCreatine">₱580</span>
-    </div>
-
-    <div class="quantity-section">
-      <span class="qty-label"><i class="fas fa-shopping-cart"></i> Quantity</span>
-      <div class="quantity-control">
-        <button class="qty-btn" data-action="decrease" data-product="creatine">−</button>
-        <span class="qty-number" id="qtyCreatine">1</span>
-        <button class="qty-btn" data-action="increase" data-product="creatine">+</button>
-      </div>
-    </div>
-
-    <div class="variant-info">
-      Selected: <span class="selected-variant" id="variantDisplayCreatine">Creatine 30 Servings (Unflavored)</span>
-      <span class="variant-stock-info in-stock-info" id="variantStockDisplayCreatine">Loading...</span>
-    </div>
-
-    <div class="rating-block">
-      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>189 sold</span></div>
-      <div class="stock" id="stockCreatine"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
-    </div>
-
-    <div class="btn-group">
-      <button class="btn btn-buy" id="buyBtnCreatine" onclick="openCheckoutModal('creatine', 'Creatine Monohydrate', 'images/creatine.jpg')">
-        <i class="fas fa-bag-shopping"></i> Buy Now
-      </button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
-    </div>
-
-    <div class="reviews">
-      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-      <span class="highlight"> "Huge strength gains!"</span> — Jay
-    </div>
-  </div>
-
-  <!-- ===== PRODUCT: Pre-Workout (WITH VARIANTS) ===== -->
-  <div class="product" data-product="pre" data-stock-id="stockPre">
-    <div class="product-img">
-      <img src="images/pre-workout.jpg" alt="Pre-Workout" onerror="this.src='https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&h=600&fit=crop&crop=center'">
-      <span class="badge" id="badgePre"><i class="fas fa-fire" style="margin-right:4px;"></i>POWER</span>
-    </div>
-    <h3>C4 Pre-Workout</h3>
-    <div class="desc"><i class="fas fa-bolt"></i> 150mg caffeine · beta-alanine · focus</div>
-
-    <!-- VARIANT SELECTOR -->
-    <div class="variant-section">
-      <div class="variant-label"><i class="fas fa-box"></i> Select Size</div>
-      <div class="variant-options" data-product="pre">
-        <button class="variant-btn active" data-variant-id="pre-30orange" data-price="1800" data-old-price="2200" onclick="selectVariant('pre', this)">
-          <span class="variant-label-text">30 Servings (Orange Burst)</span>
-          <span class="variant-stock-badge" id="stock-badge-pre-30orange">(Loading...)</span>
-        </button>
-        <button class="variant-btn" data-variant-id="pre-30fruitpunch" data-price="1800" data-old-price="2200" onclick="selectVariant('pre', this)">
-          <span class="variant-label-text">30 Servings (Fruit Punch)</span>
-          <span class="variant-stock-badge" id="stock-badge-pre-30fruitpunch">(Loading...)</span>
-        </button>
-        <button class="variant-btn" data-variant-id="pre-30grape" data-price="1800" data-old-price="2200" onclick="selectVariant('pre', this)">
-          <span class="variant-label-text">30 Servings (Grape)</span>
-          <span class="variant-stock-badge" id="stock-badge-pre-30grape">(Loading...)</span>
-        </button>
-        <button class="variant-btn" data-variant-id="pre-30icy" data-price="1800" data-old-price="2200" onclick="selectVariant('pre', this)">
-          <span class="variant-label-text">30 Servings (Icy Blue Razz)</span>
-          <span class="variant-stock-badge" id="stock-badge-pre-30icy">(Loading...)</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="price-row">
-      <span class="price" id="pricePre">₱1,800</span>
-      <span class="price-old" id="oldPricePre">₱2,200</span>
-    </div>
-
-    <div class="quantity-section">
-      <span class="qty-label"><i class="fas fa-shopping-cart"></i> Quantity</span>
-      <div class="quantity-control">
-        <button class="qty-btn" data-action="decrease" data-product="pre">−</button>
-        <span class="qty-number" id="qtyPre">1</span>
-        <button class="qty-btn" data-action="increase" data-product="pre">+</button>
-      </div>
-    </div>
-
-    <div class="variant-info">
-      Selected: <span class="selected-variant" id="variantDisplayPre">30 Servings (Orange Burst)</span>
-      <span class="variant-stock-info in-stock-info" id="variantStockDisplayPre">Loading...</span>
-    </div>
-
-    <div class="rating-block">
-      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>142 sold</span></div>
-      <div class="stock" id="stockPre"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
-    </div>
-
-    <div class="btn-group">
-      <button class="btn btn-buy" id="buyBtnPre" onclick="openCheckoutModal('pre', 'C4 Pre-Workout', 'images/pre-workout.jpg')">
-        <i class="fas fa-bag-shopping"></i> Buy Now
-      </button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
-    </div>
-
-    <div class="reviews">
-      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-      <span class="highlight"> "Insane energy!"</span> — Chris
-    </div>
-  </div>
-
-  <!-- ================================================================ -->
-  <!-- ======================= PED's SECTION ======================== -->
-  <!-- ================================================================ -->
+  <!-- PED's Category Header -->
   <div class="category-header">
     <div class="cat-icon"><i class="fas fa-syringe"></i></div>
     <h2>PED's</h2>
     <span class="cat-badge">Peptides · Gears</span>
   </div>
-
-  <!-- ===== PRODUCT: CJC-1295 + Ipamorelin (WITH VARIANTS) ===== -->
+  
+<!-- ===== PRODUCT: CJC-1295 + Ipamorelin (WITH VARIANTS) ===== -->
 <div class="product" data-product="cjc" data-stock-id="stock1">
   <div class="product-img">
     <img src="images/cjc-1295.jpg" alt="CJC-1295 no DAC + Ipamorelin" onerror="this.src='https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=600&h=600&fit=crop&crop=center'">
@@ -1637,7 +1391,7 @@
     <div class="variant-section">
       <div class="variant-label"><i class="fas fa-box"></i> Select Dosage</div>
       <div class="variant-options" data-product="tb">
-        <button class="variant-btn active" data-variant-id="tb-10mg" data-price="2199" data-old-price="2900" onclick="selectVariant('tb', this)">
+        <button class="variant-btn" data-variant-id="tb-10mg" data-price="2199" data-old-price="2900" onclick="selectVariant('tb', this)">
           <span class="variant-label-text">TB-500 10mg</span>
           <span class="variant-stock-badge" id="stock-badge-tb-10mg">(Loading...)</span>
         </button>
@@ -1877,7 +1631,7 @@
     <div class="variant-section">
       <div class="variant-label"><i class="fas fa-box"></i> Select Quantity</div>
       <div class="variant-options" data-product="dbol">
-      <button class="variant-btn active" data-variant-id="dbol-20tabs" data-price="450" data-old-price="600" onclick="selectVariant('dbol', this)">
+        <button class="variant-btn active" data-variant-id="dbol-20tabs" data-price="450" data-old-price="600" onclick="selectVariant('dbol', this)">
           <span class="variant-label-text">Dbol-10 20 tablets</span>
           <span class="variant-stock-badge" id="stock-badge-dbol-20tabs">(Loading...)</span>
         </button>
@@ -2104,229 +1858,9 @@
   </div>
 </div>
 
-  <!-- ================================================================ -->
-  <!-- ==================== HEALTH SUPPORT SECTION ==================== -->
-  <!-- ================================================================ -->
-  <div class="category-header">
-    <div class="cat-icon"><i class="fas fa-capsules"></i></div>
-    <h2>Health Support</h2>
-    <span class="cat-badge">New Arrivals</span>
-  </div>
-
-  <!-- ===== PRODUCT: Fish Oil ===== -->
-  <div class="product" data-product="fishoil" data-stock-id="stockFishOil">
-    <div class="product-img">
-      <img src="images/fish-oil.jpg" alt="Omega-3 Fish Oil" onerror="this.src='https://images.unsplash.com/photo-1584483766114-2cea6facdf57?w=600&h=600&fit=crop&crop=center'">
-      <span class="badge" id="badgeFishOil"><i class="fas fa-heartbeat" style="margin-right:4px;"></i>TOP RATED</span>
-    </div>
-    <h3>Omega-3 Fish Oil</h3>
-    <div class="desc"><i class="fas fa-brain"></i> Heart health · brain function · inflammation</div>
-    <div class="price-row">
-      <span class="price" id="priceFishOil">₱380</span>
-      <span class="price-old" id="oldPriceFishOil">₱420</span>
-    </div>
-    <div class="rating-block">
-      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>112 sold</span></div>
-      <div class="stock" id="stockFishOil"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
-    </div>
-    <div class="btn-group">
-      <button class="btn btn-buy" id="buyBtnFishOil" onclick="openCheckoutModal('fishoil', 'Omega-3 Fish Oil', 'images/fish-oil.jpg')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
-    </div>
-    <div class="reviews">
-      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-      <span class="highlight"> "Joint pain gone!"</span> — Sarah
-    </div>
-  </div>
-
-  <!-- ===== PRODUCT: Calcium Magnesium Zinc + D3 ===== -->
-  <div class="product" data-product="calmagzinc" data-stock-id="stockCalMagZinc">
-    <div class="product-img">
-      <img src="images/cal-mag-zinc.jpg" alt="Calcium Magnesium Zinc + D3" onerror="this.src='https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&h=600&fit=crop&crop=center'">
-      <span class="badge" id="badgeCalMagZinc"><i class="fas fa-star" style="margin-right:4px;"></i>TOP RATED</span>
-    </div>
-    <h3>Calcium Magnesium Zinc + D3</h3>
-    <div class="desc"><i class="fas fa-bone"></i> Bone health · immune support · muscle function · sleep</div>
-    <div class="price-row">
-      <span class="price" id="priceCalMagZinc">₱300</span>
-      <span class="price-old" id="oldPriceCalMagZinc">₱395</span>
-    </div>
-    <div class="rating-block">
-      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>89 sold</span></div>
-      <div class="stock" id="stockCalMagZinc"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
-    </div>
-    <div class="btn-group">
-      <button class="btn btn-buy" id="buyBtnCalMagZinc" onclick="openCheckoutModal('calmagzinc', 'Calcium Magnesium Zinc + D3', 'images/cal-mag-zinc.jpg')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
-    </div>
-    <div class="reviews">
-      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-      <span class="highlight"> "Better sleep and stronger bones!"</span> — Maria
-    </div>
-  </div>
-
-  <!-- ===== PRODUCT: Coenzyme Q10 ===== -->
-  <div class="product" data-product="coq10" data-stock-id="stockCoQ10">
-    <div class="product-img">
-      <img src="images/coq10.jpg" alt="Coenzyme Q10" onerror="this.src='https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&h=600&fit=crop&crop=center'">
-      <span class="badge" id="badgeCoQ10"><i class="fas fa-heart" style="margin-right:4px;"></i>HEART HEALTH</span>
-    </div>
-    <h3>Coenzyme Q10</h3>
-    <div class="desc"><i class="fas fa-heartbeat"></i> Heart health · energy production · antioxidant · cellular health</div>
-    <div class="price-row">
-      <span class="price" id="priceCoQ10">₱300</span>
-      <span class="price-old" id="oldPriceCoQ10">₱420</span>
-    </div>
-    <div class="rating-block">
-      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>76 sold</span></div>
-      <div class="stock" id="stockCoQ10"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
-    </div>
-    <div class="btn-group">
-      <button class="btn btn-buy" id="buyBtnCoQ10" onclick="openCheckoutModal('coq10', 'Coenzyme Q10', 'images/coq10.jpg')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
-    </div>
-    <div class="reviews">
-      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-      <span class="highlight"> "More energy and better heart health!"</span> — Robert
-    </div>
-  </div>
-
-  <!-- ===== PRODUCT: Milk Thistle Liver Support ===== -->
-  <div class="product" data-product="milkthistle" data-stock-id="stockMilkThistle">
-    <div class="product-img">
-      <img src="images/milk-thistle.jpg" alt="Milk Thistle Liver Support" onerror="this.src='https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&h=600&fit=crop&crop=center'">
-      <span class="badge" id="badgeMilkThistle"><i class="fas fa-leaf" style="margin-right:4px;"></i>LIVER HEALTH</span>
-    </div>
-    <h3>Milk Thistle Liver Support</h3>
-    <div class="desc"><i class="fas fa-liver"></i> Liver detox · antioxidant · digestive health · skin support</div>
-    <div class="price-row">
-      <span class="price" id="priceMilkThistle">₱420</span>
-      <span class="price-old" id="oldPriceMilkThistle">₱550</span>
-    </div>
-    <div class="rating-block">
-      <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>64 sold</span></div>
-      <div class="stock" id="stockMilkThistle"><i class="fas fa-circle" style="color:#6effb0; font-size:10px;"></i> Loading...</div>
-    </div>
-    <div class="btn-group">
-      <button class="btn btn-buy" id="buyBtnMilkThistle" onclick="openCheckoutModal('milkthistle', 'Milk Thistle Liver Support', 'images/milk-thistle.jpg')"><i class="fas fa-bag-shopping"></i> Buy Now</button>
-      <a href="https://www.instagram.com/peakworkout2026/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-        <i class="fab fa-instagram"></i> Order via Instagram
-      </a>
-    </div>
-    <div class="reviews">
-      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-      <span class="highlight"> "Great for detox and overall health!"</span> — John
-    </div>
-  </div>
-
-  <!-- trust badges -->
-  <div class="trust-badges">
-    <span><i class="fas fa-truck"></i> 3-7 days delivery</span>
-    <span><i class="fas fa-shield-alt"></i> 100+ customers</span>
-    <span><i class="fas fa-credit-card"></i> COD available</span>
-  </div>
-
-</div>
-
-<!-- ================================================================ -->
-<!-- CHECKOUT MODAL -->
-<!-- ================================================================ -->
-<div class="checkout-overlay" id="checkoutModal">
-  <div class="checkout-modal">
-    <div class="modal-header">
-      <h3><i class="fas fa-edit"></i> Checkout</h3>
-      <button class="modal-close" onclick="closeCheckoutModal()"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="modal-body">
-      <!-- Product Summary -->
-      <div class="product-summary">
-        <img id="checkoutProductImage" src="" alt="Product">
-        <div class="info">
-          <div class="name" id="checkoutProductName">Product Name</div>
-          <div class="variant-detail" id="checkoutVariantDetail">Variant: -</div>
-          <div class="price-details">
-            <span class="original" id="checkoutOriginalPrice">₱0</span>
-            <span class="discounted" id="checkoutDiscountedPrice">₱0</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Discount Code Section -->
-      <div class="discount-section">
-        <input type="text" id="discountCodeInput" placeholder="Enter Discount Code" maxlength="20" />
-        <button class="btn-apply" id="applyDiscountBtn">Apply</button>
-        <button class="btn-remove" id="removeDiscountBtn" style="display:none;">Remove</button>
-      </div>
-      <div id="discountFeedback" class="discount-feedback"></div>
-      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:4px;">
-        <div class="discount-applied-badge" id="discountAppliedBadge">
-          <i class="fas fa-check-circle"></i> <span id="discountBadgeText">Discount Applied</span>
-        </div>
-        <div class="discount-used-badge" id="discountUsedBadge">
-          <i class="fas fa-info-circle"></i> Already Used
-        </div>
-      </div>
-
-      <!-- Used Codes List -->
-      <div class="used-codes-list" id="usedCodesList">
-        <span class="label-text"><i class="fas fa-history"></i> Used Discount Codes:</span>
-        <div id="usedCodesContainer"></div>
-      </div>
-
-      <!-- Shipping Info -->
-      <div class="input-group">
-        <label><i class="fas fa-user"></i> Full Name</label>
-        <input type="text" id="checkoutName" placeholder="Enter your full name">
-      </div>
-
-      <div class="input-group">
-        <label><i class="fas fa-map-pin"></i> Address</label>
-        <textarea id="checkoutAddress" placeholder="House #, Street, Barangay, City, Province" rows="2"></textarea>
-      </div>
-
-      <div class="input-group">
-        <label><i class="fas fa-phone"></i> Phone Number</label>
-        <input type="text" id="checkoutPhone" placeholder="09XX XXX XXXX">
-      </div>
-
-      <!-- Order Total -->
-      <div class="order-total">
-        <span class="total-label">Total</span>
-        <span class="total-price" id="checkoutTotalPrice">₱0</span>
-      </div>
-
-      <!-- Payment Info -->
-      <div class="payment-info">
-        <i class="fas fa-coins"></i>
-        <div class="details">
-          <div class="label">💳 Send payment to:</div>
-          <div class="number">09691348416</div>
-          <div class="note">PayMaya · Include your Order ID</div>
-        </div>
-      </div>
-
-      <!-- Place Order Button -->
-      <button class="btn-place-order" id="checkoutPlaceOrderBtn">
-        <i class="fas fa-check-circle"></i> Place Order
-      </button>
-
-      <div class="instagram-note">
-        <i class="fab fa-instagram"></i> After placing order, DM us your payment proof
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== FIREBASE + MAIN APP ===== -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, query, where, onSnapshot, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, query, where, onSnapshot, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCtkKzMB3ogRwwq4OIEaF9oICuV_n25xkY",
@@ -2341,33 +1875,29 @@
   const INSTAGRAM_URL = 'https://www.instagram.com/peakworkout2026/';
 
   // ============================================
-  // VARIANT DATA
+  // VARIANT DATA - PED's
   // ============================================
   const VARIANT_NAMES = {
-    'promaxsberry-2lb': 'Strawberry 2lb',
-    'promaxchoco-2lb': 'Chocolate 2lb',
-    'promaxsberry-1lb': 'Strawberry 1lb',
-    'creatine-30': 'Creatine 30 Servings (Unflavored)',
-    'creatine-60': 'Creatine 60 Servings (Unflavored)',
-    'creatine-60orange': 'Creatine 60 Servings (Orange)',
-    'creatine-60melon': 'Creatine 60 Servings (Watermelon)',
-    'pre-30orange': '30 Servings (Orange Burst)',
-    'pre-30fruitpunch': '30 Servings (Fruit Punch)',
-    'pre-30grape': '30 Servings (Grape)',
-    'pre-30icy': '30 Servings (Icy Blue Razz)',
+    // CJC-1295
     'cjc-10mg': 'CJC-1295 + Ipamorelin 10mg',
+    // BPC-157
     'bpc-10mg': 'BPC-157 10mg',
+    // TB-500
     'tb-10mg': 'TB-500 10mg',
+    // GHK-Cu
     'ghkcu-50mg': 'GHK-Cu 50mg',
     'ghkcu-100mg': 'GHK-Cu 100mg',
+    // MOTS-c
     'motsc-10mg': 'MOTS-c 10mg',
+    // Tesamorelin
     'tesa-10mg': 'Tesamorelin 10mg',
+    // Dbol
     'dbol-20tabs': 'Dbol-10 20 tablets',
     'dbol-50tabs': 'Dbol-10 50 tablets',
     'dbol-100tabs': 'Dbol-10 100 tablets',
+    // Anavar
     'anavar-50tabs': 'Anavar 50 tablets',
     'anavar-100tabs': 'Anavar 100 tablets',
-    'promaxchoco-1lb': 'Chocolate 1lb',
   };
 
   // ============================================
@@ -2432,30 +1962,18 @@
       } else {
         // Initialize with defaults
         const defaults = {
-          'promaxsberry-2lb': 5,
-          'promaxchoco-2lb': 3,
-          'promaxsberry-1lb': 9,
-          'creatine-30': 3,
-          'creatine-60': 1,
-          'creatine-60orange': 0,
-          'creatine-60melon': 0,
-          'pre-30orange': 5,
-          'pre-30fruitpunch': 3,
-          'pre-30grape': 2,
-          'pre-30icy': 0,
           'cjc-10mg': 3,
           'bpc-10mg': 3,
           'tb-10mg': 3,
-          'ghkcu-50mg': 3,
-          'ghkcu-100mg': 3,
+          'ghkcu-50mg': 10,
+          'ghkcu-100mg': 5,
           'motsc-10mg': 3,
           'tesa-10mg': 3,
           'dbol-20tabs': 3,
-          'dbol-50tabs': 3,
-          'dbol-100tabs': 3,
-          'anavar-50tabs': 3,
+          'dbol-50tabs': 8,
+          'dbol-100tabs': 4,
+          'anavar-50tabs': 6,
           'anavar-100tabs': 3,
-          'promaxchoco-1lb': 6,
         };
         variantStockData = { ...defaults };
         await saveVariantStockToFirebase();
@@ -2465,33 +1983,6 @@
       return variantStockData;
     } catch (error) {
       console.error('Error loading variant stock from Firebase:', error);
-      // Fallback to defaults
-      variantStockData = {
-        'promaxsberry-2lb': 5,
-        'promaxchoco-2lb': 3,
-        'promaxsberry-1lb': 9,
-        'creatine-30': 3,
-        'creatine-60': 1,
-        'creatine-60orange': 0,
-        'creatine-60melon': 0,
-        'pre-30orange': 5,
-        'pre-30fruitpunch': 3,
-        'pre-30grape': 2,
-        'pre-30icy': 0,
-        'cjc-10mg': 3,
-        'bpc-10mg': 3,
-        'tb-10mg': 3,
-        'ghkcu-50mg': 3,
-        'ghkcu-100mg': 3,
-        'motsc-10mg': 3,
-        'tesa-10mg': 3,
-        'dbol-20tabs': 3,
-        'dbol-50tabs': 3,
-        'dbol-100tabs': 3,
-        'anavar-100tabs': 3,
-        'promaxchoco-1lb': 6,
-      };
-      updateVariantUI();
       return variantStockData;
     }
   }
@@ -2551,11 +2042,7 @@
           });
         }
       } else {
-        // Initialize with defaults
         const defaults = {
-          stockWhey: 12,
-          stockCreatine: 15,
-          stockPre: 9,
           stock1: 7,
           stockBPC: 6,
           stockTB: 5,
@@ -2564,10 +2051,6 @@
           stockTesamorelin: 6,
           stockDbol: 8,
           stockAnavar: 6,
-          stockFishOil: 8,
-          stockCalMagZinc: 10,
-          stockCoQ10: 8,
-          stockMilkThistle: 10
         };
         productStockData = { ...defaults };
         await saveProductStockToFirebase();
@@ -2626,7 +2109,6 @@
   // LISTEN FOR REAL-TIME UPDATES
   // ============================================
   function listenForStockUpdates() {
-    // Listen for variant stock changes
     const variantRef = collection(db, VARIANT_STOCK_COLLECTION);
     onSnapshot(variantRef, (snapshot) => {
       if (!snapshot.empty) {
@@ -2648,7 +2130,6 @@
       console.error('Error listening for variant stock updates:', error);
     });
 
-    // Listen for product stock changes
     const productRef = collection(db, PRODUCT_STOCK_COLLECTION);
     onSnapshot(productRef, (snapshot) => {
       if (!snapshot.empty) {
@@ -2689,20 +2170,16 @@
     const stock = getVariantStock(variantId);
     const displayName = VARIANT_NAMES[variantId] || variantId;
 
-    // Update price
     const priceEl = document.getElementById(`price${productId.charAt(0).toUpperCase() + productId.slice(1)}`);
     const oldPriceEl = document.getElementById(`oldPrice${productId.charAt(0).toUpperCase() + productId.slice(1)}`);
     if (priceEl) priceEl.textContent = `₱${price.toLocaleString()}`;
     if (oldPriceEl) oldPriceEl.textContent = `₱${oldPrice.toLocaleString()}`;
 
-    // Update display
     const displayEl = document.getElementById(`variantDisplay${productId.charAt(0).toUpperCase() + productId.slice(1)}`);
     if (displayEl) displayEl.textContent = displayName;
 
-    // Update stock display
     updateVariantStockDisplay(productId, variantId);
 
-    // Update badge stock
     const badge = document.getElementById(`stock-badge-${variantId}`);
     if (badge) {
       if (stock <= 0) {
@@ -2716,7 +2193,6 @@
       }
     }
 
-    // Update state
     if (!currentVariantState[productId]) {
       currentVariantState[productId] = { quantity: 1 };
     }
@@ -2726,14 +2202,12 @@
     currentVariantState[productId].stock = stock;
     currentVariantState[productId].displayName = displayName;
 
-    // Reset quantity
     const qtyEl = document.getElementById(`qty${productId.charAt(0).toUpperCase() + productId.slice(1)}`);
     if (qtyEl) {
       qtyEl.textContent = '1';
       currentVariantState[productId].quantity = 1;
     }
 
-    // Update buy button
     updateBuyButton(productId, stock);
   };
 
@@ -2807,74 +2281,6 @@
   }
 
   // ============================================
-  // INITIALIZE VARIANT STATE FOR ALL PRODUCTS
-  // ============================================
-  function initializeVariantStates() {
-    const productsWithoutVariants = ['cjc', 'bpc', 'tb', 'ghkcu', 'motsc', 'tesamorelin', 'dbol', 'anavar', 'fishoil', 'calmagzinc', 'coq10', 'milkthistle'];
-    
-    productsWithoutVariants.forEach(productId => {
-      const productCard = document.querySelector(`.product[data-product="${productId}"]`);
-      if (!productCard) return;
-      
-      const priceEl = document.getElementById(`price${productId.charAt(0).toUpperCase() + productId.slice(1)}`);
-      const oldPriceEl = document.getElementById(`oldPrice${productId.charAt(0).toUpperCase() + productId.slice(1)}`);
-      
-      const price = parseInt(priceEl?.textContent?.replace(/[₱,]/g, '') || 0);
-      const oldPrice = parseInt(oldPriceEl?.textContent?.replace(/[₱,]/g, '') || 0);
-      
-      const stockEl = productCard.querySelector('[id^="stock"]');
-      const stockId = stockEl?.id;
-      const stock = window.getStockLevel(stockId);
-      
-      // Get the display name from the HTML instead of overwriting with "Default"
-      const displayEl = document.getElementById(`variantDisplay${productId.charAt(0).toUpperCase() + productId.slice(1)}`);
-      let displayName = 'Default';
-      if (displayEl) {
-        displayName = displayEl.textContent; // Keep the HTML value
-      }
-      
-      currentVariantState[productId] = {
-        variantId: `default-${productId}`,
-        price: price,
-        oldPrice: oldPrice,
-        stock: stock,
-        displayName: displayName,
-        quantity: 1
-      };
-      
-      // DON'T overwrite the display element - just use what's in HTML
-      // Remove this: if (displayEl) displayEl.textContent = 'Default';
-      
-      const stockDisplayEl = document.getElementById(`variantStockDisplay${productId.charAt(0).toUpperCase() + productId.slice(1)}`);
-      if (stockDisplayEl) {
-        if (stock <= 0) {
-          stockDisplayEl.textContent = 'Out of Stock ❌';
-          stockDisplayEl.className = 'variant-stock-info';
-          stockDisplayEl.style.color = '#fc8181';
-        } else if (stock <= 3) {
-          stockDisplayEl.textContent = `Stock: ${stock} available ⚠️`;
-          stockDisplayEl.className = 'variant-stock-info';
-          stockDisplayEl.style.color = '#f6ad55';
-        } else {
-          stockDisplayEl.textContent = `Stock: ${stock} available`;
-          stockDisplayEl.className = 'variant-stock-info in-stock-info';
-          stockDisplayEl.style.color = '#6effb0';
-        }
-      }
-      
-      const buyBtn = document.getElementById(`buyBtn${productId.charAt(0).toUpperCase() + productId.slice(1)}`);
-      if (buyBtn) {
-        buyBtn.disabled = stock <= 0;
-        if (stock <= 0) {
-          buyBtn.innerHTML = '<i class="fas fa-times-circle"></i> Out of Stock';
-        } else {
-          buyBtn.innerHTML = '<i class="fas fa-bag-shopping"></i> Buy Now';
-        }
-      }
-    });
-  }
-
-  // ============================================
   // QUANTITY CONTROLS
   // ============================================
   document.querySelectorAll('.qty-btn').forEach(btn => {
@@ -2912,12 +2318,10 @@
   // UPDATE STOCK DISPLAY - TOTAL VARIANTS STOCK
   // ============================================
   window.updateAllStockDisplay = function() {
-    // Update product stock elements
     document.querySelectorAll('[id^="stock"]').forEach(el => {
       const stockId = el.id;
       const qty = window.getStockLevel(stockId);
       
-      // Get total stock from variants if this product has variants
       const productCard = el.closest('.product');
       let totalStock = qty;
       
@@ -2926,7 +2330,6 @@
         if (productId) {
           const variantContainer = document.querySelector(`.variant-options[data-product="${productId}"]`);
           if (variantContainer) {
-            // This product has variants - calculate total stock from all variants
             const variantBtns = variantContainer.querySelectorAll('.variant-btn');
             let totalVariantStock = 0;
             variantBtns.forEach(btn => {
@@ -2955,7 +2358,6 @@
       }
     });
 
-    // Update variant badges
     document.querySelectorAll('.variant-btn').forEach(btn => {
       const variantId = btn.dataset.variantId;
       if (variantId) {
@@ -2975,7 +2377,6 @@
       }
     });
 
-    // Update variant stock info
     document.querySelectorAll('.variant-info .variant-stock-info').forEach(el => {
       const productId = el.id.replace('variantStockDisplay', '').toLowerCase();
       const container = document.querySelector(`.variant-options[data-product="${productId}"]`);
@@ -3011,7 +2412,6 @@
     element.className = `stock ${statusClass}`;
     element.innerHTML = `<i class="fas fa-circle" style="color:${color}; font-size:10px;"></i> ${label}`;
     
-    // Update the product badge with total stock
     const productCard = element.closest('.product');
     if (productCard) {
       const badge = productCard.querySelector('.badge');
@@ -3031,6 +2431,16 @@
         }
       }
     }
+  }
+
+  function initStockFallback() {
+    document.querySelectorAll('.product').forEach(card => {
+      const badge = card.querySelector('.badge');
+      if (badge && !badge.classList.contains('out-of-stock') && !badge.classList.contains('low-stock')) {
+        card.dataset.originalBadge = badge.innerHTML;
+      }
+    });
+    window.updateAllStockDisplay();
   }
 
   // ============================================
@@ -3058,6 +2468,21 @@
     } catch (error) {
       console.error('Error fetching discount:', error);
       return { valid: false, reason: 'error' };
+    }
+  };
+
+  window.checkDiscountUsedByCustomer = async function(code, customerId) {
+    try {
+      const q = query(
+        collection(db, "orders"),
+        where("discountCode", "==", code),
+        where("customerId", "==", customerId)
+      );
+      const querySnapshot = await getDocs(q);
+      return !querySnapshot.empty;
+    } catch (error) {
+      console.error('Error checking discount usage:', error);
+      return false;
     }
   };
 
@@ -3249,169 +2674,163 @@
   // ============================================
   // PLACE ORDER
   // ============================================
-  // Replace the placeOrderFromCheckout function in index.html with this:
+  window.placeOrderFromCheckout = async function() {
+    const name = document.getElementById('checkoutName').value.trim();
+    const address = document.getElementById('checkoutAddress').value.trim();
+    const phone = document.getElementById('checkoutPhone').value.trim();
+    const btn = document.getElementById('checkoutPlaceOrderBtn');
 
-window.placeOrderFromCheckout = async function() {
-  const name = document.getElementById('checkoutName').value.trim();
-  const address = document.getElementById('checkoutAddress').value.trim();
-  const phone = document.getElementById('checkoutPhone').value.trim();
-  const btn = document.getElementById('checkoutPlaceOrderBtn');
+    const productName = document.getElementById('checkoutProductName').textContent;
+    const totalPriceText = document.getElementById('checkoutTotalPrice').textContent;
+    const totalPrice = parseFloat(totalPriceText.replace('₱', '').trim()) || 0;
+    const originalPrice = parseFloat(document.getElementById('checkoutOriginalPrice').textContent.replace('₱', '').trim()) || 0;
+    
+    const discountCode = globalDiscountState.code || null;
+    const discountId = globalDiscountState.id || null;
 
-  const productName = document.getElementById('checkoutProductName').textContent;
-  const totalPriceText = document.getElementById('checkoutTotalPrice').textContent;
-  const totalPrice = parseFloat(totalPriceText.replace('₱', '').trim()) || 0;
-  const originalPrice = parseFloat(document.getElementById('checkoutOriginalPrice').textContent.replace('₱', '').trim()) || 0;
-  
-  const discountCode = globalDiscountState.code || null;
-  const discountId = globalDiscountState.id || null;
-
-  if (!name || !address || !phone) {
-    alert("⚠️ Please fill in all fields.");
-    return;
-  }
-
-  const productId = currentCheckoutProductId;
-  const state = currentVariantState?.[productId];
-  if (!state) {
-    alert("❌ Please select a variant first.");
-    return;
-  }
-
-  const variantId = state.variantId;
-  const quantity = state.quantity || 1;
-  const variantStock = getVariantStock(variantId);
-
-  if (variantStock < quantity) {
-    alert(`❌ Only ${variantStock} items available in stock for this variant.`);
-    return;
-  }
-
-  const stockId = window._currentStockId;
-  if (!stockId) {
-    alert("❌ Error: Product stock ID not found.");
-    return;
-  }
-
-  const customerId = generateCustomerId(name, address);
-
-  // CRITICAL: Use the VARIANT price, not the displayed price
-  const variantPrice = state.price || 0;
-  const variantOldPrice = state.oldPrice || 0;
-  
-  // Calculate total using variant price
-  const variantTotalPrice = variantPrice * quantity;
-  const variantTotalOldPrice = variantOldPrice * quantity;
-
-  if (discountCode) {
-    if (isCodeUsed(discountCode)) {
-      alert("❌ This discount code has already been used by you.");
-      globalDiscountState.used = true;
-      showDiscountUsedUI(discountCode);
+    if (!name || !address || !phone) {
+      alert("⚠️ Please fill in all fields.");
       return;
     }
-  }
 
-  btn.disabled = true;
-  btn.innerHTML = '<span class="loading-spinner" style="display:inline-block;width:20px;height:20px;border:3px solid rgba(0,0,0,0.2);border-radius:50%;border-top-color:#0b0b0b;animation:spin 0.8s ease infinite;margin-right:10px;"></span> Placing Order...';
-
-  try {
-    const orderId = generateOrderId();
-
-    // Apply discount to variant price if needed
-    let finalPrice = variantTotalPrice;
-    let discountAmount = 0;
-    
-    if (discountCode && globalDiscountState.discount) {
-      const discount = globalDiscountState.discount;
-      if (discount.type === 'percentage') {
-        discountAmount = variantTotalPrice * (discount.value / 100);
-      } else {
-        discountAmount = Math.min(discount.value, variantTotalPrice);
-      }
-      finalPrice = Math.max(0, variantTotalPrice - discountAmount);
+    const productId = currentCheckoutProductId;
+    const state = currentVariantState?.[productId];
+    if (!state) {
+      alert("❌ Please select a variant first.");
+      return;
     }
 
-    await addDoc(collection(db, "orders"), {
-      orderId: orderId,
-      name: name,
-      address: address,
-      phone: phone,
-      customerId: customerId,
-      product: productName,
-      variant: state.displayName,
-      variantId: variantId,
-      quantity: quantity,
-      originalPrice: variantTotalOldPrice,
-      price: finalPrice,
-      variantPrice: variantPrice,
-      discountCode: discountCode,
-      status: "pending",
-      date: new Date().toISOString()
-    });
+    const variantId = state.variantId;
+    const quantity = state.quantity || 1;
+    const variantStock = getVariantStock(variantId);
 
-    if (discountCode && discountId) {
-      try {
-        const discountRef = doc(db, "discountCodes", discountId);
-        const discountSnap = await getDoc(discountRef);
-        if (discountSnap.exists()) {
-          const currentUsed = discountSnap.data().usedCount || 0;
-          await updateDoc(discountRef, {
-            usedCount: currentUsed + 1
-          });
-        }
-      } catch (e) {
-        console.error('Error updating discount usage:', e);
-      }
+    if (variantStock < quantity) {
+      alert(`❌ Only ${variantStock} items available in stock for this variant.`);
+      return;
     }
 
-    if (variantId && variantId.startsWith('default-') === false) {
-      await decreaseVariantStock(variantId, quantity);
+    const stockId = window._currentStockId;
+    if (!stockId) {
+      alert("❌ Error: Product stock ID not found.");
+      return;
     }
 
-    await window.decreaseStock(stockId);
+    const customerId = generateCustomerId(name, address);
+
+    const variantPrice = state.price || 0;
+    const variantOldPrice = state.oldPrice || 0;
+    const variantTotalPrice = variantPrice * quantity;
+    const variantTotalOldPrice = variantOldPrice * quantity;
 
     if (discountCode) {
-      globalDiscountState.used = true;
-      addUsedCode(discountCode);
+      if (isCodeUsed(discountCode)) {
+        alert("❌ This discount code has already been used by you.");
+        globalDiscountState.used = true;
+        showDiscountUsedUI(discountCode);
+        return;
+      }
     }
 
-    let localOrders = JSON.parse(localStorage.getItem("orders")) || {};
-    localOrders[orderId] = {
-      name: name,
-      address: address,
-      phone: phone,
-      customerId: customerId,
-      product: productName,
-      variant: state.displayName,
-      variantId: variantId,
-      quantity: quantity,
-      originalPrice: variantTotalOldPrice,
-      price: finalPrice,
-      variantPrice: variantPrice,
-      discountCode: discountCode,
-      status: "Pending",
-      date: new Date().toISOString()
-    };
-    localStorage.setItem("orders", JSON.stringify(localOrders));
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading-spinner" style="display:inline-block;width:20px;height:20px;border:3px solid rgba(0,0,0,0.2);border-radius:50%;border-top-color:#0b0b0b;animation:spin 0.8s ease infinite;margin-right:10px;"></span> Placing Order...';
 
-    closeCheckoutModal();
-    showOrderSuccess(orderId);
-    listenForOrderUpdates(orderId);
+    try {
+      const orderId = generateOrderId();
 
-    setTimeout(() => {
-      window.open(INSTAGRAM_URL, '_blank');
-    }, 1000);
+      let finalPrice = variantTotalPrice;
+      let discountAmount = 0;
+      
+      if (discountCode && globalDiscountState.discount) {
+        const discount = globalDiscountState.discount;
+        if (discount.type === 'percentage') {
+          discountAmount = variantTotalPrice * (discount.value / 100);
+        } else {
+          discountAmount = Math.min(discount.value, variantTotalPrice);
+        }
+        finalPrice = Math.max(0, variantTotalPrice - discountAmount);
+      }
 
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-check-circle"></i> Place Order';
+      await addDoc(collection(db, "orders"), {
+        orderId: orderId,
+        name: name,
+        address: address,
+        phone: phone,
+        customerId: customerId,
+        product: productName,
+        variant: state.displayName,
+        variantId: variantId,
+        quantity: quantity,
+        originalPrice: variantTotalOldPrice,
+        price: finalPrice,
+        variantPrice: variantPrice,
+        discountCode: discountCode,
+        status: "pending",
+        date: new Date().toISOString()
+      });
 
-  } catch (error) {
-    alert("❌ Error placing order. Please try again.");
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-check-circle"></i> Place Order';
-    console.error(error);
-  }
-};
+      if (discountCode && discountId) {
+        try {
+          const discountRef = doc(db, "discountCodes", discountId);
+          const discountSnap = await getDoc(discountRef);
+          if (discountSnap.exists()) {
+            const currentUsed = discountSnap.data().usedCount || 0;
+            await updateDoc(discountRef, {
+              usedCount: currentUsed + 1
+            });
+          }
+        } catch (e) {
+          console.error('Error updating discount usage:', e);
+        }
+      }
+
+      if (variantId && variantId.startsWith('default-') === false) {
+        await decreaseVariantStock(variantId, quantity);
+      }
+
+      await window.decreaseStock(stockId);
+
+      if (discountCode) {
+        globalDiscountState.used = true;
+        addUsedCode(discountCode);
+      }
+
+      let localOrders = JSON.parse(localStorage.getItem("orders")) || {};
+      localOrders[orderId] = {
+        name: name,
+        address: address,
+        phone: phone,
+        customerId: customerId,
+        product: productName,
+        variant: state.displayName,
+        variantId: variantId,
+        quantity: quantity,
+        originalPrice: variantTotalOldPrice,
+        price: finalPrice,
+        variantPrice: variantPrice,
+        discountCode: discountCode,
+        status: "Pending",
+        date: new Date().toISOString()
+      };
+      localStorage.setItem("orders", JSON.stringify(localOrders));
+
+      closeCheckoutModal();
+      showOrderSuccess(orderId);
+      listenForOrderUpdates(orderId);
+
+      setTimeout(() => {
+        window.open(INSTAGRAM_URL, '_blank');
+      }, 1000);
+
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-check-circle"></i> Place Order';
+
+    } catch (error) {
+      alert("❌ Error placing order. Please try again.");
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-check-circle"></i> Place Order';
+      console.error(error);
+    }
+  };
 
   // ============================================
   // SHOW ORDER SUCCESS
@@ -3497,130 +2916,123 @@ window.placeOrderFromCheckout = async function() {
   window._currentStockId = null;
 
   window.openCheckoutModal = function(productId, productName, imageSrc) {
-  // Ensure variant state exists
-  if (!currentVariantState[productId]) {
-    const productCard = document.querySelector(`.product[data-product="${productId}"]`);
-    const priceEl = document.getElementById(`price${productId.charAt(0).toUpperCase() + productId.slice(1)}`);
-    const price = parseInt(priceEl?.textContent?.replace(/[₱,]/g, '') || 0);
-    const stockEl = productCard?.querySelector('[id^="stock"]');
-    const stockId = stockEl?.id;
-    const stock = window.getStockLevel(stockId);
-    
-    currentVariantState[productId] = {
-      variantId: `default-${productId}`,
-      price: price,
-      oldPrice: price,
-      stock: stock,
-      displayName: 'Default',
-      quantity: 1
-    };
-  }
-
-  // Get the ACTIVE variant from the DOM
-  const container = document.querySelector(`.variant-options[data-product="${productId}"]`);
-  let activePrice = 0;
-  let activeOldPrice = 0;
-  let activeVariantId = null;
-  let activeDisplayName = 'Default';
-  
-  if (container) {
-    const activeBtn = container.querySelector('.variant-btn.active');
-    if (activeBtn) {
-      activePrice = parseInt(activeBtn.dataset.price) || 0;
-      activeOldPrice = parseInt(activeBtn.dataset.oldPrice) || 0;
-      activeVariantId = activeBtn.dataset.variantId;
-      activeDisplayName = activeBtn.querySelector('.variant-label-text')?.textContent || activeVariantId;
+    if (!currentVariantState[productId]) {
+      const productCard = document.querySelector(`.product[data-product="${productId}"]`);
+      const priceEl = document.getElementById(`price${productId.charAt(0).toUpperCase() + productId.slice(1)}`);
+      const price = parseInt(priceEl?.textContent?.replace(/[₱,]/g, '') || 0);
+      const stockEl = productCard?.querySelector('[id^="stock"]');
+      const stockId = stockEl?.id;
+      const stock = window.getStockLevel(stockId);
+      
+      currentVariantState[productId] = {
+        variantId: `default-${productId}`,
+        price: price,
+        oldPrice: price,
+        stock: stock,
+        displayName: 'Default',
+        quantity: 1
+      };
     }
-  }
-  
-  // If no active button found, fallback to state
-  if (activePrice === 0 && currentVariantState[productId]) {
-    activePrice = currentVariantState[productId].price;
-    activeOldPrice = currentVariantState[productId].oldPrice;
-    activeVariantId = currentVariantState[productId].variantId;
-    activeDisplayName = currentVariantState[productId].displayName;
-  }
 
-  // Update the state with the active variant info - CRITICAL: Use variant price
-  if (activeVariantId) {
-    const stock = getVariantStock(activeVariantId);
-    currentVariantState[productId] = {
-      variantId: activeVariantId,
-      price: activePrice,
-      oldPrice: activeOldPrice,
-      stock: stock,
-      displayName: activeDisplayName,
-      quantity: currentVariantState[productId]?.quantity || 1
+    const container = document.querySelector(`.variant-options[data-product="${productId}"]`);
+    let activePrice = 0;
+    let activeOldPrice = 0;
+    let activeVariantId = null;
+    let activeDisplayName = 'Default';
+    
+    if (container) {
+      const activeBtn = container.querySelector('.variant-btn.active');
+      if (activeBtn) {
+        activePrice = parseInt(activeBtn.dataset.price) || 0;
+        activeOldPrice = parseInt(activeBtn.dataset.oldPrice) || 0;
+        activeVariantId = activeBtn.dataset.variantId;
+        activeDisplayName = activeBtn.querySelector('.variant-label-text')?.textContent || activeVariantId;
+      }
+    }
+    
+    if (activePrice === 0 && currentVariantState[productId]) {
+      activePrice = currentVariantState[productId].price;
+      activeOldPrice = currentVariantState[productId].oldPrice;
+      activeVariantId = currentVariantState[productId].variantId;
+      activeDisplayName = currentVariantState[productId].displayName;
+    }
+
+    if (activeVariantId) {
+      const stock = getVariantStock(activeVariantId);
+      currentVariantState[productId] = {
+        variantId: activeVariantId,
+        price: activePrice,
+        oldPrice: activeOldPrice,
+        stock: stock,
+        displayName: activeDisplayName,
+        quantity: currentVariantState[productId]?.quantity || 1
+      };
+    }
+
+    const state = currentVariantState[productId];
+    if (!state) {
+      alert('❌ Please select a variant first.');
+      return;
+    }
+
+    const variantId = state.variantId;
+    const variantStock = getVariantStock(variantId);
+    const quantity = state.quantity || 1;
+
+    if (variantStock <= 0) {
+      alert('❌ Sorry, this variant is out of stock!');
+      return;
+    }
+
+    if (quantity > variantStock) {
+      alert(`❌ Only ${variantStock} items available in stock for this variant.`);
+      return;
+    }
+
+    const productCard = document.querySelector(`.product[data-product="${productId}"]`);
+    const stockEl = productCard?.querySelector('[id^="stock"]');
+    const stockId = stockEl?.id || null;
+
+    if (!stockId) {
+      alert("❌ Error: Product stock ID not found.");
+      return;
+    }
+
+    window._currentStockId = stockId;
+    currentCheckoutProductId = productId;
+    currentProductPrice = state.price * quantity;
+
+    document.getElementById('checkoutProductName').textContent = `${productName} (${state.displayName})`;
+    document.getElementById('checkoutProductImage').src = imageSrc || 'images/placeholder.jpg';
+    document.getElementById('checkoutVariantDetail').textContent = `Variant: ${state.displayName} × ${quantity}`;
+    
+    const unitPrice = state.price;
+    const unitOldPrice = state.oldPrice;
+    const totalPrice = unitPrice * quantity;
+    const totalOldPrice = unitOldPrice * quantity;
+    
+    document.getElementById('checkoutOriginalPrice').textContent = `₱${totalOldPrice.toLocaleString()}`;
+    document.getElementById('checkoutDiscountedPrice').textContent = `₱${totalPrice.toLocaleString()}`;
+    document.getElementById('checkoutTotalPrice').textContent = `₱${totalPrice.toLocaleString()}`;
+    
+    document.getElementById('checkoutName').value = '';
+    document.getElementById('checkoutAddress').value = '';
+    document.getElementById('checkoutPhone').value = '';
+
+    resetDiscountUI();
+    globalDiscountState = {
+      code: null,
+      id: null,
+      discount: null,
+      applied: false,
+      used: false
     };
-  }
 
-  const state = currentVariantState[productId];
-  if (!state) {
-    alert('❌ Please select a variant first.');
-    return;
-  }
+    renderUsedCodes();
 
-  const variantId = state.variantId;
-  const variantStock = getVariantStock(variantId);
-  const quantity = state.quantity || 1;
-
-  if (variantStock <= 0) {
-    alert('❌ Sorry, this variant is out of stock!');
-    return;
-  }
-
-  if (quantity > variantStock) {
-    alert(`❌ Only ${variantStock} items available in stock for this variant.`);
-    return;
-  }
-
-  const productCard = document.querySelector(`.product[data-product="${productId}"]`);
-  const stockEl = productCard?.querySelector('[id^="stock"]');
-  const stockId = stockEl?.id || null;
-
-  if (!stockId) {
-    alert("❌ Error: Product stock ID not found.");
-    return;
-  }
-
-  window._currentStockId = stockId;
-  currentCheckoutProductId = productId;
-  
-  // CRITICAL: Use the variant price from state, not a calculated total
-  currentProductPrice = state.price * quantity;
-
-  document.getElementById('checkoutProductName').textContent = `${productName} (${state.displayName})`;
-  document.getElementById('checkoutProductImage').src = imageSrc || 'images/placeholder.jpg';
-  document.getElementById('checkoutVariantDetail').textContent = `Variant: ${state.displayName} × ${quantity}`;
-  
-  // Display the variant price correctly
-  const unitPrice = state.price;
-  const unitOldPrice = state.oldPrice;
-  const totalPrice = unitPrice * quantity;
-  const totalOldPrice = unitOldPrice * quantity;
-  
-  document.getElementById('checkoutOriginalPrice').textContent = `₱${totalOldPrice.toLocaleString()}`;
-  document.getElementById('checkoutDiscountedPrice').textContent = `₱${totalPrice.toLocaleString()}`;
-  document.getElementById('checkoutTotalPrice').textContent = `₱${totalPrice.toLocaleString()}`;
-  
-  document.getElementById('checkoutName').value = '';
-  document.getElementById('checkoutAddress').value = '';
-  document.getElementById('checkoutPhone').value = '';
-
-  resetDiscountUI();
-  globalDiscountState = {
-    code: null,
-    id: null,
-    discount: null,
-    applied: false,
-    used: false
+    document.getElementById('checkoutModal').classList.add('show');
+    document.body.style.overflow = 'hidden';
   };
-
-  renderUsedCodes();
-
-  document.getElementById('checkoutModal').classList.add('show');
-  document.body.style.overflow = 'hidden';
-};
 
   window.closeCheckoutModal = function() {
     document.getElementById('checkoutModal').classList.remove('show');
@@ -3671,43 +3083,20 @@ window.placeOrderFromCheckout = async function() {
   }
 
   // ============================================
-  // STOCK DISPLAY INITIALIZATION
-  // ============================================
-  function initStockFallback() {
-    document.querySelectorAll('.product').forEach(card => {
-      const badge = card.querySelector('.badge');
-      if (badge && !badge.classList.contains('out-of-stock') && !badge.classList.contains('low-stock')) {
-        card.dataset.originalBadge = badge.innerHTML;
-      }
-    });
-    window.updateAllStockDisplay();
-  }
-
-  // ============================================
   // INIT
   // ============================================
-  console.log('🚀 PEAK Store initializing...');
+  console.log('🚀 PEAK Store PEDs page initializing...');
   
-  // Load stock from Firebase
   await loadVariantStockFromFirebase();
   await loadProductStockFromFirebase();
   
-  // Listen for real-time updates
   listenForStockUpdates();
-  
-  // Auto-select first variant for each product
   autoSelectFirstVariant();
-  
-  // Initialize variant states for products without variants
-  initializeVariantStates();
-  
-  // Initialize stock display
   initStockFallback();
-  
   checkLastOrder();
   renderUsedCodes();
   
-  console.log('✅ PEAK Store fully loaded');
+  console.log('✅ PEDs page fully loaded');
   console.log('📦 Variant Stock:', variantStockData);
   console.log('📦 Product Stock:', productStockData);
 </script>
@@ -3718,6 +3107,5 @@ window.placeOrderFromCheckout = async function() {
     to { transform: rotate(360deg); }
   }
 </style>
-
 </body>
 </html>
